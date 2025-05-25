@@ -1,0 +1,2309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inspector Dashboard - Fire NOC System</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.3/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.css">
+    <meta name="csrf-token" content="{{ csrf_token() if csrf_token else '' }}">
+    <style>
+        :root {
+            --primary-color: #e53e3e;
+            --secondary-color: #c53030;
+            --accent-color: #059669;
+            --dark-color: #2d3748;
+            --light-color: #f7fafc;
+        }
+
+        body {
+            background: #f8fafc;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+        }
+
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .sidebar {
+            background: var(--dark-color);
+            color: white;
+            padding: 1.5rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.8);
+            padding: 0.75rem 1rem;
+            margin: 0.5rem 0;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            text-decoration: none;
+        }
+
+        .nav-link.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.875rem;
+        }
+
+        .status-pending {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .status-completed {
+            background: #dcfce7;
+            color: #059669;
+        }
+
+        .status-scheduled {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+
+        .status-in_progress {
+            background: #e0f2fe;
+            color: #0284c7;
+        }
+
+        .animated {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .card {
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        #map {
+            height: 400px;
+            border-radius: 0.5rem;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            height: 0;
+            padding-bottom: 56.25%;
+            overflow: hidden;
+            border-radius: 0.5rem;
+        }
+
+        .video-container video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .camera-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .btn-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 3rem;
+            height: 3rem;
+            border-radius: 50%;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-icon:hover {
+            background: var(--secondary-color);
+            transform: scale(1.1);
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            margin-bottom: 0.5rem;
+            background: #f9fafb;
+            transition: background 0.3s ease;
+        }
+
+        .checklist-item:hover {
+            background: #f3f4f6;
+        }
+
+        .checklist-item input[type="checkbox"] {
+            margin-right: 1rem;
+            width: 1.25rem;
+            height: 1.25rem;
+        }
+
+        .ai-analysis-container {
+            background: #f8fafc;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .ai-result {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .ai-result-icon {
+            margin-right: 0.5rem;
+            font-size: 1.25rem;
+        }
+
+        .ai-result-text {
+            flex: 1;
+        }
+
+        .risk-level {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.875rem;
+            font-weight: bold;
+        }
+
+        .risk-high {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .risk-medium {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .risk-low {
+            background: #dcfce7;
+            color: #059669;
+        }
+    </style>
+</head>
+<body data-username="{{ session.get('username', '') }}">
+    <div class="dashboard-container">
+        <div class="d-flex">
+            <div class="sidebar w-64">
+                <div class="text-center mb-4">
+                    <img src="/static/fire_logo.svg" alt="Fire NOC Logo" class="w-24 h-24 mx-auto mb-4" onerror="this.src='https://via.placeholder.com/96x96?text=FIRE'">
+                    <h2 class="text-xl font-bold text-white">Fire NOC System</h2>
+                </div>
+
+                <div class="user-profile border-t border-b border-gray-700 py-4 mb-4">
+                    <div class="text-center">
+                        <div class="relative inline-block">
+                            <img id="userProfileImage"
+                                 src="/static/profile_images/default-profile.svg"
+                                 alt="Profile"
+                                 class="w-20 h-20 rounded-full object-cover border-2 border-white mx-auto"
+                                 onerror="this.src='https://via.placeholder.com/80x80?text=User'">
+                        </div>
+                        <h3 id="userName" class="text-white font-medium mt-2">{{ session.get('username', 'Inspector') }}</h3>
+                        <span id="userRole" class="inline-block bg-red-200 text-red-800 text-xs px-2 py-1 rounded-full mt-1">Inspector</span>
+                    </div>
+                </div>
+
+                <nav class="space-y-2">
+                    <a href="#dashboard" class="nav-link w-full text-left block active" data-tab="dashboard">
+                        <i class="fas fa-home mr-2"></i> Dashboard
+                    </a>
+                    <a href="#inspections" class="nav-link w-full text-left block" data-tab="inspections">
+                        <i class="fas fa-clipboard-check mr-2"></i> My Inspections
+                    </a>
+                    <a href="#site-inspection" class="nav-link w-full text-left block" data-tab="site-inspection">
+                        <i class="fas fa-hard-hat mr-2"></i> Site Inspection
+                    </a>
+                    <a href="#video-inspection" class="nav-link w-full text-left block" data-tab="video-inspection">
+                        <i class="fas fa-video mr-2"></i> Video Inspection
+                    </a>
+                    <a href="#ai-analysis" class="nav-link w-full text-left block" data-tab="ai-analysis">
+                        <i class="fas fa-robot mr-2"></i> AI Analysis
+                    </a>
+                    <a href="#reports" class="nav-link w-full text-left block" data-tab="reports">
+                        <i class="fas fa-file-alt mr-2"></i> Reports
+                    </a>
+                    <a href="#analytics" class="nav-link w-full text-left block" data-tab="analytics">
+                        <i class="fas fa-chart-line mr-2"></i> Analytics
+                    </a>
+                    <a href="{{ url_for('logout') }}" class="nav-link w-full text-left block">
+                        <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                    </a>
+                </nav>
+            </div>
+
+            <div class="main-content flex-1 p-6">
+                <!-- Dashboard Tab -->
+                <div id="dashboard" class="tab-content active">
+                    <div class="bg-white p-6 rounded-lg shadow-sm mb-8">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-4">
+                                <div class="profile-image">
+                                    <img src="/static/profile_images/default-profile.svg"
+                                         alt="Profile"
+                                         class="w-20 h-20 rounded-full object-cover border-4 border-red-500"
+                                         onerror="this.src='https://via.placeholder.com/80x80?text=User'">
+                                </div>
+                                <div class="profile-info flex-1">
+                                    <h1 class="text-3xl font-bold mb-2">Welcome, {{ session.get('name', 'Inspector') }}</h1>
+                                    <div class="flex items-center space-x-4 text-gray-600">
+                                        <span class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm">Inspector</span>
+                                        <span class="flex items-center">
+                                            <i class="fas fa-envelope mr-2"></i> {{ session.get('email', 'inspector@example.com') }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Refresh Button -->
+                            <button onclick="refreshInspectorDashboard()" class="bg-red-500 hover:bg-red-600 text-white p-3 rounded-full transition shadow-lg" title="Refresh Dashboard">
+                                <i class="fas fa-sync-alt text-xl" id="inspectorRefreshIcon"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                        <div class="bg-white p-6 rounded-lg shadow-sm card">
+                            <div class="flex items-center justify-between mb-4">
+                                <h4 class="text-lg font-semibold">Pending Inspections</h4>
+                                <span class="text-yellow-500">
+                                    <i class="fas fa-clock text-xl"></i>
+                                </span>
+                            </div>
+                            <div class="text-3xl font-bold text-center mb-2">{{ inspection_count }}</div>
+                            <div class="text-center text-gray-500">Assigned to you</div>
+                        </div>
+
+                        <div class="bg-white p-6 rounded-lg shadow-sm card">
+                            <div class="flex items-center justify-between mb-4">
+                                <h4 class="text-lg font-semibold">Today's Schedule</h4>
+                                <span class="text-blue-500">
+                                    <i class="fas fa-calendar-day text-xl"></i>
+                                </span>
+                            </div>
+                            <div class="text-3xl font-bold text-center mb-2">{{ today_count }}</div>
+                            <div class="text-center text-gray-500">Inspections today</div>
+                        </div>
+
+                        <div class="bg-white p-6 rounded-lg shadow-sm card">
+                            <div class="flex items-center justify-between mb-4">
+                                <h4 class="text-lg font-semibold">Completed</h4>
+                                <span class="text-green-500">
+                                    <i class="fas fa-check-circle text-xl"></i>
+                                </span>
+                            </div>
+                            <div class="text-3xl font-bold text-center mb-2">{{ completed_count }}</div>
+                            <div class="text-center text-gray-500">This month</div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-lg shadow-sm">
+                        <h3 class="text-xl font-semibold mb-4">Upcoming Inspections</h3>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Business Name</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Address</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    {% for inspection in inspections %}
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap">{{ inspection.date }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">{{ inspection.time }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">{{ inspection.business_name }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">{{ inspection.location }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="status-indicator status-{{ inspection.status }}">
+                                                {{ inspection.status }}
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <a href="#" class="text-blue-600 hover:text-blue-900 mr-3" onclick="viewInspection('{{ inspection._id }}')">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                            <a href="#" class="text-green-600 hover:text-green-900 mr-3" onclick="startInspection('{{ inspection._id }}')">
+                                                <i class="fas fa-clipboard-check"></i>
+                                            </a>
+                                            <a href="#" class="text-red-600 hover:text-red-900" onclick="showOnMap('{{ inspection.location }}')">
+                                                <i class="fas fa-map-marker-alt"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    {% else %}
+                                    <tr>
+                                        <td colspan="6" class="px-6 py-4 text-center text-gray-500">No inspections scheduled</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- My Inspections Tab -->
+                <div id="inspections" class="tab-content">
+                    <div class="bg-white p-6 rounded-lg shadow-sm mb-6">
+                        <h3 class="text-xl font-semibold mb-4">My Inspections</h3>
+
+                        <div class="mb-4">
+                            <div class="flex space-x-2">
+                                <button class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition" onclick="filterInspections('all')">All</button>
+                                <button class="px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition" onclick="filterInspections('pending')">Pending</button>
+                                <button class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition" onclick="filterInspections('scheduled')">Scheduled</button>
+                                <button class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition" onclick="filterInspections('completed')">Completed</button>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="inspectionsList">
+                            {% for inspection in inspections %}
+                            <div class="inspection-card p-4 border rounded-lg hover:shadow-md transition" data-status="{{ inspection.status }}">
+                                <div class="flex justify-between items-start mb-2">
+                                    <h4 class="font-semibold">{{ inspection.business_name }}</h4>
+                                    <span class="status-indicator status-{{ inspection.status }}">{{ inspection.status }}</span>
+                                </div>
+                                <p class="text-sm text-gray-600 mb-2">{{ inspection.location }}</p>
+                                <div class="flex items-center text-sm text-gray-500 mb-3">
+                                    <i class="far fa-calendar mr-2"></i> {{ inspection.date }}
+                                    <i class="far fa-clock ml-3 mr-2"></i> {{ inspection.time }}
+                                </div>
+                                <div class="flex justify-between mt-2">
+                                    <button class="px-3 py-1 bg-blue-500 text-white text-sm rounded hover:bg-blue-600" onclick="viewInspection('{{ inspection._id }}')">
+                                        View Details
+                                    </button>
+                                    {% if inspection.status != 'completed' %}
+                                    <button class="px-3 py-1 bg-green-500 text-white text-sm rounded hover:bg-green-600" onclick="startInspection('{{ inspection._id }}')">
+                                        Start Inspection
+                                    </button>
+                                    {% else %}
+                                    <button class="px-3 py-1 bg-purple-500 text-white text-sm rounded hover:bg-purple-600" onclick="viewReport('{{ inspection._id }}')">
+                                        View Report
+                                    </button>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% else %}
+                            <div class="col-span-3 text-center py-8 text-gray-500">
+                                <i class="fas fa-clipboard-list text-4xl mb-3"></i>
+                                <p>No inspections found</p>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Site Inspection Tab -->
+                <div id="site-inspection" class="tab-content">
+                    <div class="bg-white p-6 rounded-lg shadow-sm mb-6">
+                        <h3 class="text-xl font-semibold mb-4">Site Inspection</h3>
+
+                        <!-- Inspection Selection -->
+                        <div class="mb-6">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Select Inspection</label>
+                            <select id="inspectionSelect" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                                <option value="">Choose an inspection...</option>
+                                {% for inspection in inspections %}
+                                <option value="{{ inspection._id }}">{{ inspection.business_name }} - {{ inspection.date }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <!-- Location Map -->
+                        <div class="mb-6">
+                            <h4 class="text-lg font-semibold mb-3">Location</h4>
+                            <div id="map" class="border rounded-lg"></div>
+                        </div>
+
+                        <!-- Inspection Checklist -->
+                        <div class="mb-6">
+                            <h4 class="text-lg font-semibold mb-3">Fire Safety Checklist</h4>
+                            <div id="inspectionChecklist" class="space-y-2">
+                                <div class="checklist-item">
+                                    <input type="checkbox" id="fire_exits" name="checklist" value="fire_exits">
+                                    <label for="fire_exits">Fire exits are clearly marked and unobstructed</label>
+                                </div>
+                                <div class="checklist-item">
+                                    <input type="checkbox" id="fire_extinguishers" name="checklist" value="fire_extinguishers">
+                                    <label for="fire_extinguishers">Fire extinguishers are properly placed and maintained</label>
+                                </div>
+                                <div class="checklist-item">
+                                    <input type="checkbox" id="smoke_detectors" name="checklist" value="smoke_detectors">
+                                    <label for="smoke_detectors">Smoke detectors are installed and functional</label>
+                                </div>
+                                <div class="checklist-item">
+                                    <input type="checkbox" id="sprinkler_system" name="checklist" value="sprinkler_system">
+                                    <label for="sprinkler_system">Sprinkler system is operational</label>
+                                </div>
+                                <div class="checklist-item">
+                                    <input type="checkbox" id="emergency_lighting" name="checklist" value="emergency_lighting">
+                                    <label for="emergency_lighting">Emergency lighting is functional</label>
+                                </div>
+                                <div class="checklist-item">
+                                    <input type="checkbox" id="fire_alarm" name="checklist" value="fire_alarm">
+                                    <label for="fire_alarm">Fire alarm system is working</label>
+                                </div>
+                                <div class="checklist-item">
+                                    <input type="checkbox" id="electrical_safety" name="checklist" value="electrical_safety">
+                                    <label for="electrical_safety">Electrical installations are safe</label>
+                                </div>
+                                <div class="checklist-item">
+                                    <input type="checkbox" id="storage_safety" name="checklist" value="storage_safety">
+                                    <label for="storage_safety">Hazardous materials are properly stored</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Photo Documentation -->
+                        <div class="mb-6">
+                            <h4 class="text-lg font-semibold mb-3">Photo Documentation</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <input type="file" id="photoUpload" accept="image/*" multiple class="hidden">
+                                    <button onclick="document.getElementById('photoUpload').click()" class="w-full p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-red-500 transition">
+                                        <i class="fas fa-camera text-2xl text-gray-400 mb-2"></i>
+                                        <p class="text-gray-600">Click to upload photos</p>
+                                    </button>
+                                </div>
+                                <div id="photoPreview" class="grid grid-cols-2 gap-2">
+                                    <!-- Photos will be displayed here -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Notes -->
+                        <div class="mb-6">
+                            <h4 class="text-lg font-semibold mb-3">Inspection Notes</h4>
+                            <textarea id="inspectionNotes" rows="4" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500" placeholder="Enter your inspection notes here..."></textarea>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="flex space-x-4">
+                            <button onclick="saveInspectionData()" class="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">
+                                <i class="fas fa-save mr-2"></i> Save Progress
+                            </button>
+                            <button onclick="completeInspection()" class="px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition">
+                                <i class="fas fa-check mr-2"></i> Complete Inspection
+                            </button>
+                            <button onclick="generateReport()" class="px-6 py-3 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition">
+                                <i class="fas fa-file-pdf mr-2"></i> Generate Report
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Video Inspection Tab -->
+                <div id="video-inspection" class="tab-content">
+                    <div class="bg-white p-6 rounded-lg shadow-sm mb-6">
+                        <h3 class="text-xl font-semibold mb-4">Video Inspection</h3>
+
+                        <!-- Video Recording -->
+                        <div class="mb-6">
+                            <h4 class="text-lg font-semibold mb-3">Live Video Recording</h4>
+                            <div class="video-container">
+                                <video id="videoElement" autoplay muted></video>
+                            </div>
+                            <div class="camera-controls">
+                                <button id="startRecording" class="btn-icon" title="Start Recording">
+                                    <i class="fas fa-play"></i>
+                                </button>
+                                <button id="stopRecording" class="btn-icon" title="Stop Recording" disabled>
+                                    <i class="fas fa-stop"></i>
+                                </button>
+                                <button id="takeSnapshot" class="btn-icon" title="Take Snapshot">
+                                    <i class="fas fa-camera"></i>
+                                </button>
+                                <button id="switchCamera" class="btn-icon" title="Switch Camera">
+                                    <i class="fas fa-sync-alt"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Recorded Videos -->
+                        <div class="mb-6">
+                            <h4 class="text-lg font-semibold mb-3">Recorded Videos</h4>
+                            <div id="recordedVideos" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                <!-- Recorded videos will appear here -->
+                            </div>
+                        </div>
+
+                        <!-- Video Notes -->
+                        <div class="mb-6">
+                            <h4 class="text-lg font-semibold mb-3">Video Notes</h4>
+                            <textarea id="videoNotes" rows="3" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500" placeholder="Add notes about the video inspection..."></textarea>
+                        </div>
+
+                        <!-- Upload Video -->
+                        <div class="mb-6">
+                            <h4 class="text-lg font-semibold mb-3">Upload Video Files</h4>
+                            <input type="file" id="videoUpload" accept="video/*" multiple class="hidden">
+                            <button onclick="document.getElementById('videoUpload').click()" class="w-full p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-red-500 transition">
+                                <i class="fas fa-video text-2xl text-gray-400 mb-2"></i>
+                                <p class="text-gray-600">Click to upload video files</p>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI Analysis Tab -->
+                <div id="ai-analysis" class="tab-content">
+                    <div class="bg-white p-6 rounded-lg shadow-sm mb-6">
+                        <h3 class="text-xl font-semibold mb-4">AI-Powered Analysis</h3>
+
+                        <!-- Image Analysis -->
+                        <div class="mb-6">
+                            <h4 class="text-lg font-semibold mb-3">Image Analysis</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <input type="file" id="aiImageUpload" accept="image/*" class="hidden">
+                                    <button onclick="document.getElementById('aiImageUpload').click()" class="w-full p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-red-500 transition">
+                                        <i class="fas fa-upload text-2xl text-gray-400 mb-2"></i>
+                                        <p class="text-gray-600">Upload image for AI analysis</p>
+                                    </button>
+                                    <div id="aiImagePreview" class="mt-4"></div>
+                                </div>
+                                <div>
+                                    <div id="aiAnalysisResults" class="ai-analysis-container">
+                                        <h5 class="font-semibold mb-3">Analysis Results</h5>
+                                        <div id="analysisContent">
+                                            <p class="text-gray-500 text-center py-4">Upload an image to see AI analysis results</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Risk Assessment -->
+                        <div class="mb-6">
+                            <h4 class="text-lg font-semibold mb-3">AI Risk Assessment</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div class="p-4 bg-gray-50 rounded-lg">
+                                    <h5 class="font-semibold mb-2">Fire Risk Level</h5>
+                                    <div id="fireRiskLevel" class="risk-level risk-low">Low Risk</div>
+                                    <p class="text-sm text-gray-600 mt-2">Based on current inspection data</p>
+                                </div>
+                                <div class="p-4 bg-gray-50 rounded-lg">
+                                    <h5 class="font-semibold mb-2">Compliance Score</h5>
+                                    <div class="text-2xl font-bold text-green-600" id="complianceScore">85%</div>
+                                    <p class="text-sm text-gray-600 mt-2">Safety compliance rating</p>
+                                </div>
+                                <div class="p-4 bg-gray-50 rounded-lg">
+                                    <h5 class="font-semibold mb-2">Recommendations</h5>
+                                    <div class="text-2xl font-bold text-blue-600" id="recommendationCount">3</div>
+                                    <p class="text-sm text-gray-600 mt-2">AI-generated suggestions</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- AI Recommendations -->
+                        <div class="mb-6">
+                            <h4 class="text-lg font-semibold mb-3">AI Recommendations</h4>
+                            <div id="aiRecommendations" class="space-y-3">
+                                <div class="ai-result">
+                                    <i class="fas fa-exclamation-triangle ai-result-icon text-yellow-500"></i>
+                                    <div class="ai-result-text">
+                                        <p class="font-medium">Fire Extinguisher Maintenance</p>
+                                        <p class="text-sm text-gray-600">Some fire extinguishers require immediate inspection and maintenance.</p>
+                                    </div>
+                                </div>
+                                <div class="ai-result">
+                                    <i class="fas fa-lightbulb ai-result-icon text-blue-500"></i>
+                                    <div class="ai-result-text">
+                                        <p class="font-medium">Emergency Lighting Upgrade</p>
+                                        <p class="text-sm text-gray-600">Consider upgrading to LED emergency lighting for better efficiency.</p>
+                                    </div>
+                                </div>
+                                <div class="ai-result">
+                                    <i class="fas fa-shield-alt ai-result-icon text-green-500"></i>
+                                    <div class="ai-result-text">
+                                        <p class="font-medium">Smoke Detector Coverage</p>
+                                        <p class="text-sm text-gray-600">Smoke detector coverage is adequate for the current layout.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Generate AI Report -->
+                        <div class="text-center">
+                            <button onclick="generateAIReport()" class="px-6 py-3 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition">
+                                <i class="fas fa-robot mr-2"></i> Generate AI Report
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reports Tab -->
+                <div id="reports" class="tab-content">
+                    <div class="bg-white p-6 rounded-lg shadow-sm mb-6">
+                        <h3 class="text-xl font-semibold mb-4">Inspection Reports</h3>
+
+                        <!-- Report Filters -->
+                        <div class="mb-6">
+                            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Date Range</label>
+                                    <select class="w-full p-2 border border-gray-300 rounded-lg">
+                                        <option>Last 7 days</option>
+                                        <option>Last 30 days</option>
+                                        <option>Last 3 months</option>
+                                        <option>Custom range</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                                    <select class="w-full p-2 border border-gray-300 rounded-lg">
+                                        <option>All</option>
+                                        <option>Completed</option>
+                                        <option>Pending</option>
+                                        <option>In Progress</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Business Type</label>
+                                    <select class="w-full p-2 border border-gray-300 rounded-lg">
+                                        <option>All Types</option>
+                                        <option>Restaurant</option>
+                                        <option>Office</option>
+                                        <option>Retail</option>
+                                        <option>Industrial</option>
+                                    </select>
+                                </div>
+                                <div class="flex items-end">
+                                    <button class="w-full px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition">
+                                        <i class="fas fa-filter mr-2"></i> Filter
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Reports List -->
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Report ID</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Business Name</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Compliance</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    {% for inspection in inspections %}
+                                    {% if inspection.status == 'completed' %}
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                            #{{ inspection._id[:8] }}
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                            {{ inspection.business_name }}
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            {{ inspection.completion_date or inspection.date }}
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="status-indicator status-{{ inspection.status }}">
+                                                {{ inspection.status }}
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                            <div class="flex items-center">
+                                                <div class="w-16 bg-gray-200 rounded-full h-2 mr-2">
+                                                    <div class="bg-green-600 h-2 rounded-full" style="width: 85%"></div>
+                                                </div>
+                                                <span class="text-sm">85%</span>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                            <button onclick="viewReport('{{ inspection._id }}')" class="text-blue-600 hover:text-blue-900 mr-3">
+                                                <i class="fas fa-eye"></i> View
+                                            </button>
+                                            <button onclick="downloadReport('{{ inspection._id }}')" class="text-green-600 hover:text-green-900 mr-3">
+                                                <i class="fas fa-download"></i> Download
+                                            </button>
+                                            <button onclick="shareReport('{{ inspection._id }}')" class="text-purple-600 hover:text-purple-900">
+                                                <i class="fas fa-share"></i> Share
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    {% endif %}
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Analytics Tab -->
+                <div id="analytics" class="tab-content">
+                    <div class="bg-white p-6 rounded-lg shadow-sm mb-6">
+                        <h3 class="text-xl font-semibold mb-4">Inspection Analytics</h3>
+
+                        <!-- Key Metrics -->
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                            <div class="p-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-blue-100">Total Inspections</p>
+                                        <p class="text-2xl font-bold">{{ total_inspections or 0 }}</p>
+                                    </div>
+                                    <i class="fas fa-clipboard-check text-3xl text-blue-200"></i>
+                                </div>
+                            </div>
+                            <div class="p-4 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-green-100">Avg. Compliance</p>
+                                        <p class="text-2xl font-bold">87%</p>
+                                    </div>
+                                    <i class="fas fa-chart-line text-3xl text-green-200"></i>
+                                </div>
+                            </div>
+                            <div class="p-4 bg-gradient-to-r from-yellow-500 to-yellow-600 text-white rounded-lg">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-yellow-100">Issues Found</p>
+                                        <p class="text-2xl font-bold">23</p>
+                                    </div>
+                                    <i class="fas fa-exclamation-triangle text-3xl text-yellow-200"></i>
+                                </div>
+                            </div>
+                            <div class="p-4 bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-lg">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-purple-100">Avg. Time</p>
+                                        <p class="text-2xl font-bold">2.5h</p>
+                                    </div>
+                                    <i class="fas fa-clock text-3xl text-purple-200"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Charts -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div class="p-4 border rounded-lg">
+                                <h4 class="text-lg font-semibold mb-4">Inspection Trends</h4>
+                                <canvas id="inspectionTrendsChart" width="400" height="200"></canvas>
+                            </div>
+                            <div class="p-4 border rounded-lg">
+                                <h4 class="text-lg font-semibold mb-4">Compliance Distribution</h4>
+                                <canvas id="complianceChart" width="400" height="200"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Common Issues -->
+                        <div class="p-4 border rounded-lg">
+                            <h4 class="text-lg font-semibold mb-4">Most Common Issues</h4>
+                            <div class="space-y-3">
+                                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-fire-extinguisher text-red-500 mr-3"></i>
+                                        <span>Fire Extinguisher Maintenance</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <div class="w-32 bg-gray-200 rounded-full h-2 mr-2">
+                                            <div class="bg-red-500 h-2 rounded-full" style="width: 65%"></div>
+                                        </div>
+                                        <span class="text-sm">65%</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-door-open text-yellow-500 mr-3"></i>
+                                        <span>Emergency Exit Blockage</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <div class="w-32 bg-gray-200 rounded-full h-2 mr-2">
+                                            <div class="bg-yellow-500 h-2 rounded-full" style="width: 45%"></div>
+                                        </div>
+                                        <span class="text-sm">45%</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-lightbulb text-blue-500 mr-3"></i>
+                                        <span>Emergency Lighting Issues</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <div class="w-32 bg-gray-200 rounded-full h-2 mr-2">
+                                            <div class="bg-blue-500 h-2 rounded-full" style="width: 30%"></div>
+                                        </div>
+                                        <span class="text-sm">30%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+
+    <script>
+        // Global variables
+        let map;
+        let mediaRecorder;
+        let recordedChunks = [];
+        let currentStream;
+        let currentInspectionId = null;
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeTabs();
+            initializeMap();
+            initializeCharts();
+            initializeVideoRecording();
+            setupEventListeners();
+            loadInspectionReports(); // Load reports on page load
+        });
+
+        // Tab functionality
+        function initializeTabs() {
+            const navLinks = document.querySelectorAll('.nav-link[data-tab]');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+
+                    // Remove active class from all nav links and tab contents
+                    navLinks.forEach(nl => nl.classList.remove('active'));
+                    tabContents.forEach(tc => tc.classList.remove('active'));
+
+                    // Add active class to clicked nav link
+                    this.classList.add('active');
+
+                    // Show corresponding tab content
+                    const tabId = this.getAttribute('data-tab');
+                    const tabContent = document.getElementById(tabId);
+                    if (tabContent) {
+                        tabContent.classList.add('active');
+
+                        // Initialize specific tab features
+                        if (tabId === 'site-inspection') {
+                            initializeMap();
+                        } else if (tabId === 'video-inspection') {
+                            initializeVideoRecording();
+                        } else if (tabId === 'analytics') {
+                            initializeCharts();
+                        }
+                    }
+                });
+            });
+        }
+
+        // Map initialization
+        function initializeMap() {
+            if (map) {
+                map.remove();
+            }
+
+            map = L.map('map').setView([28.6139, 77.2090], 13); // Delhi coordinates
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+
+            // Add sample markers for inspection locations
+            const sampleLocations = [
+                { lat: 28.6139, lng: 77.2090, name: "Central Delhi Office" },
+                { lat: 28.5355, lng: 77.3910, name: "Noida Restaurant" },
+                { lat: 28.4595, lng: 77.0266, name: "Gurgaon Mall" }
+            ];
+
+            sampleLocations.forEach(location => {
+                L.marker([location.lat, location.lng])
+                    .addTo(map)
+                    .bindPopup(location.name);
+            });
+        }
+
+        // Video recording functionality
+        function initializeVideoRecording() {
+            const videoElement = document.getElementById('videoElement');
+            const startBtn = document.getElementById('startRecording');
+            const stopBtn = document.getElementById('stopRecording');
+            const snapshotBtn = document.getElementById('takeSnapshot');
+            const switchBtn = document.getElementById('switchCamera');
+
+            if (!videoElement) return;
+
+            // Get user media
+            navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+                .then(stream => {
+                    currentStream = stream;
+                    videoElement.srcObject = stream;
+                })
+                .catch(err => {
+                    console.error('Error accessing camera:', err);
+                    showNotification('Camera access denied', 'error');
+                });
+
+            // Start recording
+            startBtn.addEventListener('click', function() {
+                if (currentStream) {
+                    recordedChunks = [];
+                    mediaRecorder = new MediaRecorder(currentStream);
+
+                    mediaRecorder.ondataavailable = function(event) {
+                        if (event.data.size > 0) {
+                            recordedChunks.push(event.data);
+                        }
+                    };
+
+                    mediaRecorder.onstop = function() {
+                        const blob = new Blob(recordedChunks, { type: 'video/webm' });
+                        addRecordedVideo(blob);
+                    };
+
+                    mediaRecorder.start();
+                    startBtn.disabled = true;
+                    stopBtn.disabled = false;
+                    showNotification('Recording started', 'success');
+                }
+            });
+
+            // Stop recording
+            stopBtn.addEventListener('click', function() {
+                if (mediaRecorder && mediaRecorder.state === 'recording') {
+                    mediaRecorder.stop();
+                    startBtn.disabled = false;
+                    stopBtn.disabled = true;
+                    showNotification('Recording stopped', 'success');
+                }
+            });
+
+            // Take snapshot
+            snapshotBtn.addEventListener('click', function() {
+                if (videoElement.srcObject) {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = videoElement.videoWidth;
+                    canvas.height = videoElement.videoHeight;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(videoElement, 0, 0);
+
+                    canvas.toBlob(function(blob) {
+                        addSnapshot(blob);
+                    });
+                }
+            });
+        }
+
+        // Add recorded video to the list
+        function addRecordedVideo(blob) {
+            const videoContainer = document.getElementById('recordedVideos');
+            const videoElement = document.createElement('video');
+            const videoWrapper = document.createElement('div');
+
+            videoWrapper.className = 'relative bg-gray-100 rounded-lg overflow-hidden';
+            videoElement.src = URL.createObjectURL(blob);
+            videoElement.controls = true;
+            videoElement.className = 'w-full h-32 object-cover';
+
+            const deleteBtn = document.createElement('button');
+            deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
+            deleteBtn.className = 'absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full hover:bg-red-600';
+            deleteBtn.onclick = () => videoWrapper.remove();
+
+            videoWrapper.appendChild(videoElement);
+            videoWrapper.appendChild(deleteBtn);
+            videoContainer.appendChild(videoWrapper);
+        }
+
+        // Add snapshot to photo preview
+        function addSnapshot(blob) {
+            const photoPreview = document.getElementById('photoPreview');
+            const imgElement = document.createElement('img');
+            const imgWrapper = document.createElement('div');
+
+            imgWrapper.className = 'relative';
+            imgElement.src = URL.createObjectURL(blob);
+            imgElement.className = 'w-full h-24 object-cover rounded-lg';
+
+            const deleteBtn = document.createElement('button');
+            deleteBtn.innerHTML = '<i class="fas fa-times"></i>';
+            deleteBtn.className = 'absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full text-xs hover:bg-red-600';
+            deleteBtn.onclick = () => imgWrapper.remove();
+
+            imgWrapper.appendChild(imgElement);
+            imgWrapper.appendChild(deleteBtn);
+            photoPreview.appendChild(imgWrapper);
+        }
+
+        // Charts initialization
+        function initializeCharts() {
+            // Inspection Trends Chart
+            const trendsCtx = document.getElementById('inspectionTrendsChart');
+            if (trendsCtx) {
+                new Chart(trendsCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                        datasets: [{
+                            label: 'Inspections',
+                            data: [12, 19, 15, 25, 22, 30],
+                            borderColor: 'rgb(239, 68, 68)',
+                            backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Compliance Chart
+            const complianceCtx = document.getElementById('complianceChart');
+            if (complianceCtx) {
+                new Chart(complianceCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Compliant', 'Minor Issues', 'Major Issues'],
+                        datasets: [{
+                            data: [70, 20, 10],
+                            backgroundColor: [
+                                'rgb(34, 197, 94)',
+                                'rgb(251, 191, 36)',
+                                'rgb(239, 68, 68)'
+                            ]
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'bottom'
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        // Event listeners setup
+        function setupEventListeners() {
+            // Photo upload
+            const photoUpload = document.getElementById('photoUpload');
+            if (photoUpload) {
+                photoUpload.addEventListener('change', function(e) {
+                    const files = Array.from(e.target.files);
+                    files.forEach(file => {
+                        if (file.type.startsWith('image/')) {
+                            const reader = new FileReader();
+                            reader.onload = function(e) {
+                                addPhotoToPreview(e.target.result);
+                            };
+                            reader.readAsDataURL(file);
+                        }
+                    });
+                });
+            }
+
+            // AI Image upload
+            const aiImageUpload = document.getElementById('aiImageUpload');
+            if (aiImageUpload) {
+                aiImageUpload.addEventListener('change', function(e) {
+                    const file = e.target.files[0];
+                    if (file && file.type.startsWith('image/')) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            showAIImagePreview(e.target.result);
+                            performAIAnalysis(file);
+                        };
+                        reader.readAsDataURL(file);
+
+                        // Also upload the photo for inspection
+                        uploadInspectionPhoto(file);
+                    }
+                });
+            }
+
+            // Video upload
+            const videoUpload = document.getElementById('videoUpload');
+            if (videoUpload) {
+                videoUpload.addEventListener('change', function(e) {
+                    const files = Array.from(e.target.files);
+                    files.forEach(file => {
+                        if (file.type.startsWith('video/')) {
+                            uploadInspectionVideo(file);
+                        }
+                    });
+                });
+            }
+        }
+
+        // Utility functions
+        function addPhotoToPreview(imageSrc) {
+            const photoPreview = document.getElementById('photoPreview');
+            const imgElement = document.createElement('img');
+            const imgWrapper = document.createElement('div');
+
+            imgWrapper.className = 'relative';
+            imgElement.src = imageSrc;
+            imgElement.className = 'w-full h-24 object-cover rounded-lg';
+
+            const deleteBtn = document.createElement('button');
+            deleteBtn.innerHTML = '<i class="fas fa-times"></i>';
+            deleteBtn.className = 'absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full text-xs hover:bg-red-600';
+            deleteBtn.onclick = () => imgWrapper.remove();
+
+            imgWrapper.appendChild(imgElement);
+            imgWrapper.appendChild(deleteBtn);
+            photoPreview.appendChild(imgWrapper);
+        }
+
+        function showAIImagePreview(imageSrc) {
+            const preview = document.getElementById('aiImagePreview');
+            preview.innerHTML = `<img src="${imageSrc}" class="w-full h-48 object-cover rounded-lg border">`;
+        }
+
+        function performAIAnalysis(file) {
+            const analysisContent = document.getElementById('analysisContent');
+            analysisContent.innerHTML = '<div class="text-center py-4"><i class="fas fa-spinner fa-spin text-2xl text-blue-500"></i><p class="mt-2">Analyzing image...</p></div>';
+
+            // Simulate AI analysis
+            setTimeout(() => {
+                const results = [
+                    { icon: 'fas fa-fire-extinguisher', color: 'text-green-500', text: 'Fire extinguisher detected and properly positioned' },
+                    { icon: 'fas fa-door-open', color: 'text-yellow-500', text: 'Emergency exit partially obstructed' },
+                    { icon: 'fas fa-exclamation-triangle', color: 'text-red-500', text: 'Electrical hazard detected near exit' }
+                ];
+
+                let html = '';
+                results.forEach(result => {
+                    html += `
+                        <div class="ai-result">
+                            <i class="${result.icon} ai-result-icon ${result.color}"></i>
+                            <div class="ai-result-text">
+                                <p class="text-sm">${result.text}</p>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                analysisContent.innerHTML = html;
+            }, 2000);
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 p-4 rounded-lg text-white z-50 ${
+                type === 'success' ? 'bg-green-500' :
+                type === 'error' ? 'bg-red-500' :
+                type === 'warning' ? 'bg-yellow-500' : 'bg-blue-500'
+            }`;
+            notification.innerHTML = `
+                <div class="flex items-center">
+                    <i class="fas fa-${type === 'success' ? 'check' : type === 'error' ? 'times' : 'info'} mr-2"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // Inspection functions
+        function viewInspection(inspectionId) {
+            currentInspectionId = inspectionId;
+            // Switch to site inspection tab
+            document.querySelector('[data-tab="site-inspection"]').click();
+
+            // Load inspection details
+            fetch(`/api/inspection/${inspectionId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        populateInspectionForm(data.inspection);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading inspection:', error);
+                    showNotification('Error loading inspection details', 'error');
+                });
+        }
+
+        function startInspection(inspectionId) {
+            currentInspectionId = inspectionId;
+            document.querySelector('[data-tab="site-inspection"]').click();
+            showNotification('Inspection started', 'success');
+        }
+
+        function populateInspectionForm(inspection) {
+            const select = document.getElementById('inspectionSelect');
+            if (select) {
+                select.value = inspection._id;
+            }
+
+            // Update map with inspection location
+            if (map && inspection.coordinates) {
+                map.setView([inspection.coordinates.lat, inspection.coordinates.lng], 15);
+                L.marker([inspection.coordinates.lat, inspection.coordinates.lng])
+                    .addTo(map)
+                    .bindPopup(inspection.business_name)
+                    .openPopup();
+            }
+        }
+
+        async function saveInspectionData() {
+            // Get current application ID from the applications list
+            const applications = window.currentApplications || [];
+            const currentApp = applications.find(app => app.status === 'under_inspection');
+
+            if (!currentApp) {
+                // Also check for inspection_scheduled status and allow saving
+                const scheduledApp = applications.find(app => app.status === 'inspection_scheduled');
+                if (scheduledApp) {
+                    showNotification('⚠️ Please start the inspection first by clicking "Start" button.', 'warning');
+                    return;
+                }
+                showNotification('⚠️ No active inspection found. Please start an inspection first.', 'warning');
+                return;
+            }
+
+            const checklistData = getChecklistData();
+            const notes = document.getElementById('inspectionNotes').value || '';
+
+            const data = {
+                application_id: currentApp._id,
+                checklist: checklistData,
+                notes: notes,
+                status: 'in_progress'
+            };
+
+            try {
+                const response = await fetch('/api/save-inspection-data', {
+                    method: 'POST',
+                    credentials: 'same-origin',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.status === 401) {
+                    showNotification('❌ Session expired. Please login again.', 'error');
+                    setTimeout(() => window.location.href = '/login', 2000);
+                    return;
+                }
+
+                const result = await response.json();
+
+                if (result.success) {
+                    showNotification('✅ Inspection progress saved successfully!', 'success');
+                } else {
+                    showNotification('❌ Error saving data: ' + (result.error || 'Unknown error'), 'error');
+                }
+            } catch (error) {
+                console.error('Error saving inspection data:', error);
+                showNotification('❌ Error saving data', 'error');
+            }
+        }
+
+        async function completeInspection() {
+            // Get current application ID from the applications list
+            const applications = window.currentApplications || [];
+            const currentApp = applications.find(app => app.status === 'under_inspection');
+
+            if (!currentApp) {
+                // Also check for inspection_scheduled status and provide helpful message
+                const scheduledApp = applications.find(app => app.status === 'inspection_scheduled');
+                if (scheduledApp) {
+                    showNotification('⚠️ Please start the inspection first by clicking "Start" button.', 'warning');
+                    return;
+                }
+                showNotification('⚠️ No active inspection found. Please start an inspection first.', 'warning');
+                return;
+            }
+
+            const checklistData = getChecklistData();
+            const notes = document.getElementById('inspectionNotes').value || '';
+
+            // Calculate compliance score based on checklist
+            const totalItems = Object.keys(checklistData).length;
+            const passedItems = Object.values(checklistData).filter(Boolean).length;
+            const complianceScore = totalItems > 0 ? Math.round((passedItems / totalItems) * 100) : 85;
+
+            // Determine recommendation based on compliance score
+            let recommendation = 'approved';
+            if (complianceScore < 60) {
+                recommendation = 'rejected';
+            } else if (complianceScore < 80) {
+                recommendation = 'needs_improvement';
+            }
+
+            const inspectionData = {
+                inspection_report: {
+                    checklist: checklistData,
+                    notes: notes,
+                    inspector_name: '{{ session.get("username", "Inspector") }}',
+                    inspection_date: new Date().toISOString(),
+                    application_details: {
+                        business_name: currentApp.business_name,
+                        business_type: currentApp.business_type,
+                        business_address: currentApp.business_address,
+                        contact_number: currentApp.contact_number,
+                        building_area: currentApp.building_area,
+                        floors: currentApp.floors,
+                        max_occupancy: currentApp.max_occupancy
+                    }
+                },
+                compliance_score: complianceScore,
+                recommendation: recommendation
+            };
+
+            try {
+                const response = await fetch(`/api/inspection/${currentApp._id}/complete`, {
+                    method: 'POST',
+                    credentials: 'same-origin',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
+                    },
+                    body: JSON.stringify(inspectionData)
+                });
+
+                if (response.status === 401) {
+                    showNotification('❌ Session expired. Please login again.', 'error');
+                    setTimeout(() => window.location.href = '/login', 2000);
+                    return;
+                }
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showNotification('✅ Inspection completed successfully! Report sent to manager and will appear in Reports section.', 'success');
+                    // Refresh the applications list and reports
+                    loadInspectorApplications();
+                    loadInspectionReports();
+                    // Switch to reports tab to show the completed report
+                    setTimeout(() => {
+                        document.querySelector('[data-tab="reports"]').click();
+                    }, 1000);
+                } else {
+                    showNotification('❌ Error completing inspection: ' + (data.error || 'Unknown error'), 'error');
+                }
+            } catch (error) {
+                console.error('Error completing inspection:', error);
+                showNotification('❌ Error completing inspection', 'error');
+            }
+        }
+
+        function getChecklistData() {
+            const checkboxes = document.querySelectorAll('#inspectionChecklist input[type="checkbox"]');
+            const data = {};
+
+            checkboxes.forEach(checkbox => {
+                data[checkbox.value] = checkbox.checked;
+            });
+
+            return data;
+        }
+
+        function generateReport() {
+            // Get current application ID from the applications list
+            const applications = window.currentApplications || [];
+            const currentApp = applications.find(app => app.status === 'inspection_completed' || app.status === 'under_inspection');
+
+            if (!currentApp) {
+                showNotification('⚠️ No inspection found to generate report. Please complete an inspection first.', 'warning');
+                return;
+            }
+
+            showNotification('📄 Generating inspection report...', 'info');
+            window.open(`/download-inspection-report/${currentApp._id}`, '_blank');
+        }
+
+        function generateAIReport() {
+            showNotification('Generating AI report...', 'info');
+
+            // Simulate AI report generation
+            setTimeout(() => {
+                showNotification('AI report generated successfully', 'success');
+            }, 3000);
+        }
+
+        // Upload inspection video
+        async function uploadInspectionVideo(file) {
+            try {
+                const currentApp = getCurrentApplication();
+                if (!currentApp) {
+                    showNotification('⚠️ Please select an application first', 'warning');
+                    return;
+                }
+
+                const formData = new FormData();
+                formData.append('video', file);
+                formData.append('application_id', currentApp._id);
+                formData.append('video_type', 'general');
+
+                showNotification('📹 Uploading video...', 'info');
+
+                const response = await fetch('/api/inspector/upload-video', {
+                    method: 'POST',
+                    body: formData,
+                    credentials: 'same-origin'
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showNotification('✅ Video uploaded successfully!', 'success');
+                    addVideoToPreview(file, data.filename);
+                } else {
+                    showNotification('❌ Error uploading video: ' + data.error, 'error');
+                }
+            } catch (error) {
+                console.error('Error uploading video:', error);
+                showNotification('❌ Error uploading video', 'error');
+            }
+        }
+
+        // Upload inspection photo
+        async function uploadInspectionPhoto(file) {
+            try {
+                const currentApp = getCurrentApplication();
+                if (!currentApp) {
+                    showNotification('⚠️ Please select an application first', 'warning');
+                    return;
+                }
+
+                const formData = new FormData();
+                formData.append('photo', file);
+                formData.append('inspection_id', currentApp._id);
+
+                showNotification('📸 Uploading photo...', 'info');
+
+                const response = await fetch('/api/upload-inspection-photo', {
+                    method: 'POST',
+                    body: formData,
+                    credentials: 'same-origin'
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showNotification('✅ Photo uploaded successfully!', 'success');
+                    addPhotoToPreview(data.url);
+                } else {
+                    showNotification('❌ Error uploading photo: ' + data.error, 'error');
+                }
+            } catch (error) {
+                console.error('Error uploading photo:', error);
+                showNotification('❌ Error uploading photo', 'error');
+            }
+        }
+
+        // Get current application
+        function getCurrentApplication() {
+            const applications = window.currentApplications || [];
+            return applications.find(app => app.status === 'inspection_scheduled' || app.status === 'under_inspection') || applications[0];
+        }
+
+        // Add video to preview
+        function addVideoToPreview(file, filename) {
+            const videoContainer = document.getElementById('recordedVideos') || createVideoContainer();
+            const videoElement = document.createElement('div');
+            videoElement.className = 'video-preview mb-4 p-4 border rounded-lg';
+
+            const videoURL = URL.createObjectURL(file);
+            videoElement.innerHTML = `
+                <video controls class="w-full h-48 mb-2">
+                    <source src="${videoURL}" type="${file.type}">
+                    Your browser does not support the video tag.
+                </video>
+                <p class="text-sm text-gray-600">File: ${filename}</p>
+                <p class="text-sm text-gray-500">Size: ${(file.size / 1024 / 1024).toFixed(2)} MB</p>
+            `;
+
+            videoContainer.appendChild(videoElement);
+        }
+
+        // Create video container if it doesn't exist
+        function createVideoContainer() {
+            let container = document.getElementById('recordedVideos');
+            if (!container) {
+                container = document.createElement('div');
+                container.id = 'recordedVideos';
+                container.className = 'mt-4';
+
+                const siteInspectionTab = document.querySelector('#site-inspection');
+                if (siteInspectionTab) {
+                    siteInspectionTab.appendChild(container);
+                }
+            }
+            return container;
+        }
+
+        // Filter functions
+        function filterInspections(status) {
+            const cards = document.querySelectorAll('.inspection-card');
+
+            cards.forEach(card => {
+                if (status === 'all' || card.dataset.status === status) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        function showOnMap(location) {
+            document.querySelector('[data-tab="site-inspection"]').click();
+            showNotification(`Showing ${location} on map`, 'info');
+        }
+
+        // Report functions
+        function viewReport(inspectionId) {
+            window.open(`/view-inspection-report/${inspectionId}`, '_blank');
+        }
+
+        function downloadReport(inspectionId) {
+            window.open(`/download-inspection-report/${inspectionId}`, '_blank');
+        }
+
+        function shareReport(inspectionId) {
+            const shareUrl = `${window.location.origin}/view-inspection-report/${inspectionId}`;
+
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Fire Safety Inspection Report',
+                    url: shareUrl
+                });
+            } else {
+                // Fallback: copy to clipboard
+                navigator.clipboard.writeText(shareUrl).then(() => {
+                    showNotification('Report link copied to clipboard', 'success');
+                });
+            }
+        }
+
+        // Load Inspector Applications
+        async function loadInspectorApplications() {
+            try {
+                // Debug session info
+                console.log('Loading inspector applications...');
+                console.log('Current user:', document.body.getAttribute('data-username'));
+
+                const response = await fetch('/api/inspector/applications', {
+                    method: 'GET',
+                    credentials: 'same-origin',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
+                    }
+                });
+
+                console.log('Response status:', response.status);
+
+                if (response.status === 401) {
+                    console.error('Error loading applications: Unauthorized - Session expired');
+                    showNotification('❌ Session expired. Redirecting to login...', 'error');
+                    // Clear any existing intervals
+                    if (window.inspectorRefreshInterval) {
+                        clearInterval(window.inspectorRefreshInterval);
+                    }
+                    setTimeout(() => {
+                        window.location.href = '/login';
+                    }, 2000);
+                    return;
+                }
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                console.log('Response data:', data);
+
+                if (data.success) {
+                    updateInspectionsList(data.applications);
+                    updateInspectionStats(data.applications);
+                    window.currentApplications = data.applications; // Store globally
+                    console.log('Applications loaded successfully:', data.applications.length);
+
+                    // Show success message only if applications found
+                    if (data.applications.length > 0) {
+                        showNotification(`✅ Loaded ${data.applications.length} assigned applications`, 'success');
+                    } else {
+                        showNotification('ℹ️ No applications assigned yet', 'info');
+                    }
+                } else {
+                    console.error('Error loading applications:', data.error);
+                    showNotification('❌ Error loading applications: ' + (data.error || 'Unknown error'), 'error');
+                }
+            } catch (error) {
+                console.error('Error loading applications:', error);
+                showNotification('❌ Network error loading applications. Please check your connection.', 'error');
+            }
+        }
+
+        // Load Inspection Reports
+        async function loadInspectionReports() {
+            try {
+                const response = await fetch('/api/inspector/reports', {
+                    credentials: 'same-origin',
+                    headers: {
+                        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
+                    }
+                });
+
+                if (response.status === 401) {
+                    showNotification('❌ Session expired. Please login again.', 'error');
+                    setTimeout(() => window.location.href = '/login', 2000);
+                    return;
+                }
+
+                const data = await response.json();
+
+                if (data.success) {
+                    updateReportsTable(data.reports);
+                } else {
+                    console.log('No reports found or error:', data.error);
+                    updateReportsTable([]);
+                }
+            } catch (error) {
+                console.error('Error loading reports:', error);
+                updateReportsTable([]);
+            }
+        }
+
+        // Update Reports Table
+        function updateReportsTable(reports) {
+            const tbody = document.querySelector('#reports tbody');
+            if (!tbody) return;
+
+            if (reports.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="px-6 py-8 text-center text-gray-500">
+                            <i class="fas fa-file-alt text-4xl mb-3"></i>
+                            <p>No inspection reports found</p>
+                            <p class="text-sm">Complete inspections to see reports here</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = reports.map(report => `
+                <tr>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                        #${report._id.substring(0, 8)}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        ${report.business_name || 'N/A'}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        ${new Date(report.inspection_date).toLocaleDateString()}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="status-indicator status-${report.status}">
+                            ${report.status}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        <div class="flex items-center">
+                            <div class="w-16 bg-gray-200 rounded-full h-2 mr-2">
+                                <div class="bg-green-600 h-2 rounded-full" style="width: ${report.compliance_score || 0}%"></div>
+                            </div>
+                            <span class="text-sm">${report.compliance_score || 0}%</span>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <button onclick="viewReport('${report._id}')" class="text-blue-600 hover:text-blue-900 mr-3">
+                            <i class="fas fa-eye"></i> View
+                        </button>
+                        <button onclick="downloadReport('${report._id}')" class="text-green-600 hover:text-green-900 mr-3">
+                            <i class="fas fa-download"></i> Download
+                        </button>
+                        <button onclick="shareReport('${report._id}')" class="text-purple-600 hover:text-purple-900">
+                            <i class="fas fa-share"></i> Share
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function updateInspectionStats(applications) {
+            // Update statistics in the overview tab
+            const totalInspections = applications.length;
+            const pendingInspections = applications.filter(app => app.status === 'inspection_scheduled').length;
+            const inProgressInspections = applications.filter(app => app.status === 'under_inspection').length;
+            const completedInspections = applications.filter(app => app.status === 'inspection_completed').length;
+
+            // Update stat cards if they exist
+            const statCards = document.querySelectorAll('.stat-card');
+            if (statCards.length >= 4) {
+                statCards[0].querySelector('.stat-number').textContent = totalInspections;
+                statCards[1].querySelector('.stat-number').textContent = pendingInspections;
+                statCards[2].querySelector('.stat-number').textContent = inProgressInspections;
+                statCards[3].querySelector('.stat-number').textContent = completedInspections;
+            }
+        }
+
+        function updateInspectionsList(applications) {
+            const container = document.getElementById('inspectionsList');
+            if (!container) return;
+
+            if (applications.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full text-center py-8">
+                        <i class="fas fa-clipboard-list text-4xl text-gray-300 mb-4"></i>
+                        <h3 class="text-lg font-semibold text-gray-600 mb-2">No Inspections Assigned</h3>
+                        <p class="text-gray-500">Inspections will appear here when assigned by the manager</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = applications.map(app => `
+                <div class="inspection-card p-4 border rounded-lg hover:shadow-md transition" data-status="${app.status}">
+                    <div class="flex justify-between items-start mb-2">
+                        <h4 class="font-semibold">${app.business_name}</h4>
+                        <span class="status-indicator status-${app.status}">${app.status.replace('_', ' ')}</span>
+                    </div>
+                    <p class="text-sm text-gray-600 mb-2">${app.business_address}</p>
+                    <div class="flex items-center text-sm text-gray-500 mb-3">
+                        <i class="far fa-calendar mr-2"></i> ${app.inspection_date}
+                        <i class="far fa-clock ml-3 mr-2"></i> ${app.inspection_time}
+                    </div>
+                    <div class="flex justify-between mt-2">
+                        <button onclick="viewApplicationDetails('${app._id}')" class="text-blue-600 hover:text-blue-700 text-sm">
+                            <i class="fas fa-eye mr-1"></i> View Details
+                        </button>
+                        ${app.status === 'inspection_scheduled' ?
+                            `<button onclick="startInspectionFlow('${app._id}')" class="bg-green-500 text-white px-3 py-1 rounded text-sm hover:bg-green-600">
+                                <i class="fas fa-play mr-1"></i> Start
+                            </button>` :
+                            app.status === 'under_inspection' ?
+                            `<button onclick="continueInspection('${app._id}')" class="bg-blue-500 text-white px-3 py-1 rounded text-sm hover:bg-blue-600">
+                                <i class="fas fa-arrow-right mr-1"></i> Continue
+                            </button>` :
+                            `<span class="text-sm text-gray-500">Completed</span>`
+                        }
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Start Inspection Flow
+        async function startInspectionFlow(applicationId) {
+            try {
+                const response = await fetch('/api/inspector/start-inspection', {
+                    method: 'POST',
+                    credentials: 'same-origin',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
+                    },
+                    body: JSON.stringify({
+                        application_id: applicationId
+                    })
+                });
+
+                if (response.status === 401) {
+                    showNotification('❌ Session expired. Please login again.', 'error');
+                    setTimeout(() => window.location.href = '/login', 2000);
+                    return;
+                }
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showNotification('✅ Inspection started successfully! You can now save progress and complete inspection.', 'success');
+                    loadInspectorApplications(); // Refresh the list
+
+                    // Switch to site inspection tab for immediate work
+                    document.querySelector('[data-tab="site-inspection"]').click();
+                } else {
+                    showNotification('❌ Error starting inspection: ' + data.error, 'error');
+                }
+            } catch (error) {
+                console.error('Error starting inspection:', error);
+                showNotification('❌ Error starting inspection', 'error');
+            }
+        }
+
+        // Continue Inspection
+        function continueInspection(applicationId) {
+            // Open inspection modal for continuing inspection
+            openInspectionModal(applicationId);
+        }
+
+        // Open Inspection Modal
+        function openInspectionModal(applicationId) {
+            const applications = window.currentApplications || [];
+            const app = applications.find(a => a._id === applicationId);
+
+            if (!app) {
+                showNotification('Application not found', 'error');
+                return;
+            }
+
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+            modal.innerHTML = `
+                <div class="bg-white rounded-lg p-6 max-w-4xl w-full mx-4 max-h-96 overflow-y-auto">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-xl font-bold">Complete Inspection - ${app.business_name}</h3>
+                        <button onclick="this.closest('.fixed').remove()" class="text-gray-500 hover:text-gray-700">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+
+                    <form id="inspectionForm" onsubmit="submitInspection(event, '${app._id}')">
+                        <div class="grid grid-cols-2 gap-6">
+                            <div>
+                                <h4 class="font-semibold mb-3">Fire Safety Checklist</h4>
+                                <div class="space-y-2">
+                                    <label class="flex items-center">
+                                        <input type="checkbox" name="fire_extinguishers" class="mr-2">
+                                        Fire extinguishers properly placed and maintained
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" name="emergency_exits" class="mr-2">
+                                        Emergency exits clearly marked and accessible
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" name="fire_alarm" class="mr-2">
+                                        Fire alarm system functional
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" name="smoke_detectors" class="mr-2">
+                                        Smoke detectors installed and working
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" name="electrical_safety" class="mr-2">
+                                        Electrical systems safe and compliant
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div>
+                                <h4 class="font-semibold mb-3">Inspection Details</h4>
+                                <div class="space-y-4">
+                                    <div>
+                                        <label class="block text-sm font-medium mb-1">Compliance Score (%)</label>
+                                        <input type="number" name="compliance_score" min="0" max="100" value="85"
+                                               class="w-full px-3 py-2 border border-gray-300 rounded-md">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium mb-1">Recommendation</label>
+                                        <select name="recommendation" class="w-full px-3 py-2 border border-gray-300 rounded-md">
+                                            <option value="approved">Approved</option>
+                                            <option value="needs_improvement">Needs Improvement</option>
+                                            <option value="rejected">Rejected</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium mb-1">Inspector Notes</label>
+                                        <textarea name="notes" rows="3"
+                                                  class="w-full px-3 py-2 border border-gray-300 rounded-md"
+                                                  placeholder="Additional observations and recommendations..."></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-6 flex justify-end space-x-2">
+                            <button type="button" onclick="this.closest('.fixed').remove()"
+                                    class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
+                                Cancel
+                            </button>
+                            <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+                                Complete Inspection
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        // Submit Inspection
+        async function submitInspection(event, applicationId) {
+            event.preventDefault();
+
+            const form = event.target;
+            const formData = new FormData(form);
+
+            // Collect checklist data
+            const checklistData = {};
+            const checkboxes = form.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                checklistData[checkbox.name] = checkbox.checked;
+            });
+
+            const inspectionData = {
+                inspection_report: {
+                    checklist: checklistData,
+                    notes: formData.get('notes'),
+                    inspector_name: '{{ session.get("username", "Inspector") }}',
+                    inspection_date: new Date().toISOString()
+                },
+                compliance_score: parseInt(formData.get('compliance_score')),
+                recommendation: formData.get('recommendation')
+            };
+
+            try {
+                const response = await fetch(`/api/inspection/${applicationId}/complete`, {
+                    method: 'POST',
+                    credentials: 'same-origin',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
+                    },
+                    body: JSON.stringify(inspectionData)
+                });
+
+                if (response.status === 401) {
+                    showNotification('❌ Session expired. Please login again.', 'error');
+                    setTimeout(() => window.location.href = '/login', 2000);
+                    return;
+                }
+
+                const result = await response.json();
+
+                if (result.success) {
+                    showNotification('✅ Inspection completed successfully! Report sent to manager and will appear in Reports section.', 'success');
+                    form.closest('.fixed').remove();
+                    loadInspectorApplications(); // Refresh the list
+                    loadInspectionReports(); // Refresh reports
+
+                    // Switch to reports tab after a short delay
+                    setTimeout(() => {
+                        document.querySelector('[data-tab="reports"]').click();
+                    }, 1000);
+                } else {
+                    showNotification('❌ Error completing inspection: ' + result.error, 'error');
+                }
+            } catch (error) {
+                console.error('Error submitting inspection:', error);
+                showNotification('❌ Error submitting inspection', 'error');
+            }
+        }
+
+        // View Application Details
+        function viewApplicationDetails(applicationId) {
+            const applications = window.currentApplications || [];
+            const app = applications.find(a => a._id === applicationId);
+
+            if (!app) {
+                showNotification('Application not found', 'error');
+                return;
+            }
+
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+            modal.innerHTML = `
+                <div class="bg-white rounded-lg p-6 max-w-2xl w-full mx-4 max-h-96 overflow-y-auto">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-xl font-bold">Application Details</h3>
+                        <button onclick="this.closest('.fixed').remove()" class="text-gray-500 hover:text-gray-700">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div><strong>Business Name:</strong> ${app.business_name}</div>
+                        <div><strong>Business Type:</strong> ${app.business_type}</div>
+                        <div><strong>Address:</strong> ${app.business_address}</div>
+                        <div><strong>Contact:</strong> ${app.contact_number}</div>
+                        <div><strong>Building Area:</strong> ${app.building_area}</div>
+                        <div><strong>Floors:</strong> ${app.floors}</div>
+                        <div><strong>Max Occupancy:</strong> ${app.max_occupancy}</div>
+                        <div><strong>Fire Extinguishers:</strong> ${app.fire_extinguishers}</div>
+                        <div><strong>Fire Alarm:</strong> ${app.fire_alarm}</div>
+                        <div><strong>Emergency Exits:</strong> ${app.emergency_exits}</div>
+                        <div><strong>Last Fire Drill:</strong> ${app.last_fire_drill}</div>
+                        <div><strong>Status:</strong> <span class="status-indicator status-${app.status}">${app.status.replace('_', ' ')}</span></div>
+                    </div>
+                    <div class="mt-6 flex justify-end space-x-2">
+                        ${app.status === 'inspection_scheduled' ?
+                            `<button onclick="startInspectionFlow('${app._id}'); this.closest('.fixed').remove();" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+                                Start Inspection
+                            </button>` : ''
+                        }
+                        <button onclick="this.closest('.fixed').remove()" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        // Refresh Inspector Dashboard Function
+        async function refreshInspectorDashboard() {
+            const refreshIcon = document.getElementById('inspectorRefreshIcon');
+
+            // Add spinning animation
+            if (refreshIcon) {
+                refreshIcon.classList.add('fa-spin');
+            }
+
+            try {
+                // Show loading notification
+                showNotification('🔄 Refreshing inspector dashboard...', 'info');
+
+                // Check session first
+                const sessionCheck = await fetch('/api/inspector/applications', {
+                    method: 'HEAD',
+                    credentials: 'same-origin'
+                });
+
+                if (sessionCheck.status === 401) {
+                    showNotification('❌ Session expired. Redirecting to login...', 'error');
+                    setTimeout(() => {
+                        window.location.href = '/login';
+                    }, 2000);
+                    return;
+                }
+
+                // Refresh all dashboard data with proper error handling
+                const refreshPromises = [
+                    loadInspectorApplications().catch(err => {
+                        console.error('Applications refresh failed:', err);
+                        return { error: err.message };
+                    })
+                ];
+
+                const results = await Promise.allSettled(refreshPromises);
+
+                // Check if any refresh failed due to session issues
+                const hasSessionError = results.some(result =>
+                    result.status === 'rejected' ||
+                    (result.value && result.value.error && result.value.error.includes('401'))
+                );
+
+                if (hasSessionError) {
+                    showNotification('❌ Session expired. Please login again.', 'error');
+                    setTimeout(() => {
+                        window.location.href = '/login';
+                    }, 2000);
+                    return;
+                }
+
+                // Show success notification only if no session errors
+                showNotification('✅ Inspector dashboard refreshed successfully!', 'success');
+
+            } catch (error) {
+                console.error('Error refreshing inspector dashboard:', error);
+
+                if (error.message && error.message.includes('401')) {
+                    showNotification('❌ Session expired. Please login again.', 'error');
+                    setTimeout(() => {
+                        window.location.href = '/login';
+                    }, 2000);
+                } else {
+                    showNotification('❌ Error refreshing dashboard. Please try again.', 'error');
+                }
+            } finally {
+                // Remove spinning animation
+                setTimeout(() => {
+                    if (refreshIcon) {
+                        refreshIcon.classList.remove('fa-spin');
+                    }
+                }, 500);
+            }
+        }
+
+        // Session check function
+        async function checkInspectorSession() {
+            try {
+                const response = await fetch('/api/inspector/applications', {
+                    method: 'HEAD',
+                    credentials: 'same-origin'
+                });
+
+                if (response.status === 401) {
+                    console.log('Inspector session expired');
+                    showNotification('❌ Session expired. Redirecting to login...', 'error');
+
+                    // Clear any existing intervals
+                    if (window.inspectorRefreshInterval) {
+                        clearInterval(window.inspectorRefreshInterval);
+                    }
+
+                    setTimeout(() => {
+                        window.location.href = '/login';
+                    }, 2000);
+                    return false;
+                }
+                return true;
+            } catch (error) {
+                console.error('Session check failed:', error);
+                return false;
+            }
+        }
+
+        // Load real analytics data
+        async function loadInspectorAnalytics() {
+            try {
+                const response = await fetch('/api/inspector/analytics', {
+                    credentials: 'same-origin'
+                });
+
+                if (response.status === 401) {
+                    showNotification('❌ Session expired. Please login again.', 'error');
+                    setTimeout(() => window.location.href = '/login', 2000);
+                    return;
+                }
+
+                const data = await response.json();
+
+                if (data.success) {
+                    updateAnalyticsDisplay(data);
+                    showNotification('📊 Analytics updated with real data', 'success');
+                } else {
+                    console.error('Error loading analytics:', data.error);
+                }
+            } catch (error) {
+                console.error('Error loading analytics:', error);
+            }
+        }
+
+        // Update analytics display with real data
+        function updateAnalyticsDisplay(data) {
+            // Update stats cards
+            const stats = data.stats;
+            document.getElementById('totalApplications').textContent = stats.total_assigned || 0;
+            document.getElementById('pendingInspections').textContent = stats.pending_inspections || 0;
+            document.getElementById('completedInspections').textContent = stats.total_completed || 0;
+            document.getElementById('todayInspections').textContent = stats.today_inspections || 0;
+
+            // Update compliance score if element exists
+            const complianceElement = document.getElementById('avgCompliance');
+            if (complianceElement) {
+                complianceElement.textContent = stats.avg_compliance + '%' || '0%';
+            }
+
+            // Update recent activities
+            if (data.recent_activities && data.recent_activities.length > 0) {
+                updateRecentActivities(data.recent_activities);
+            }
+        }
+
+        // Update recent activities
+        function updateRecentActivities(activities) {
+            const container = document.getElementById('recentActivities');
+            if (!container) return;
+
+            container.innerHTML = activities.map(activity => `
+                <div class="activity-item p-3 border-b border-gray-100">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="text-sm font-medium text-gray-800">${activity.message}</p>
+                            <p class="text-xs text-gray-500">${new Date(activity.timestamp).toLocaleDateString()}</p>
+                        </div>
+                        <span class="text-xs px-2 py-1 bg-green-100 text-green-800 rounded">
+                            ${activity.compliance_score}%
+                        </span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Initialize Dashboard - Add to existing DOMContentLoaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Store applications globally for access in other functions
+            window.currentApplications = [];
+
+            // Initial load
+            loadInspectorApplications();
+            loadInspectorAnalytics();
+
+            // Set up auto-refresh every 30 seconds with session check
+            window.inspectorRefreshInterval = setInterval(async () => {
+                const sessionValid = await checkInspectorSession();
+                if (sessionValid) {
+                    loadInspectorApplications();
+                    loadInspectorAnalytics();
+                }
+            }, 30000);
+
+            // Check session every 5 minutes
+            setInterval(checkInspectorSession, 300000);
+        });
+    </script>
+</body>
+</html>

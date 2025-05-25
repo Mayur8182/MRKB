@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+
+{% block title %}Verify Certificate{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="max-w-3xl mx-auto">
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-red-600 mb-2">Certificate Verification</h1>
+            <p class="text-gray-600">Verify the authenticity of a Fire NOC certificate using blockchain technology</p>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <form method="POST" action="{{ url_for('verify_certificate') }}" class="space-y-4">
+                <div class="form-group">
+                    <label for="certificate_hash" class="block text-gray-700 font-medium mb-2">Certificate Hash</label>
+                    <input type="text" name="certificate_hash" id="certificate_hash" 
+                           class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+                           placeholder="Enter certificate hash" required>
+                </div>
+                
+                <div class="text-center">
+                    <button type="submit" class="px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+                        Verify Certificate
+                    </button>
+                </div>
+            </form>
+        </div>
+        
+        {% if verification_result %}
+            {% if verification_result.verified %}
+                <div class="bg-green-50 border border-green-200 rounded-lg p-6 mb-8">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-green-100 p-2 rounded-full mr-3">
+                            <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                        </div>
+                        <h2 class="text-xl font-bold text-green-800">Certificate Verified</h2>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <h3 class="text-sm font-medium text-gray-500">Business Name</h3>
+                                <p class="text-gray-800 font-medium">{{ verification_result.certificate_data.business_name }}</p>
+                            </div>
+                            <div>
+                                <h3 class="text-sm font-medium text-gray-500">Address</h3>
+                                <p class="text-gray-800 font-medium">{{ verification_result.certificate_data.address }}</p>
+                            </div>
+                            <div>
+                                <h3 class="text-sm font-medium text-gray-500">Issue Date</h3>
+                                <p class="text-gray-800 font-medium">{{ verification_result.certificate_data.issue_date }}</p>
+                            </div>
+                            <div>
+                                <h3 class="text-sm font-medium text-gray-500">Expiry Date</h3>
+                                <p class="text-gray-800 font-medium">{{ verification_result.certificate_data.expiry_date }}</p>
+                            </div>
+                            <div>
+                                <h3 class="text-sm font-medium text-gray-500">Certificate Hash</h3>
+                                <p class="text-gray-800 font-medium">{{ verification_result.certificate_data.certificate_hash }}</p>
+                            </div>
+                            <div>
+                                <h3 class="text-sm font-medium text-gray-500">Approved By</h3>
+                                <p class="text-gray-800 font-medium">{{ verification_result.certificate_data.approved_by }}</p>
+                            </div>
+                        </div>
+                        
+                        <div class="pt-4 border-t border-green-200">
+                            <h3 class="text-sm font-medium text-gray-500 mb-2">Blockchain Verification Details</h3>
+                            <div class="bg-white p-4 rounded border border-green-200 text-sm">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                    <div>
+                                        <span class="font-medium">Transaction ID:</span>
+                                        <span class="text-gray-600">{{ verification_result.transaction_id }}</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-medium">Block Index:</span>
+                                        <span class="text-gray-600">{{ verification_result.block_index }}</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-medium">Timestamp:</span>
+                                        <span class="text-gray-600">{{ verification_result.timestamp }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="bg-red-50 border border-red-200 rounded-lg p-6 mb-8">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-red-100 p-2 rounded-full mr-3">
+                            <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </div>
+                        <h2 class="text-xl font-bold text-red-800">Certificate Not Verified</h2>
+                    </div>
+                    
+                    <p class="text-gray-700">The certificate hash you provided could not be verified on our blockchain. This may indicate that:</p>
+                    
+                    <ul class="list-disc list-inside mt-2 text-gray-700 space-y-1">
+                        <li>The certificate was not issued by our system</li>
+                        <li>The certificate hash was entered incorrectly</li>
+                        <li>The certificate may have been tampered with</li>
+                    </ul>
+                    
+                    <div class="mt-4">
+                        <p class="text-gray-700">Please check the certificate hash and try again, or contact our support team for assistance.</p>
+                    </div>
+                </div>
+            {% endif %}
+        {% endif %}
+        
+        <div class="bg-blue-50 border border-blue-200 rounded-lg p-6">
+            <h2 class="text-xl font-bold text-blue-800 mb-2">About Blockchain Verification</h2>
+            <p class="text-gray-700 mb-4">
+                Our certificate verification system uses blockchain technology to ensure the authenticity and integrity of all Fire NOC certificates.
+                Each certificate is stored on a secure, tamper-proof blockchain with a unique hash identifier.
+            </p>
+            
+            <div class="space-y-2">
+                <div class="flex items-start">
+                    <div class="bg-blue-100 p-1 rounded-full mt-1 mr-2">
+                        <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                        </svg>
+                    </div>
+                    <p class="text-gray-700 text-sm">
+                        <span class="font-medium">Tamper-Proof:</span> Once a certificate is issued and stored on the blockchain, it cannot be altered or forged.
+                    </p>
+                </div>
+                
+                <div class="flex items-start">
+                    <div class="bg-blue-100 p-1 rounded-full mt-1 mr-2">
+                        <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                        </svg>
+                    </div>
+                    <p class="text-gray-700 text-sm">
+                        <span class="font-medium">Real-Time Verification:</span> Certificates can be verified instantly, 24/7, without requiring manual intervention.
+                    </p>
+                </div>
+                
+                <div class="flex items-start">
+                    <div class="bg-blue-100 p-1 rounded-full mt-1 mr-2">
+                        <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                        </svg>
+                    </div>
+                    <p class="text-gray-700 text-sm">
+                        <span class="font-medium">Transparent History:</span> The complete history of the certificate is recorded and can be audited if needed.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

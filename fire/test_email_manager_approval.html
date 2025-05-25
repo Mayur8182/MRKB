@@ -1,0 +1,145 @@
+
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Fire NOC System</title>
+            <style>
+                
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .header p {
+            margin: 5px 0 0 0;
+            opacity: 0.9;
+        }
+        .content {
+            padding: 30px;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .status-scheduled { background-color: #e3f2fd; color: #1976d2; }
+        .status-started { background-color: #fff3e0; color: #f57c00; }
+        .status-completed { background-color: #e8f5e8; color: #388e3c; }
+        .status-approved { background-color: #e8f5e8; color: #2e7d32; }
+        .info-box {
+            background-color: #f8f9fa;
+            border-left: 4px solid #ff6b35;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        .button {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: #ff6b35;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+        .footer {
+            background-color: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+        }
+        .details-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        .details-table th, .details-table td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        .details-table th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+        }
+        
+            </style>
+        </head>
+        <body>
+            <div class="email-container">
+                <div class="header">
+                    <div class="logo-section">
+                        <h1>🔥 Fire NOC System</h1>
+                        <p>Government Fire Safety Department</p>
+                    </div>
+                </div>
+
+                <div class="content">
+                    
+        <h2>📊 Inspection Report Ready for Review</h2>
+        <p>Dear Manager,</p>
+        <p>An inspection has been completed and requires your review and approval. The detailed report is attached for your evaluation.</p>
+
+        <div class="status-badge status-completed">Awaiting Approval</div>
+
+        <div class="info-box">
+            <h3>Inspection Details:</h3>
+            <table class="details-table">
+                <tr><th>Business Name:</th><td>Test Restaurant</td></tr>
+                <tr><th>Inspector:</th><td>Inspector Smith</td></tr>
+                <tr><th>Completed Date:</th><td>2025-05-25 17:00:36</td></tr>
+                <tr><th>Compliance Score:</th><td>95%</td></tr>
+                <tr><th>Inspector Recommendation:</th><td>Approved</td></tr>
+                <tr><th>Application ID:</th><td>APP123456</td></tr>
+            </table>
+        </div>
+
+        <p><strong>🔍 Key Findings:</strong></p>
+        <ul>
+            <li>Fire extinguishers properly installed</li>
+<li>Emergency exits clearly marked</li>
+<li>Smoke detectors functional</li>
+<li>Fire safety training completed</li>
+        </ul>
+
+        <p><strong>📎 Attachments:</strong> Complete Inspection Report with Photos (PDF)</p>
+
+        <a href="http://localhost:5000/manager_dashboard" class="button">Review & Approve</a>
+        
+                </div>
+
+                <div class="footer">
+                    <p>Fire Safety Department | Government Portal</p>
+                    <p>📧 support@firenoc.gov.in | 📞 1800-XXX-XXXX</p>
+                    <p><small>This is an automated message. Please do not reply to this email.</small></p>
+                </div>
+            </div>
+        </body>
+        </html>
+        

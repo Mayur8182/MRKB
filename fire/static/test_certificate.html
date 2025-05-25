@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fire Safety Certificate - NOC</title>
+    <style>
+        body {
+            font-family: 'Times New Roman', serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .certificate-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border: 3px solid #000;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            border-bottom: 2px solid #000;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .flag {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        .govt-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .dept-info {
+            font-size: 0.9em;
+            line-height: 1.4;
+        }
+        .certificate-title {
+            text-align: center;
+            margin: 30px 0;
+        }
+        .cert-main-title {
+            font-size: 1.8em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .cert-sub-title {
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        .certificate-content {
+            margin: 30px 0;
+            text-align: justify;
+            line-height: 1.6;
+        }
+        .details-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        .details-table th,
+        .details-table td {
+            border: 1px solid #000;
+            padding: 8px 12px;
+            text-align: left;
+        }
+        .details-table th {
+            background-color: #f0f0f0;
+            font-weight: bold;
+        }
+        .signature-section {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding: 20px 0;
+        }
+        .qr-code {
+            width: 100px;
+            height: 100px;
+            border: 1px solid #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f0f0f0;
+        }
+        .signature-box {
+            text-align: right;
+        }
+        .signature-line {
+            border-bottom: 2px solid #000;
+            width: 200px;
+            margin-left: auto;
+            margin-bottom: 5px;
+            height: 40px;
+            display: flex;
+            align-items: end;
+            justify-content: center;
+            font-style: italic;
+        }
+        .note {
+            border-top: 2px solid #000;
+            padding-top: 10px;
+            margin-top: 20px;
+            font-size: 0.85em;
+        }
+        .download-buttons {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            border-top: 1px solid #ccc;
+        }
+        .btn {
+            background: #007bff;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 0 10px;
+        }
+        .btn:hover {
+            background: #0056b3;
+        }
+        .btn-success {
+            background: #28a745;
+        }
+        .btn-success:hover {
+            background: #1e7e34;
+        }
+        @media print {
+            .download-buttons {
+                display: none !important;
+            }
+            body {
+                background: white;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="certificate-container">
+        <div class="header">
+            <div class="flag">🇮🇳</div>
+            <div class="govt-title">Government of India</div>
+            <div class="dept-info">
+                Ministry of Home Affairs<br>
+                Directorate General of Fire Services<br>
+                Office of the Additional Director General of Fire Services, Gujarat<br>
+                3rd Floor, Fire Safety Building, Sector-10, Gandhinagar, GUJARAT
+            </div>
+        </div>
+
+        <div class="certificate-title">
+            <div class="cert-main-title">Fire Safety Certificate</div>
+            <div class="cert-sub-title">No Objection Certificate (NOC)</div>
+        </div>
+
+        <div class="certificate-content">
+            This is to certify that <strong>Sample Business Name</strong> is issued a Fire Safety Certificate (NOC) with details as follows:
+        </div>
+
+        <table class="details-table">
+            <tr>
+                <th>NOC</th>
+                <td>NOC-2025-001</td>
+            </tr>
+            <tr>
+                <th>PAN</th>
+                <td>ABCDE1234F</td>
+            </tr>
+            <tr>
+                <th>Firm Name</th>
+                <td>Sample Business Name</td>
+            </tr>
+            <tr>
+                <th>Nature of Business</th>
+                <td>Commercial</td>
+            </tr>
+            <tr>
+                <th>Date of Issue</th>
+                <td>24/05/2025</td>
+            </tr>
+            <tr>
+                <th>Registered Address</th>
+                <td>Sample Address, City, State</td>
+            </tr>
+            <tr>
+                <th>Name of the Signatory</th>
+                <td>MAYUR BHARVAD</td>
+            </tr>
+            <tr>
+                <th>Director / Partner Details</th>
+                <td>Refer online at https://firenoc.gov.in or scan the QR Code</td>
+            </tr>
+            <tr>
+                <th>Branch Details</th>
+                <td>Refer online at https://firenoc.gov.in or scan the QR Code</td>
+            </tr>
+        </table>
+
+        <div style="text-align: right; margin: 20px 0;">
+            <strong>Last Modified:</strong> 24/05/2025<br>
+            <strong>File Number:</strong> FIRE/NOC/NOC-2025-001
+        </div>
+
+        <div class="signature-section">
+            <div>
+                <div class="qr-code">QR CODE</div>
+            </div>
+            <div class="signature-box">
+                <div class="signature-line">M.K.Bharvad</div>
+                <div style="font-weight: bold;">MAYUR BHARVAD</div>
+                <div>Fire Safety Officer</div>
+                <div>Government of Gujarat</div>
+            </div>
+        </div>
+
+        <div class="note">
+            <strong>Note:</strong> This is a system-generated certificate. Authenticity / Updated details of the NOC can be checked at
+            official Fire Safety website <strong>https://firenoc.gov.in</strong> by entering the NOC and Firm Name under Services > View Any
+            NOC Details. You can also authenticate the certificate by scanning the QR code.
+        </div>
+
+        <div class="download-buttons">
+            <button class="btn" onclick="window.print()">🖨️ Print Certificate</button>
+            <button class="btn btn-success" onclick="downloadPDF()">📄 Download PDF</button>
+        </div>
+    </div>
+
+    <script>
+        function downloadPDF() {
+            // Create a simple PDF download using browser's print to PDF
+            window.print();
+        }
+
+        // Function to update certificate with real data (can be called from parent window)
+        function updateCertificateData(data) {
+            if (data.business_name) {
+                document.querySelector('.certificate-content strong').textContent = data.business_name;
+                document.querySelector('td:contains("Sample Business Name")').textContent = data.business_name;
+            }
+            if (data.certificate_number) {
+                document.querySelector('td:contains("NOC-2025-001")').textContent = data.certificate_number;
+            }
+            if (data.pan_number) {
+                document.querySelector('td:contains("ABCDE1234F")').textContent = data.pan_number;
+            }
+            if (data.business_type) {
+                document.querySelector('td:contains("Commercial")').textContent = data.business_type;
+            }
+            if (data.business_address) {
+                document.querySelector('td:contains("Sample Address, City, State")').textContent = data.business_address;
+            }
+        }
+    </script>
+    </div>
+</body>
+</html>

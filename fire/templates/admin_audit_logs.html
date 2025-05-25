@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audit Logs - Admin Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .audit-container {
+            max-width: 1400px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        
+        .audit-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+        
+        .card-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border: none;
+        }
+        
+        .card-body {
+            padding: 30px;
+        }
+        
+        .filters-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .filter-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-control, .form-select {
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+            padding: 10px 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            font-weight: 600;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            font-weight: 600;
+        }
+        
+        .audit-table {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .table th {
+            background: #f8f9fa;
+            border: none;
+            font-weight: 600;
+            color: #333;
+            padding: 15px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        .table td {
+            border: none;
+            padding: 15px;
+            vertical-align: middle;
+        }
+        
+        .table tbody tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .severity-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .severity-info {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+        
+        .severity-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .severity-error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .severity-success {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .action-icon {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            font-size: 14px;
+        }
+        
+        .action-login { background: #e3f2fd; color: #1976d2; }
+        .action-logout { background: #fce4ec; color: #c2185b; }
+        .action-create { background: #e8f5e8; color: #388e3c; }
+        .action-update { background: #fff3e0; color: #f57c00; }
+        .action-delete { background: #ffebee; color: #d32f2f; }
+        .action-view { background: #f3e5f5; color: #7b1fa2; }
+        .action-general { background: #f5f5f5; color: #616161; }
+        
+        .back-button {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .back-button:hover {
+            background: rgba(255,255,255,0.3);
+            color: white;
+            text-decoration: none;
+        }
+        
+        .stats-row {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .stat-label {
+            color: #6c757d;
+            font-size: 14px;
+        }
+        
+        .table-container {
+            max-height: 600px;
+            overflow-y: auto;
+        }
+        
+        .export-buttons {
+            margin-bottom: 20px;
+        }
+        
+        .search-highlight {
+            background-color: yellow;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="audit-container">
+        <a href="{{ url_for('admin_dashboard') }}" class="back-button">
+            <i class="fas fa-arrow-left me-2"></i> Back to Dashboard
+        </a>
+        
+        <!-- Statistics -->
+        <div class="audit-card">
+            <div class="card-header">
+                <h3><i class="fas fa-chart-line me-2"></i> Audit Statistics</h3>
+            </div>
+            <div class="card-body">
+                <div class="stats-row">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="stat-item">
+                                <div class="stat-number" id="totalLogs">-</div>
+                                <div class="stat-label">Total Logs</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stat-item">
+                                <div class="stat-number" id="todayLogs">-</div>
+                                <div class="stat-label">Today's Logs</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stat-item">
+                                <div class="stat-number" id="errorLogs">-</div>
+                                <div class="stat-label">Error Logs</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stat-item">
+                                <div class="stat-number" id="activeUsers">-</div>
+                                <div class="stat-label">Active Users</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Filters -->
+        <div class="audit-card">
+            <div class="card-header">
+                <h3><i class="fas fa-filter me-2"></i> Filters & Search</h3>
+            </div>
+            <div class="card-body">
+                <div class="filters-section">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="filter-group">
+                                <label class="form-label">Search</label>
+                                <input type="text" class="form-control" id="searchInput" placeholder="Search logs...">
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="filter-group">
+                                <label class="form-label">Action Type</label>
+                                <select class="form-select" id="actionFilter">
+                                    <option value="">All Actions</option>
+                                    <option value="login">Login</option>
+                                    <option value="logout">Logout</option>
+                                    <option value="application_submitted">Application</option>
+                                    <option value="document_uploaded">Document</option>
+                                    <option value="inspection_completed">Inspection</option>
+                                    <option value="profile_updated">Profile</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="filter-group">
+                                <label class="form-label">Severity</label>
+                                <select class="form-select" id="severityFilter">
+                                    <option value="">All Levels</option>
+                                    <option value="info">Info</option>
+                                    <option value="warning">Warning</option>
+                                    <option value="error">Error</option>
+                                    <option value="success">Success</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="filter-group">
+                                <label class="form-label">Date From</label>
+                                <input type="date" class="form-control" id="dateFrom">
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="filter-group">
+                                <label class="form-label">Date To</label>
+                                <input type="date" class="form-control" id="dateTo">
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="filter-group">
+                                <label class="form-label">&nbsp;</label>
+                                <button type="button" class="btn btn-primary w-100" onclick="applyFilters()">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="export-buttons">
+                        <button type="button" class="btn btn-secondary me-2" onclick="exportLogs('csv')">
+                            <i class="fas fa-file-csv me-1"></i> Export CSV
+                        </button>
+                        <button type="button" class="btn btn-secondary me-2" onclick="exportLogs('pdf')">
+                            <i class="fas fa-file-pdf me-1"></i> Export PDF
+                        </button>
+                        <button type="button" class="btn btn-secondary" onclick="clearFilters()">
+                            <i class="fas fa-times me-1"></i> Clear Filters
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Audit Logs Table -->
+        <div class="audit-card">
+            <div class="card-header">
+                <h3><i class="fas fa-list me-2"></i> Audit Logs</h3>
+            </div>
+            <div class="card-body">
+                <div class="table-container">
+                    <div class="audit-table">
+                        <table class="table table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th width="50">Type</th>
+                                    <th width="120">User</th>
+                                    <th width="120">Action</th>
+                                    <th>Description</th>
+                                    <th width="150">Timestamp</th>
+                                    <th width="100">Severity</th>
+                                    <th width="120">IP Address</th>
+                                </tr>
+                            </thead>
+                            <tbody id="auditLogsTable">
+                                <!-- Audit logs will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Pagination -->
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                    <div>
+                        <span id="logCount">Showing 0 logs</span>
+                    </div>
+                    <nav>
+                        <ul class="pagination mb-0" id="pagination">
+                            <!-- Pagination will be generated here -->
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let currentPage = 1;
+        let logsPerPage = 50;
+        let allLogs = [];
+        let filteredLogs = [];
+        
+        // Load audit logs
+        async function loadAuditLogs() {
+            try {
+                const response = await fetch('/api/admin/audit-logs');
+                const data = await response.json();
+                
+                if (data.success) {
+                    allLogs = data.data.logs;
+                    filteredLogs = [...allLogs];
+                    
+                    // Update statistics
+                    updateStatistics();
+                    
+                    // Display logs
+                    displayLogs();
+                }
+            } catch (error) {
+                console.error('Error loading audit logs:', error);
+            }
+        }
+        
+        // Update statistics
+        function updateStatistics() {
+            const today = new Date().toDateString();
+            const todayLogs = allLogs.filter(log => new Date(log.timestamp).toDateString() === today);
+            const errorLogs = allLogs.filter(log => log.severity === 'error');
+            const uniqueUsers = [...new Set(allLogs.map(log => log.username))];
+            
+            document.getElementById('totalLogs').textContent = allLogs.length;
+            document.getElementById('todayLogs').textContent = todayLogs.length;
+            document.getElementById('errorLogs').textContent = errorLogs.length;
+            document.getElementById('activeUsers').textContent = uniqueUsers.length;
+        }
+        
+        // Display logs in table
+        function displayLogs() {
+            const tbody = document.getElementById('auditLogsTable');
+            tbody.innerHTML = '';
+            
+            const startIndex = (currentPage - 1) * logsPerPage;
+            const endIndex = startIndex + logsPerPage;
+            const logsToShow = filteredLogs.slice(startIndex, endIndex);
+            
+            logsToShow.forEach(log => {
+                const row = document.createElement('tr');
+                const timestamp = new Date(log.timestamp).toLocaleString();
+                
+                row.innerHTML = `
+                    <td>
+                        <div class="action-icon action-${getActionClass(log.action)}">
+                            <i class="fas ${getActionIcon(log.action)}"></i>
+                        </div>
+                    </td>
+                    <td>
+                        <strong>${log.username}</strong>
+                    </td>
+                    <td>
+                        <span class="badge bg-secondary">${log.action}</span>
+                    </td>
+                    <td>
+                        <span class="description">${log.description}</span>
+                    </td>
+                    <td>
+                        <small class="text-muted">${timestamp}</small>
+                    </td>
+                    <td>
+                        <span class="severity-badge severity-${log.severity}">
+                            ${log.severity}
+                        </span>
+                    </td>
+                    <td>
+                        <small class="text-muted">${log.ip_address}</small>
+                    </td>
+                `;
+                
+                tbody.appendChild(row);
+            });
+            
+            // Update pagination
+            updatePagination();
+            
+            // Update count
+            document.getElementById('logCount').textContent = 
+                `Showing ${startIndex + 1}-${Math.min(endIndex, filteredLogs.length)} of ${filteredLogs.length} logs`;
+        }
+        
+        // Get action class for styling
+        function getActionClass(action) {
+            if (action.includes('login')) return 'login';
+            if (action.includes('logout')) return 'logout';
+            if (action.includes('create') || action.includes('submit')) return 'create';
+            if (action.includes('update') || action.includes('edit')) return 'update';
+            if (action.includes('delete') || action.includes('remove')) return 'delete';
+            if (action.includes('view') || action.includes('read')) return 'view';
+            return 'general';
+        }
+        
+        // Get action icon
+        function getActionIcon(action) {
+            if (action.includes('login')) return 'fa-sign-in-alt';
+            if (action.includes('logout')) return 'fa-sign-out-alt';
+            if (action.includes('create') || action.includes('submit')) return 'fa-plus';
+            if (action.includes('update') || action.includes('edit')) return 'fa-edit';
+            if (action.includes('delete') || action.includes('remove')) return 'fa-trash';
+            if (action.includes('view') || action.includes('read')) return 'fa-eye';
+            return 'fa-cog';
+        }
+        
+        // Apply filters
+        function applyFilters() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const actionFilter = document.getElementById('actionFilter').value;
+            const severityFilter = document.getElementById('severityFilter').value;
+            const dateFrom = document.getElementById('dateFrom').value;
+            const dateTo = document.getElementById('dateTo').value;
+            
+            filteredLogs = allLogs.filter(log => {
+                // Search filter
+                if (searchTerm && !log.description.toLowerCase().includes(searchTerm) && 
+                    !log.username.toLowerCase().includes(searchTerm)) {
+                    return false;
+                }
+                
+                // Action filter
+                if (actionFilter && log.action !== actionFilter) {
+                    return false;
+                }
+                
+                // Severity filter
+                if (severityFilter && log.severity !== severityFilter) {
+                    return false;
+                }
+                
+                // Date filters
+                const logDate = new Date(log.timestamp).toISOString().split('T')[0];
+                if (dateFrom && logDate < dateFrom) {
+                    return false;
+                }
+                if (dateTo && logDate > dateTo) {
+                    return false;
+                }
+                
+                return true;
+            });
+            
+            currentPage = 1;
+            displayLogs();
+        }
+        
+        // Clear filters
+        function clearFilters() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('actionFilter').value = '';
+            document.getElementById('severityFilter').value = '';
+            document.getElementById('dateFrom').value = '';
+            document.getElementById('dateTo').value = '';
+            
+            filteredLogs = [...allLogs];
+            currentPage = 1;
+            displayLogs();
+        }
+        
+        // Update pagination
+        function updatePagination() {
+            const totalPages = Math.ceil(filteredLogs.length / logsPerPage);
+            const pagination = document.getElementById('pagination');
+            pagination.innerHTML = '';
+            
+            // Previous button
+            const prevLi = document.createElement('li');
+            prevLi.className = `page-item ${currentPage === 1 ? 'disabled' : ''}`;
+            prevLi.innerHTML = `<a class="page-link" href="#" onclick="changePage(${currentPage - 1})">Previous</a>`;
+            pagination.appendChild(prevLi);
+            
+            // Page numbers
+            const startPage = Math.max(1, currentPage - 2);
+            const endPage = Math.min(totalPages, currentPage + 2);
+            
+            for (let i = startPage; i <= endPage; i++) {
+                const li = document.createElement('li');
+                li.className = `page-item ${i === currentPage ? 'active' : ''}`;
+                li.innerHTML = `<a class="page-link" href="#" onclick="changePage(${i})">${i}</a>`;
+                pagination.appendChild(li);
+            }
+            
+            // Next button
+            const nextLi = document.createElement('li');
+            nextLi.className = `page-item ${currentPage === totalPages ? 'disabled' : ''}`;
+            nextLi.innerHTML = `<a class="page-link" href="#" onclick="changePage(${currentPage + 1})">Next</a>`;
+            pagination.appendChild(nextLi);
+        }
+        
+        // Change page
+        function changePage(page) {
+            const totalPages = Math.ceil(filteredLogs.length / logsPerPage);
+            if (page >= 1 && page <= totalPages) {
+                currentPage = page;
+                displayLogs();
+            }
+        }
+        
+        // Export logs
+        function exportLogs(format) {
+            const exportData = filteredLogs.map(log => ({
+                timestamp: new Date(log.timestamp).toLocaleString(),
+                username: log.username,
+                action: log.action,
+                description: log.description,
+                severity: log.severity,
+                ip_address: log.ip_address
+            }));
+            
+            if (format === 'csv') {
+                exportToCSV(exportData);
+            } else if (format === 'pdf') {
+                exportToPDF(exportData);
+            }
+        }
+        
+        // Export to CSV
+        function exportToCSV(data) {
+            const headers = ['Timestamp', 'Username', 'Action', 'Description', 'Severity', 'IP Address'];
+            const csvContent = [
+                headers.join(','),
+                ...data.map(row => [
+                    row.timestamp,
+                    row.username,
+                    row.action,
+                    `"${row.description.replace(/"/g, '""')}"`,
+                    row.severity,
+                    row.ip_address
+                ].join(','))
+            ].join('\n');
+            
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `audit_logs_${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+        
+        // Export to PDF (simplified)
+        function exportToPDF(data) {
+            showNotification('PDF export feature coming soon!', 'info');
+        }
+        
+        // Show notification
+        function showNotification(message, type) {
+            const alertClass = type === 'success' ? 'alert-success' : 
+                              type === 'error' ? 'alert-danger' : 
+                              type === 'warning' ? 'alert-warning' : 'alert-info';
+            
+            const notification = document.createElement('div');
+            notification.className = `alert ${alertClass} alert-dismissible fade show position-fixed`;
+            notification.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+            notification.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 5000);
+        }
+        
+        // Real-time search
+        document.getElementById('searchInput').addEventListener('input', function() {
+            clearTimeout(this.searchTimeout);
+            this.searchTimeout = setTimeout(() => {
+                applyFilters();
+            }, 300);
+        });
+        
+        // Load logs on page load
+        loadAuditLogs();
+        
+        // Auto-refresh every 30 seconds
+        setInterval(loadAuditLogs, 30000);
+    </script>
+</body>
+</html>

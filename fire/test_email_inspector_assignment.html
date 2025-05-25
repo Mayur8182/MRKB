@@ -1,0 +1,144 @@
+
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Fire NOC System</title>
+            <style>
+                
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .header p {
+            margin: 5px 0 0 0;
+            opacity: 0.9;
+        }
+        .content {
+            padding: 30px;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .status-scheduled { background-color: #e3f2fd; color: #1976d2; }
+        .status-started { background-color: #fff3e0; color: #f57c00; }
+        .status-completed { background-color: #e8f5e8; color: #388e3c; }
+        .status-approved { background-color: #e8f5e8; color: #2e7d32; }
+        .info-box {
+            background-color: #f8f9fa;
+            border-left: 4px solid #ff6b35;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        .button {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: #ff6b35;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+        .footer {
+            background-color: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+        }
+        .details-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        .details-table th, .details-table td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        .details-table th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+        }
+        
+            </style>
+        </head>
+        <body>
+            <div class="email-container">
+                <div class="header">
+                    <div class="logo-section">
+                        <h1>🔥 Fire NOC System</h1>
+                        <p>Government Fire Safety Department</p>
+                    </div>
+                </div>
+
+                <div class="content">
+                    
+        <h2>🔍 New Inspection Assignment</h2>
+        <p>Dear Inspector Smith,</p>
+        <p>You have been assigned a new inspection. Please review the details below and plan your visit accordingly.</p>
+
+        <div class="status-badge status-scheduled">New Assignment</div>
+
+        <div class="info-box">
+            <h3>Assignment Details:</h3>
+            <table class="details-table">
+                <tr><th>Business Name:</th><td>Test Restaurant</td></tr>
+                <tr><th>Business Address:</th><td>123 Main St, City</td></tr>
+                <tr><th>Business Type:</th><td>Restaurant</td></tr>
+                <tr><th>Scheduled Date:</th><td>2024-01-15</td></tr>
+                <tr><th>Application ID:</th><td>APP123456</td></tr>
+                <tr><th>Assigned By:</th><td>Manager</td></tr>
+            </table>
+        </div>
+
+        <p><strong>📋 Inspection Checklist:</strong></p>
+        <ul>
+            <li>Verify fire safety equipment installation</li>
+            <li>Check emergency exit routes</li>
+            <li>Inspect fire extinguisher placement</li>
+            <li>Document findings with photos/videos</li>
+            <li>Complete inspection report</li>
+        </ul>
+
+        <a href="http://localhost:5000/inspector_dashboard" class="button">Access Inspector Dashboard</a>
+        
+                </div>
+
+                <div class="footer">
+                    <p>Fire Safety Department | Government Portal</p>
+                    <p>📧 support@firenoc.gov.in | 📞 1800-XXX-XXXX</p>
+                    <p><small>This is an automated message. Please do not reply to this email.</small></p>
+                </div>
+            </div>
+        </body>
+        </html>
+        

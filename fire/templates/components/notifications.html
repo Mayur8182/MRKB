@@ -1,0 +1,369 @@
+<!-- Notification Component -->
+<div id="notificationSystem" class="notification-system">
+    <div class="notification-bell">
+        <i class="fas fa-bell"></i>
+        <span class="notification-badge" id="notificationCount">0</span>
+    </div>
+    
+    <div class="notification-panel">
+        <div class="notification-header">
+            <h3>Notifications</h3>
+            <button id="markAllRead" class="btn btn-sm btn-outline-primary">Mark All Read</button>
+        </div>
+        <div class="notification-list" id="notificationList">
+            <!-- Notifications will be loaded here -->
+            <div class="empty-notification">No notifications</div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .notification-system {
+        position: relative;
+    }
+    
+    .notification-bell {
+        position: relative;
+        cursor: pointer;
+        font-size: 1.2rem;
+        color: #495057;
+        transition: color 0.3s;
+    }
+    
+    .notification-bell:hover {
+        color: #007bff;
+    }
+    
+    .notification-badge {
+        position: absolute;
+        top: -8px;
+        right: -8px;
+        background-color: #dc3545;
+        color: white;
+        border-radius: 50%;
+        width: 18px;
+        height: 18px;
+        font-size: 0.7rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+    }
+    
+    .notification-panel {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        width: 350px;
+        max-height: 400px;
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+        display: none;
+        overflow: hidden;
+    }
+    
+    .notification-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 15px;
+        border-bottom: 1px solid #e9ecef;
+        background-color: #f8f9fa;
+    }
+    
+    .notification-header h3 {
+        margin: 0;
+        font-size: 1rem;
+        font-weight: 600;
+    }
+    
+    .notification-list {
+        overflow-y: auto;
+        max-height: 350px;
+    }
+    
+    .notification-item {
+        padding: 12px 15px;
+        border-bottom: 1px solid #f1f1f1;
+        transition: background-color 0.3s;
+    }
+    
+    .notification-item:hover {
+        background-color: #f8f9fa;
+    }
+    
+    .notification-item.unread {
+        background-color: #e6f7ff;
+    }
+    
+    .notification-item.unread:hover {
+        background-color: #d1efff;
+    }
+    
+    .notification-title {
+        font-weight: 600;
+        margin-bottom: 5px;
+        color: #343a40;
+    }
+    
+    .notification-message {
+        font-size: 0.9rem;
+        color: #6c757d;
+        margin-bottom: 5px;
+    }
+    
+    .notification-time {
+        font-size: 0.8rem;
+        color: #adb5bd;
+        text-align: right;
+    }
+    
+    .empty-notification {
+        padding: 20px;
+        text-align: center;
+        color: #6c757d;
+        font-style: italic;
+    }
+    
+    .show-panel {
+        display: block;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const notificationSystem = {
+            bell: document.querySelector('.notification-bell'),
+            panel: document.querySelector('.notification-panel'),
+            count: document.getElementById('notificationCount'),
+            list: document.getElementById('notificationList'),
+            markAllBtn: document.getElementById('markAllRead'),
+            notifications: [],
+            unreadCount: 0,
+            
+            init: function() {
+                // Toggle panel on bell click
+                this.bell.addEventListener('click', () => {
+                    this.panel.classList.toggle('show-panel');
+                    if (this.panel.classList.contains('show-panel')) {
+                        this.loadNotifications();
+                    }
+                });
+                
+                // Close panel when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (!this.bell.contains(e.target) && !this.panel.contains(e.target)) {
+                        this.panel.classList.remove('show-panel');
+                    }
+                });
+                
+                // Mark all as read
+                this.markAllBtn.addEventListener('click', () => {
+                    this.markAllAsRead();
+                });
+                
+                // Initial load
+                this.loadNotifications();
+                
+                // Set up socket connection for real-time notifications
+                this.setupSocketConnection();
+            },
+            
+            loadNotifications: function() {
+                fetch('/api/notifications')
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            this.notifications = data.notifications;
+                            this.renderNotifications();
+                            this.updateUnreadCount();
+                        }
+                    })
+                    .catch(error => console.error('Error loading notifications:', error));
+            },
+            
+            renderNotifications: function() {
+                if (this.notifications.length === 0) {
+                    this.list.innerHTML = '<div class="empty-notification">No notifications</div>';
+                    return;
+                }
+                
+                this.list.innerHTML = '';
+                this.notifications.forEach(notification => {
+                    const item = document.createElement('div');
+                    item.className = `notification-item ${notification.read ? '' : 'unread'}`;
+                    item.dataset.id = notification.id;
+                    
+                    item.innerHTML = `
+                        <div class="notification-title">${notification.activity_type}</div>
+                        <div class="notification-message">${notification.description}</div>
+                        <div class="notification-time">${notification.timestamp}</div>
+                    `;
+                    
+                    item.addEventListener('click', () => {
+                        this.markAsRead(notification.id);
+                    });
+                    
+                    this.list.appendChild(item);
+                });
+            },
+            
+            updateUnreadCount: function() {
+                this.unreadCount = this.notifications.filter(n => !n.read).length;
+                this.count.textContent = this.unreadCount;
+                
+                if (this.unreadCount > 0) {
+                    this.count.style.display = 'flex';
+                } else {
+                    this.count.style.display = 'none';
+                }
+            },
+            
+            markAsRead: function(id) {
+                fetch('/api/notifications/mark-read', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
+                    },
+                    body: JSON.stringify({
+                        notification_ids: [id]
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Update local state
+                        this.notifications = this.notifications.map(n => {
+                            if (n.id === id) {
+                                return {...n, read: true};
+                            }
+                            return n;
+                        });
+                        this.renderNotifications();
+                        this.updateUnreadCount();
+                    }
+                })
+                .catch(error => console.error('Error marking notification as read:', error));
+            },
+            
+            markAllAsRead: function() {
+                const unreadIds = this.notifications.filter(n => !n.read).map(n => n.id);
+                
+                if (unreadIds.length === 0) return;
+                
+                fetch('/api/notifications/mark-read', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
+                    },
+                    body: JSON.stringify({
+                        notification_ids: unreadIds
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Update local state
+                        this.notifications = this.notifications.map(n => ({...n, read: true}));
+                        this.renderNotifications();
+                        this.updateUnreadCount();
+                    }
+                })
+                .catch(error => console.error('Error marking all notifications as read:', error));
+            },
+            
+            setupSocketConnection: function() {
+                // Check if socket.io is available
+                if (typeof io !== 'undefined') {
+                    const socket = io();
+                    
+                    // Listen for general notifications
+                    socket.on('notification', (data) => {
+                        this.addNotification(data);
+                    });
+                    
+                    // Listen for user-specific notifications
+                    const username = document.body.dataset.username;
+                    if (username) {
+                        socket.on(`notification_${username}`, (data) => {
+                            this.addNotification(data);
+                        });
+                    }
+                }
+            },
+            
+            addNotification: function(notification) {
+                // Add to the beginning of the array
+                this.notifications.unshift({
+                    id: notification.id,
+                    timestamp: notification.timestamp,
+                    activity_type: notification.activity_type,
+                    description: notification.description,
+                    username: notification.username,
+                    read: false
+                });
+                
+                // Re-render and update count
+                this.renderNotifications();
+                this.updateUnreadCount();
+                
+                // Show a toast notification
+                this.showToast(notification);
+            },
+            
+            showToast: function(notification) {
+                // Create toast element if it doesn't exist
+                let toastContainer = document.getElementById('toast-container');
+                if (!toastContainer) {
+                    toastContainer = document.createElement('div');
+                    toastContainer.id = 'toast-container';
+                    toastContainer.style.position = 'fixed';
+                    toastContainer.style.top = '20px';
+                    toastContainer.style.right = '20px';
+                    toastContainer.style.zIndex = '9999';
+                    document.body.appendChild(toastContainer);
+                }
+                
+                // Create toast
+                const toast = document.createElement('div');
+                toast.className = 'toast show';
+                toast.style.minWidth = '300px';
+                toast.style.background = 'white';
+                toast.style.boxShadow = '0 0.5rem 1rem rgba(0, 0, 0, 0.15)';
+                toast.style.margin = '0 0 10px 0';
+                toast.style.opacity = '1';
+                
+                toast.innerHTML = `
+                    <div class="toast-header">
+                        <strong class="mr-auto">${notification.activity_type}</strong>
+                        <small>${notification.timestamp}</small>
+                        <button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button>
+                    </div>
+                    <div class="toast-body">
+                        ${notification.description}
+                    </div>
+                `;
+                
+                // Add close button functionality
+                toast.querySelector('.close').addEventListener('click', function() {
+                    toast.remove();
+                });
+                
+                // Add to container
+                toastContainer.appendChild(toast);
+                
+                // Auto-remove after 5 seconds
+                setTimeout(() => {
+                    toast.remove();
+                }, 5000);
+            }
+        };
+        
+        // Initialize notification system
+        notificationSystem.init();
+    });
+</script>

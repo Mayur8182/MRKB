@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Role Update</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .container { max-width: 600px; margin: 0 auto; }
+        .button { padding: 10px 20px; margin: 10px; background: #007bff; color: white; border: none; cursor: pointer; }
+        .button:hover { background: #0056b3; }
+        .result { margin: 20px 0; padding: 10px; border: 1px solid #ddd; background: #f9f9f9; }
+        .error { background: #f8d7da; border-color: #f5c6cb; color: #721c24; }
+        .success { background: #d4edda; border-color: #c3e6cb; color: #155724; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Manager Dashboard Fix - Role Update Test</h1>
+
+        <div id="currentSession" class="result">
+            <h3>Current Session:</h3>
+            <div id="sessionInfo">Loading...</div>
+        </div>
+
+        <div>
+            <h3>Update Role:</h3>
+            <button class="button" onclick="updateRole('manager')">Set Role to Manager</button>
+            <button class="button" onclick="updateRole('user')">Set Role to User</button>
+            <button class="button" onclick="updateRole('admin')">Set Role to Admin</button>
+            <button class="button" onclick="updateRole('inspector')">Set Role to Inspector</button>
+        </div>
+
+        <div>
+            <h3>Refresh Role:</h3>
+            <button class="button" onclick="refreshRole()" style="background: #28a745;">Refresh Role from Database</button>
+        </div>
+
+        <div>
+            <h3>Test Manager Endpoints:</h3>
+            <button class="button" onclick="testManagerSession()">Test Manager Session</button>
+            <button class="button" onclick="testAnalytics()">Test Analytics</button>
+            <button class="button" onclick="testInspectionReports()">Test Inspection Reports</button>
+        </div>
+
+        <div id="result" class="result" style="display: none;">
+            <h3>Result:</h3>
+            <div id="resultContent"></div>
+        </div>
+    </div>
+
+    <script>
+        // Load current session on page load
+        window.onload = function() {
+            loadCurrentSession();
+        };
+
+        async function loadCurrentSession() {
+            try {
+                const response = await fetch('/api/debug/session');
+                const data = await response.json();
+
+                document.getElementById('sessionInfo').innerHTML = `
+                    <strong>Username:</strong> ${data.username || 'Not logged in'}<br>
+                    <strong>Role:</strong> ${data.role || 'None'}<br>
+                    <strong>Authenticated:</strong> ${data.authenticated}<br>
+                    <strong>Is Manager:</strong> ${data.is_manager}<br>
+                    <strong>Session Keys:</strong> ${data.session_keys ? data.session_keys.join(', ') : 'None'}
+                `;
+            } catch (error) {
+                document.getElementById('sessionInfo').innerHTML = 'Error loading session: ' + error.message;
+            }
+        }
+
+        async function updateRole(role) {
+            try {
+                const response = await fetch('/api/update-current-user-role', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ role: role })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showResult(`✅ Role updated to ${role} successfully!`, 'success');
+                    // Reload session info
+                    setTimeout(loadCurrentSession, 500);
+                } else {
+                    showResult(`❌ Error: ${data.error}`, 'error');
+                }
+            } catch (error) {
+                showResult(`❌ Error updating role: ${error.message}`, 'error');
+            }
+        }
+
+        async function refreshRole() {
+            try {
+                const response = await fetch('/api/refresh-user-role', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showResult(`✅ Role refreshed from ${data.old_role} to ${data.new_role}!`, 'success');
+                    // Reload session info
+                    setTimeout(loadCurrentSession, 500);
+                } else {
+                    showResult(`❌ Error: ${data.error}`, 'error');
+                }
+            } catch (error) {
+                showResult(`❌ Error refreshing role: ${error.message}`, 'error');
+            }
+        }
+
+        async function testManagerSession() {
+            try {
+                const response = await fetch('/api/manager/session-check');
+                const data = await response.json();
+
+                if (response.ok) {
+                    showResult(`✅ Manager session check passed!<br>
+                        Username: ${data.username}<br>
+                        Role: ${data.role}<br>
+                        Authenticated: ${data.authenticated}<br>
+                        Authorized: ${data.authorized}`, 'success');
+                } else {
+                    showResult(`❌ Manager session check failed (${response.status}):<br>
+                        ${data.error || 'Unknown error'}`, 'error');
+                }
+            } catch (error) {
+                showResult(`❌ Error testing manager session: ${error.message}`, 'error');
+            }
+        }
+
+        async function testAnalytics() {
+            try {
+                const response = await fetch('/api/manager/real-analytics');
+                const data = await response.json();
+
+                if (response.ok) {
+                    showResult(`✅ Analytics endpoint working!<br>
+                        Total Apps: ${data.total_applications || 'N/A'}<br>
+                        Pending: ${data.pending_applications || 'N/A'}<br>
+                        Approved: ${data.approved_applications || 'N/A'}`, 'success');
+                } else {
+                    showResult(`❌ Analytics endpoint failed (${response.status}):<br>
+                        ${data.error || 'Unknown error'}`, 'error');
+                }
+            } catch (error) {
+                showResult(`❌ Error testing analytics: ${error.message}`, 'error');
+            }
+        }
+
+        async function testInspectionReports() {
+            try {
+                const response = await fetch('/api/manager/inspection-reports');
+                const data = await response.json();
+
+                if (response.ok) {
+                    showResult(`✅ Inspection reports endpoint working!<br>
+                        Reports found: ${data.reports ? data.reports.length : 0}`, 'success');
+                } else {
+                    showResult(`❌ Inspection reports endpoint failed (${response.status}):<br>
+                        ${data.error || 'Unknown error'}`, 'error');
+                }
+            } catch (error) {
+                showResult(`❌ Error testing inspection reports: ${error.message}`, 'error');
+            }
+        }
+
+        function showResult(message, type) {
+            const resultDiv = document.getElementById('result');
+            const contentDiv = document.getElementById('resultContent');
+
+            contentDiv.innerHTML = message;
+            resultDiv.className = `result ${type}`;
+            resultDiv.style.display = 'block';
+
+            // Auto-hide after 10 seconds
+            setTimeout(() => {
+                resultDiv.style.display = 'none';
+            }, 10000);
+        }
+    </script>
+</body>
+</html>

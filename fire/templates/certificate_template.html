@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fire NOC Certificate</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Times+New+Roman:wght@400;700&family=Arial:wght@300;400;500;600&display=swap');
+
+        body {
+            margin: 0;
+            padding: 10px;
+            font-family: 'Times New Roman', serif;
+            background: white;
+            font-size: 12px;
+            line-height: 1.3;
+        }
+
+        .certificate-container {
+            max-width: 210mm;
+            margin: 0 auto;
+            background: white;
+            border: 3px solid #000;
+            position: relative;
+            padding: 0;
+            page-break-inside: avoid;
+        }
+
+        .certificate-header {
+            background: white;
+            padding: 15px;
+            text-align: center;
+            border-bottom: 2px solid #000;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .govt-emblem-left {
+            width: 80px;
+            height: 80px;
+            background: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAiIGhlaWdodD0iODAiIHZpZXdCb3g9IjAgMCA4MCA4MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iNDAiIGN5PSI0MCIgcj0iMzgiIGZpbGw9IiMwMDMzOTkiIHN0cm9rZT0iI0ZGRCIgc3Ryb2tlLXdpZHRoPSIzIi8+CjxjaXJjbGUgY3g9IjQwIiBjeT0iNDAiIHI9IjMwIiBmaWxsPSIjRkZGIiBzdHJva2U9IiMwMDMzOTkiIHN0cm9rZS13aWR0aD0iMiIvPgo8IS0tIEVhZ2xlIC0tPgo8cGF0aCBkPSJNNDAgMTVMMzUgMjVIMjVMMzIgMzJMMzAgNDVMNDAgMzhMNTAgNDVMNDggMzJMNTUgMjVINDVMNDAgMTVaIiBmaWxsPSIjMDAzMzk5Ii8+CjwhLS0gU2hpZWxkIC0tPgo8cmVjdCB4PSIzNSIgeT0iMzgiIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMiIgZmlsbD0iI0ZGMDAwMCIgcng9IjEiLz4KPHJlY3QgeD0iMzYiIHk9IjM5IiB3aWR0aD0iOCIgaGVpZ2h0PSIyIiBmaWxsPSIjRkZGIi8+CjxyZWN0IHg9IjM2IiB5PSI0MiIgd2lkdGg9IjgiIGhlaWdodD0iMiIgZmlsbD0iI0ZGRiIvPgo8cmVjdCB4PSIzNiIgeT0iNDUiIHdpZHRoPSI4IiBoZWlnaHQ9IjIiIGZpbGw9IiNGRkYiLz4KPCEtLSBTdGFycyAtLT4KPHN0YXIgY3g9IjI1IiBjeT0iMjUiIHI9IjMiIGZpbGw9IiNGRkQiLz4KPHN0YXIgY3g9IjU1IiBjeT0iMjUiIHI9IjMiIGZpbGw9IiNGRkQiLz4KPHN0YXIgY3g9IjI1IiBjeT0iNTUiIHI9IjMiIGZpbGw9IiNGRkQiLz4KPHN0YXIgY3g9IjU1IiBjeT0iNTUiIHI9IjMiIGZpbGw9IiNGRkQiLz4KPHRleHQgeD0iNDAiIHk9IjY1IiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iOCIgZmlsbD0iIzAwMzM5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC13ZWlnaHQ9ImJvbGQiPkdPVkVSTk1FTlQ8L3RleHQ+Cjx0ZXh0IHg9IjQwIiB5PSI3MyIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjYiIGZpbGw9IiMwMDMzOTkiIHRleHQtYW5jaG9yPSJtaWRkbGUiPk9GIElORElBPC90ZXh0Pgo8L3N2Zz4=') center/cover;
+            border-radius: 50%;
+            border: 3px solid #FFD700;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+        }
+
+        .govt-emblem-right {
+            width: 80px;
+            height: 80px;
+            background: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAiIGhlaWdodD0iODAiIHZpZXdCb3g9IjAgMCA4MCA4MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iNDAiIGN5PSI0MCIgcj0iMzgiIGZpbGw9IiNGRjY2MDAiIHN0cm9rZT0iI0ZGRCIgc3Ryb2tlLXdpZHRoPSIzIi8+CjxjaXJjbGUgY3g9IjQwIiBjeT0iNDAiIHI9IjMwIiBmaWxsPSIjRkZGIiBzdHJva2U9IiNGRjY2MDAiIHN0cm9rZS13aWR0aD0iMiIvPgo8IS0tIEZpcmUgU3ltYm9sIC0tPgo8cGF0aCBkPSJNNDAgMTVDMzUgMjAgMzAgMjUgMzAgMzVDMzAgNDUgMzUgNTAgNDAgNTBDNDUgNTAgNTAgNDUgNTAgMzVDNTAgMjUgNDUgMjAgNDAgMTVaIiBmaWxsPSIjRkY2NjAwIi8+CjxwYXRoIGQ9Ik00MCAyMEMzNyAyNSAzNSAzMCAzNSAzNUMzNSA0MCAzNyA0MyA0MCA0M0M0MyA0MyA0NSA0MCA0NSAzNUM0NSAzMCA0MyAyNSA0MCAyMFoiIGZpbGw9IiNGRkYiLz4KPCEtLSBGaXJlIERlcGFydG1lbnQgVGV4dCAtLT4KPHR5ZXh0IHg9IjQwIiB5PSI2MCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjciIGZpbGw9IiNGRjY2MDAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtd2VpZ2h0PSJib2xkIj5GSVJFPC90ZXh0Pgo8dGV4dCB4PSI0MCIgeT0iNjgiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI2IiBmaWxsPSIjRkY2NjAwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5ERVBUX1NFRVJWSUNFPC90ZXh0Pgo8L3N2Zz4=') center/cover;
+            border-radius: 50%;
+            border: 3px solid #FFD700;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+        }
+
+        .header-center {
+            flex: 1;
+            padding: 0 20px;
+        }
+
+        .ashoka-chakra {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 10px;
+            background: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMzAiIGN5PSIzMCIgcj0iMjgiIGZpbGw9IiMwMDMzOTkiIHN0cm9rZT0iI0ZGRCIgc3Ryb2tlLXdpZHRoPSIyIi8+CjxjaXJjbGUgY3g9IjMwIiBjeT0iMzAiIHI9IjIwIiBmaWxsPSIjRkZGIiBzdHJva2U9IiMwMDMzOTkiIHN0cm9rZS13aWR0aD0iMSIvPgo8IS0tIEFzaG9rYSBDaGFrcmEgU3Bva2VzIC0tPgo8ZyBzdHJva2U9IiMwMDMzOTkiIHN0cm9rZS13aWR0aD0iMSI+CjxsaW5lIHgxPSIzMCIgeTE9IjEwIiB4Mj0iMzAiIHkyPSI1MCIvPgo8bGluZSB4MT0iMTAiIHkxPSIzMCIgeDI9IjUwIiB5Mj0iMzAiLz4KPGxpbmUgeDE9IjE5LjM5IiB5MT0iMTkuMzkiIHgyPSI0MC42MSIgeTI9IjQwLjYxIi8+CjxsaW5lIHgxPSI0MC42MSIgeTE9IjE5LjM5IiB4Mj0iMTkuMzkiIHkyPSI0MC42MSIvPgo8bGluZSB4MT0iMjIuNSIgeTE9IjEzLjQiIHgyPSIzNy41IiB5Mj0iNDYuNiIvPgo8bGluZSB4MT0iMzcuNSIgeTE9IjEzLjQiIHgyPSIyMi41IiB5Mj0iNDYuNiIvPgo8bGluZSB4MT0iMTMuNCIgeTE9IjIyLjUiIHgyPSI0Ni42IiB5Mj0iMzcuNSIvPgo8bGluZSB4MT0iNDYuNiIgeTE9IjIyLjUiIHgyPSIxMy40IiB5Mj0iMzcuNSIvPgo8L2c+CjxjaXJjbGUgY3g9IjMwIiBjeT0iMzAiIHI9IjMiIGZpbGw9IiMwMDMzOTkiLz4KPC9zdmc+') center/cover;
+            border-radius: 50%;
+            position: relative;
+            border: 3px solid #FFD700;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+
+        .ashoka-chakra::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px;
+            height: 40px;
+            background: transparent;
+            border-radius: 50%;
+        }
+
+        .certificate-title {
+            font-family: 'Times New Roman', serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin: 5px 0;
+            color: #000;
+            text-transform: uppercase;
+        }
+
+        .certificate-subtitle {
+            font-size: 0.9rem;
+            margin: 3px 0;
+            color: #000;
+            font-weight: 600;
+        }
+
+        .govt-info {
+            font-size: 0.75rem;
+            color: #000;
+            margin: 3px 0;
+            line-height: 1.2;
+        }
+
+        .certificate-body {
+            padding: 15px;
+            background: white;
+        }
+
+        .certificate-text {
+            font-size: 0.9rem;
+            line-height: 1.4;
+            color: #000;
+            margin: 10px 0;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .highlight {
+            color: #000;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .details-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+            background: white;
+            border: 2px solid #000;
+            font-size: 0.8rem;
+        }
+
+        .details-table th,
+        .details-table td {
+            padding: 6px 8px;
+            text-align: left;
+            border: 1px solid #000;
+            vertical-align: top;
+        }
+
+        .details-table th {
+            background: #f0f0f0;
+            color: #000;
+            font-weight: 700;
+            width: 25%;
+        }
+
+        .details-table td {
+            font-weight: 500;
+        }
+
+        .watermark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            font-size: 4rem;
+            color: rgba(0, 0, 0, 0.02);
+            font-weight: bold;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .signature-section {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            padding: 10px 0;
+        }
+
+        .qr-section {
+            text-align: left;
+        }
+
+        .signature-box {
+            text-align: right;
+            min-width: 200px;
+        }
+
+        .signature-line {
+            border-bottom: 2px solid #000;
+            width: 180px;
+            margin: 30px 0 5px auto;
+            height: 30px;
+            display: flex;
+            align-items: end;
+            justify-content: center;
+            font-style: italic;
+            font-size: 0.9rem;
+        }
+
+        .qr-placeholder {
+            width: 80px;
+            height: 80px;
+            border: 1px solid #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f0f0f0;
+            font-size: 0.7rem;
+            text-align: center;
+        }
+
+        .note-section {
+            border-top: 2px solid #000;
+            padding-top: 8px;
+            margin-top: 15px;
+            font-size: 0.7rem;
+            line-height: 1.3;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+                font-size: 11px;
+            }
+            .certificate-container {
+                box-shadow: none;
+                max-width: 100%;
+                margin: 0;
+            }
+            .no-print {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="certificate-container">
+        <div class="watermark">GOVERNMENT OF INDIA</div>
+
+        <div class="certificate-header">
+            <div class="govt-emblem-left">
+                <img src="https://w7.pngwing.com/pngs/926/964/png-transparent-united-states-department-of-state-united-states-secretary-of-state-federal-government-of-the-united-states-foreign-relations-of-the-united-states-passport-miscellaneous-emblem-logo.png"
+                     alt="Government Logo" style="width: 70px; height: 70px; object-fit: contain;">
+            </div>
+            <div class="header-center">
+                <div class="ashoka-chakra"></div>
+                <div class="govt-info">
+                    <div style="font-size: 1.1rem; font-weight: bold; color: #003399; margin-bottom: 3px;">
+                        🇮🇳 GOVERNMENT OF INDIA 🇮🇳
+                    </div>
+                    <div style="font-size: 0.9rem; font-weight: 600; color: #000; margin-bottom: 2px;">
+                        MINISTRY OF HOME AFFAIRS
+                    </div>
+                    <div style="font-size: 0.8rem; color: #000; margin-bottom: 2px;">
+                        DIRECTORATE GENERAL OF FIRE SERVICES
+                    </div>
+                    <div style="font-size: 0.8rem; color: #FF6600; font-weight: 600; margin-bottom: 2px;">
+                        GUJARAT STATE FIRE SERVICES
+                    </div>
+                    <div style="font-size: 0.7rem; color: #666; font-style: italic;">
+                        SECTOR-10, GANDHINAGAR, GUJARAT - 382010
+                    </div>
+                </div>
+                <h1 class="certificate-title">FIRE SAFETY CERTIFICATE</h1>
+                <p class="certificate-subtitle">NO OBJECTION CERTIFICATE (NOC)</p>
+            </div>
+            <div class="govt-emblem-right">
+                <img src="https://w7.pngwing.com/pngs/926/964/png-transparent-united-states-department-of-state-united-states-secretary-of-state-federal-government-of-the-united-states-foreign-relations-of-the-united-states-passport-miscellaneous-emblem-logo.png"
+                     alt="Government Logo" style="width: 70px; height: 70px; object-fit: contain;">
+            </div>
+        </div>
+
+        <div class="certificate-body">
+            <div style="text-align: center; margin: 10px 0; padding: 8px; background: linear-gradient(45deg, #000, #333); color: white; font-weight: bold; font-size: 0.9rem;">
+                🔥 FIRE SAFETY CERTIFICATE 🔥
+            </div>
+
+            <p class="certificate-text">
+                This is to certify that <strong class="highlight">{{ business_name }}</strong> is issued a Fire Safety Certificate (NOC) with following details:
+            </p>
+
+            <table class="details-table">
+                <tr>
+                    <th>NOC Number</th>
+                    <td>{{ certificate_number }}</td>
+                    <th>Issue Date</th>
+                    <td>{{ issue_date }}</td>
+                </tr>
+                <tr>
+                    <th>PAN Number</th>
+                    <td>{{ pan_number|default("Not Provided") }}</td>
+                    <th>Valid Until</th>
+                    <td>{{ valid_until|default("1 Year from Issue") }}</td>
+                </tr>
+                <tr>
+                    <th>Firm Name</th>
+                    <td colspan="3">{{ business_name }}</td>
+                </tr>
+                <tr>
+                    <th>Business Type</th>
+                    <td>{{ business_type }}</td>
+                    <th>Contact Person</th>
+                    <td>{{ contact_person|default("Business Owner") }}</td>
+                </tr>
+                <tr>
+                    <th>Registered Address</th>
+                    <td colspan="3">{{ business_address }}</td>
+                </tr>
+                <tr>
+                    <th>Building Area</th>
+                    <td>{{ building_area|default("As per application") }} sq ft</td>
+                    <th>Floors</th>
+                    <td>{{ floors|default("As per plan") }}</td>
+                </tr>
+                <tr>
+                    <th>Fire Extinguishers</th>
+                    <td>{{ fire_extinguishers|default("As per norms") }}</td>
+                    <th>Emergency Exits</th>
+                    <td>{{ emergency_exits|default("Adequate") }}</td>
+                </tr>
+                <tr>
+                    <th>Fire Alarm</th>
+                    <td>{{ fire_alarm|default("Installed") }}</td>
+                    <th>Last Fire Drill</th>
+                    <td>{{ last_fire_drill|default("As required") }}</td>
+                </tr>
+                <tr>
+                    <th>Signatory</th>
+                    <td>MAYUR BHARVAD</td>
+                    <th>Compliance Score</th>
+                    <td>{{ compliance_score|default("85") }}%</td>
+                </tr>
+            </table>
+
+            <div style="text-align: right; margin: 10px 0; font-size: 0.75rem;">
+                <strong>Last Modified:</strong> {{ issue_date }}<br>
+                <strong>File Number:</strong> FIRE/NOC/{{ certificate_number }}<br>
+                <strong>Inspector:</strong> {{ inspector_name|default("System Inspector") }}
+            </div>
+
+            <div class="signature-section">
+                <div class="qr-section">
+                    <div class="qr-placeholder" id="qr-code-container">
+                        <img id="qr-code-img" style="width: 80px; height: 80px;" alt="QR Code">
+                    </div>
+                    <div style="font-size: 0.7rem; margin-top: 5px; text-align: center;">
+                        Scan for Verification<br>
+                        <span id="verification-domain">127.0.0.1:5000/verify</span>
+                    </div>
+                </div>
+                <div class="signature-box">
+                    <div style="margin-bottom: 40px;">
+                        <div class="signature-line">
+                            M.K.Bharvad
+                        </div>
+                        <div style="font-weight: bold; font-size: 0.9rem;">MAYUR BHARVAD</div>
+                        <div style="font-size: 0.8rem;">Fire Safety Officer</div>
+                        <div style="font-size: 0.8rem;">Government of Gujarat</div>
+                        <div style="font-size: 0.7rem; margin-top: 5px;">
+                            Digital Signature Applied
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="note-section">
+                <strong>Important Note:</strong> This is a system-generated certificate. Authenticity and updated details can be checked at official Fire Safety website <strong>https://firenoc.gov.in</strong> by entering NOC and Firm Name under Services > View Any NOC Details. You can also authenticate the certificate by scanning the QR code.
+            </div>
+
+            <!-- Download Button (only show if not in PDF mode) -->
+            <div style="text-align: center; margin-top: 15px; padding: 10px; border-top: 1px solid #ccc;" class="no-print">
+                <button onclick="downloadPDF()" style="background: #007bff; color: white; padding: 8px 20px; border: none; border-radius: 5px; font-size: 14px; cursor: pointer; margin-right: 10px;">
+                    📄 Download PDF Certificate
+                </button>
+                <button onclick="window.print()" style="background: #28a745; color: white; padding: 8px 20px; border: none; border-radius: 5px; font-size: 14px; cursor: pointer;">
+                    🖨️ Print Certificate
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <script>
+        // Generate QR Code on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const certificateNumber = '{{ certificate_number }}';
+            const businessName = '{{ business_name }}';
+            const verificationUrl = `${window.location.origin}/verify?noc=${certificateNumber}&business=${encodeURIComponent(businessName)}`;
+
+            // Update verification domain display
+            document.getElementById('verification-domain').textContent = `${window.location.host}/verify`;
+
+            // Generate QR code
+            QRCode.toDataURL(verificationUrl, {
+                width: 80,
+                height: 80,
+                margin: 1,
+                color: {
+                    dark: '#000000',
+                    light: '#FFFFFF'
+                }
+            }, function (err, url) {
+                if (!err) {
+                    document.getElementById('qr-code-img').src = url;
+                } else {
+                    console.error('QR Code generation failed:', err);
+                    document.getElementById('qr-code-container').innerHTML = 'QR CODE<br>VERIFICATION';
+                }
+            });
+        });
+
+        function downloadPDF() {
+            // Get current URL and extract application ID if possible
+            const currentUrl = window.location.href;
+            const pathParts = currentUrl.split('/');
+
+            // Try to find application ID from URL
+            let applicationId = null;
+            for (let i = 0; i < pathParts.length; i++) {
+                if (pathParts[i] === 'view-certificate' && i + 1 < pathParts.length) {
+                    applicationId = pathParts[i + 1];
+                    break;
+                }
+            }
+
+            if (applicationId) {
+                // Download PDF version
+                window.open(`/download-noc-certificate-v2/${applicationId}`, '_blank');
+            } else {
+                alert('Unable to download PDF. Please contact support.');
+            }
+        }
+    </script>
+
+    <style>
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+        }
+    </style>
+</body>
+</html>

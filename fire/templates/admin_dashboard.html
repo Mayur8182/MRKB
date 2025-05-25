@@ -107,6 +107,336 @@
         .notification.show {
             transform: translateX(0);
         }
+
+        /* Enhanced Admin Dashboard Styles */
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%) !important;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .sidebar {
+            background: linear-gradient(180deg, #2c3e50 0%, #34495e 100%);
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            min-height: 100vh;
+        }
+
+        .sidebar .nav-link {
+            color: #ecf0f1 !important;
+            padding: 12px 20px;
+            margin: 2px 0;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar .nav-link:hover {
+            background: rgba(52, 152, 219, 0.2);
+            border-left: 3px solid #3498db;
+            transform: translateX(5px);
+        }
+
+        .sidebar .nav-link.active {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            border-left: 3px solid #ecf0f1;
+        }
+
+        .sidebar .nav-link i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+
+        main {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px 0 0 0;
+            box-shadow: -5px 0 20px rgba(0,0,0,0.1);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .metric-card {
+            text-align: center;
+            padding: 25px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .metric-card h3 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .metric-card p {
+            color: #7f8c8d;
+            margin: 0;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .section-content {
+            animation: fadeInUp 0.5s ease-out;
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            transform: translateY(-2px);
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            border: none;
+            padding: 20px;
+            font-weight: 600;
+        }
+
+        .card-header h5 {
+            margin: 0;
+            font-size: 1.2rem;
+        }
+
+        .btn {
+            border-radius: 25px;
+            padding: 10px 20px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: none;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #27ae60, #229954);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+        }
+
+        .btn-info {
+            background: linear-gradient(135deg, #17a2b8, #138496);
+        }
+
+        .btn-toolbar .btn {
+            margin-left: 8px;
+        }
+
+        .table {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+
+        .table thead th {
+            background: linear-gradient(135deg, #34495e, #2c3e50);
+            color: white;
+            border: none;
+            padding: 15px;
+            font-weight: 600;
+        }
+
+        .table tbody td {
+            padding: 15px;
+            border-color: #ecf0f1;
+            vertical-align: middle;
+        }
+
+        .table-hover tbody tr:hover {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        }
+
+        .badge {
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: 500;
+            font-size: 0.85rem;
+        }
+
+        .badge-active {
+            background: linear-gradient(135deg, #27ae60, #229954);
+            color: white;
+        }
+        .badge-pending {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            color: white;
+        }
+        .badge-expired {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+        }
+        .badge-completed {
+            background: linear-gradient(135deg, #17a2b8, #138496);
+            color: white;
+        }
+        .badge-success {
+            background: linear-gradient(135deg, #27ae60, #229954);
+            color: white;
+        }
+
+        .stats-card {
+            transition: all 0.3s ease;
+            border: none;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .stats-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+
+        .bg-gradient-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+        }
+
+        .bg-gradient-success {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%) !important;
+        }
+
+        .bg-gradient-warning {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%) !important;
+        }
+
+        .bg-gradient-danger {
+            background: linear-gradient(135deg, #fc466b 0%, #3f5efb 100%) !important;
+        }
+
+        .bg-gradient-info {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%) !important;
+        }
+
+        .bg-gradient-secondary {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%) !important;
+        }
+
+        .bg-gradient-dark {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%) !important;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .form-control, .form-select {
+            border-radius: 10px;
+            border: 2px solid #ecf0f1;
+            padding: 12px 15px;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+        }
+
+        .form-check {
+            margin-bottom: 1rem;
+        }
+
+        .form-check-label {
+            font-weight: 500;
+            margin-left: 0.5rem;
+            color: #2c3e50;
+        }
+
+        .modal-content {
+            border-radius: 15px;
+            border: none;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border-radius: 15px 15px 0 0;
+            border: none;
+        }
+
+        .icon-circle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+        }
+
+        .counter {
+            font-family: 'Arial', sans-serif;
+            font-weight: 700;
+        }
+
+        .border-bottom {
+            border-bottom: 3px solid #3498db !important;
+        }
+
+        h1.h2 {
+            color: #2c3e50;
+            font-weight: 700;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
     </style>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
@@ -133,7 +463,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" href="{{ url_for('admin_dashboard') }}">
+                            <a class="nav-link active" href="#" onclick="adminDashboard.showDashboard()">
                                 <i class="fas fa-home"></i> Dashboard
                             </a>
                         </li>
@@ -143,7 +473,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('manage_applications') }}">
+                            <a class="nav-link" href="javascript:void(0)" onclick="adminDashboard.showApplications(); return false;">
                                 <i class="fas fa-file-alt"></i> Applications
                             </a>
                         </li>
@@ -153,15 +483,43 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#" onclick="adminDashboard.showInspections()">
+                            <a class="nav-link" href="javascript:void(0)" onclick="adminDashboard.showInspections(); return false;">
                                 <i class="fas fa-clipboard-check"></i> Inspections
                             </a>
                         </li>
-                        <!-- Instead of using inspection_reports endpoint -->
                         <li class="nav-item">
                             <a href="{{ url_for('inspection_reports') }}" class="nav-link">
-                                <i class="fas fa-file-alt"></i>
-                                <span>Inspection Reports</span>
+                                <i class="fas fa-file-alt"></i> Inspection Reports
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="javascript:void(0)" onclick="adminDashboard.showCertificates(); return false;">
+                                <i class="fas fa-certificate"></i> Certificates
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="javascript:void(0)" onclick="adminDashboard.showAnalytics(); return false;">
+                                <i class="fas fa-chart-bar"></i> Analytics
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="javascript:void(0)" onclick="adminDashboard.showSystemSettings(); return false;">
+                                <i class="fas fa-cogs"></i> System Settings
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="javascript:void(0)" onclick="adminDashboard.showBackupRestore(); return false;">
+                                <i class="fas fa-database"></i> Backup & Restore
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="javascript:void(0)" onclick="adminDashboard.showAuditLogs(); return false;">
+                                <i class="fas fa-shield-alt"></i> Audit Logs
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="javascript:void(0)" onclick="adminDashboard.showUserTracking(); return false;">
+                                <i class="fas fa-search-location"></i> User Tracking
                             </a>
                         </li>
                     </ul>
@@ -179,36 +537,185 @@
                         </div>
                     </div>
 
+                    <!-- Enhanced Stats Row 1 -->
                     <div class="row">
-                        <div class="col-md-3">
-                            <div class="card text-white bg-primary stats-card">
+                        <div class="col-md-3 mb-4">
+                            <div class="card text-white bg-gradient-primary stats-card shadow-lg border-0">
                                 <div class="card-body">
-                                    <h5 class="card-title">Total Applications</h5>
-                                    <h2 id="total-applications">0</h2>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h5 class="card-title mb-2">
+                                                <i class="fas fa-file-alt me-2"></i>Total Applications
+                                            </h5>
+                                            <h2 id="total-applications" class="mb-0 counter">0</h2>
+                                            <small class="opacity-75">
+                                                <i class="fas fa-arrow-up me-1"></i>+12% from last month
+                                            </small>
+                                        </div>
+                                        <div class="align-self-center">
+                                            <div class="icon-circle bg-white bg-opacity-20 p-3 rounded-circle">
+                                                <i class="fas fa-file-alt fa-2x"></i>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3">
-                            <div class="card text-white bg-warning stats-card">
+                        <div class="col-md-3 mb-4">
+                            <div class="card text-white bg-gradient-warning stats-card shadow-lg border-0">
                                 <div class="card-body">
-                                    <h5 class="card-title">Pending</h5>
-                                    <h2 id="pending-applications">0</h2>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h5 class="card-title mb-2">
+                                                <i class="fas fa-clock me-2"></i>Pending
+                                            </h5>
+                                            <h2 id="pending-applications" class="mb-0 counter">0</h2>
+                                            <small class="opacity-75">
+                                                <i class="fas fa-exclamation-triangle me-1"></i>Needs attention
+                                            </small>
+                                        </div>
+                                        <div class="align-self-center">
+                                            <div class="icon-circle bg-white bg-opacity-20 p-3 rounded-circle">
+                                                <i class="fas fa-clock fa-2x"></i>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3">
-                            <div class="card text-white bg-success stats-card">
+                        <div class="col-md-3 mb-4">
+                            <div class="card text-white bg-gradient-success stats-card shadow-lg border-0">
                                 <div class="card-body">
-                                    <h5 class="card-title">Approved</h5>
-                                    <h2 id="approved-applications">0</h2>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h5 class="card-title mb-2">
+                                                <i class="fas fa-check-circle me-2"></i>Approved
+                                            </h5>
+                                            <h2 id="approved-applications" class="mb-0 counter">0</h2>
+                                            <small class="opacity-75">
+                                                <i class="fas fa-arrow-up me-1"></i>+8% this week
+                                            </small>
+                                        </div>
+                                        <div class="align-self-center">
+                                            <div class="icon-circle bg-white bg-opacity-20 p-3 rounded-circle">
+                                                <i class="fas fa-check-circle fa-2x"></i>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3">
-                            <div class="card text-white bg-danger stats-card">
+                        <div class="col-md-3 mb-4">
+                            <div class="card text-white bg-gradient-danger stats-card shadow-lg border-0">
                                 <div class="card-body">
-                                    <h5 class="card-title">Rejected</h5>
-                                    <h2 id="rejected-applications">0</2>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h5 class="card-title mb-2">
+                                                <i class="fas fa-times-circle me-2"></i>Rejected
+                                            </h5>
+                                            <h2 id="rejected-applications" class="mb-0 counter">0</h2>
+                                            <small class="opacity-75">
+                                                <i class="fas fa-arrow-down me-1"></i>-3% this month
+                                            </small>
+                                        </div>
+                                        <div class="align-self-center">
+                                            <div class="icon-circle bg-white bg-opacity-20 p-3 rounded-circle">
+                                                <i class="fas fa-times-circle fa-2x"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Enhanced Stats Row 2 -->
+                    <div class="row">
+                        <div class="col-md-3 mb-4">
+                            <div class="card text-white bg-gradient-info stats-card shadow-lg border-0">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h5 class="card-title mb-2">
+                                                <i class="fas fa-users me-2"></i>Total Users
+                                            </h5>
+                                            <h2 id="total-users" class="mb-0 counter">0</h2>
+                                            <small class="opacity-75">
+                                                <i class="fas fa-user-plus me-1"></i>Active users
+                                            </small>
+                                        </div>
+                                        <div class="align-self-center">
+                                            <div class="icon-circle bg-white bg-opacity-20 p-3 rounded-circle">
+                                                <i class="fas fa-users fa-2x"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-4">
+                            <div class="card text-white bg-gradient-secondary stats-card shadow-lg border-0">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h5 class="card-title mb-2">
+                                                <i class="fas fa-certificate me-2"></i>Certificates
+                                            </h5>
+                                            <h2 id="total-certificates" class="mb-0 counter">0</h2>
+                                            <small class="opacity-75">
+                                                <i class="fas fa-award me-1"></i>Issued certificates
+                                            </small>
+                                        </div>
+                                        <div class="align-self-center">
+                                            <div class="icon-circle bg-white bg-opacity-20 p-3 rounded-circle">
+                                                <i class="fas fa-certificate fa-2x"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-4">
+                            <div class="card text-white bg-gradient-dark stats-card shadow-lg border-0">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h5 class="card-title mb-2">
+                                                <i class="fas fa-clipboard-check me-2"></i>Inspections
+                                            </h5>
+                                            <h2 id="total-inspections" class="mb-0 counter">0</h2>
+                                            <small class="opacity-75">
+                                                <i class="fas fa-search me-1"></i>Completed inspections
+                                            </small>
+                                        </div>
+                                        <div class="align-self-center">
+                                            <div class="icon-circle bg-white bg-opacity-20 p-3 rounded-circle">
+                                                <i class="fas fa-clipboard-check fa-2x"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-4">
+                            <div class="card text-white bg-gradient-purple stats-card shadow-lg border-0" style="background: linear-gradient(45deg, #6f42c1, #8e44ad);">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h5 class="card-title mb-2">
+                                                <i class="fas fa-chart-line me-2"></i>Revenue
+                                            </h5>
+                                            <h2 id="total-revenue" class="mb-0 counter">₹0</h2>
+                                            <small class="opacity-75">
+                                                <i class="fas fa-rupee-sign me-1"></i>This month
+                                            </small>
+                                        </div>
+                                        <div class="align-self-center">
+                                            <div class="icon-circle bg-white bg-opacity-20 p-3 rounded-circle">
+                                                <i class="fas fa-chart-line fa-2x"></i>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -266,9 +773,9 @@
                             <div class="row">
                                 <div class="col-md-3 text-center">
                                     <div class="position-relative mb-3">
-                                        <img id="adminProfileImage" 
-                                             src="/static/default-profile.png" 
-                                             alt="Admin Profile" 
+                                        <img id="adminProfileImage"
+                                             src="/static/default-profile.png"
+                                             alt="Admin Profile"
                                              class="rounded-circle img-thumbnail"
                                              style="width: 150px; height: 150px; object-fit: cover;">
                                         <label for="profileImageUpload" class="position-absolute bottom-0 end-0 bg-white rounded-circle p-2 shadow-sm" style="cursor: pointer;">
@@ -324,7 +831,7 @@
                 </div>
 
                 <div id="applicationDetails"></div>
-                
+
                 <!-- Add this after the existing sections in main content -->
                 <div id="inspections-section" class="section-content hidden">
                     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
@@ -395,6 +902,967 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Certificates Management Section -->
+                <div id="certificates-section" class="section-content hidden">
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                        <h1 class="h2">🏆 Certificates Management</h1>
+                        <div class="btn-toolbar mb-2 mb-md-0">
+                            <button class="btn btn-success" onclick="adminDashboard.generateBulkCertificates()">
+                                <i class="fas fa-certificate"></i> Generate Bulk Certificates
+                            </button>
+                            <button class="btn btn-primary" onclick="adminDashboard.refreshCertificates()">
+                                <i class="fas fa-sync"></i> Refresh
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-3">
+                            <div class="card bg-success text-white">
+                                <div class="card-body">
+                                    <h5 class="card-title">Total Certificates</h5>
+                                    <h2 id="total-certificates-count">0</h2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card bg-warning text-white">
+                                <div class="card-body">
+                                    <h5 class="card-title">Pending Generation</h5>
+                                    <h2 id="pending-certificates-count">0</h2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card bg-info text-white">
+                                <div class="card-body">
+                                    <h5 class="card-title">This Month</h5>
+                                    <h2 id="monthly-certificates-count">0</h2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card bg-danger text-white">
+                                <div class="card-body">
+                                    <h5 class="card-title">Expired</h5>
+                                    <h2 id="expired-certificates-count">0</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header bg-white">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">All Certificates</h5>
+                                <div>
+                                    <input type="text" id="certificate-search" class="form-control" placeholder="Search certificates...">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover" id="certificates-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Certificate Number</th>
+                                            <th>Business Name</th>
+                                            <th>Issue Date</th>
+                                            <th>Valid Until</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Will be populated by JavaScript -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Analytics Section -->
+                <div id="analytics-section" class="section-content hidden">
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                        <h1 class="h2">📊 Advanced Analytics</h1>
+                        <div class="btn-toolbar mb-2 mb-md-0">
+                            <button class="btn btn-primary" onclick="adminDashboard.exportAnalytics()">
+                                <i class="fas fa-download"></i> Export Report
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="mb-0">Application Trends</h5>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="applicationTrendsChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="mb-0">Approval Rate</h5>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="approvalRateChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="mb-0">Performance Metrics</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <div class="metric-card">
+                                                <h3 id="avg-processing-time">0 days</h3>
+                                                <p>Avg Processing Time</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="metric-card">
+                                                <h3 id="approval-rate">0%</h3>
+                                                <p>Approval Rate</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="metric-card">
+                                                <h3 id="user-satisfaction">0%</h3>
+                                                <p>User Satisfaction</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="metric-card">
+                                                <h3 id="system-uptime">99.9%</h3>
+                                                <p>System Uptime</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- System Settings Section -->
+                <div id="system-settings-section" class="section-content hidden">
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                        <h1 class="h2">⚙️ System Settings</h1>
+                        <div class="btn-toolbar mb-2 mb-md-0">
+                            <button class="btn btn-success" onclick="adminDashboard.saveSystemSettings()">
+                                <i class="fas fa-save"></i> Save Settings
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="mb-0">Application Settings</h5>
+                                </div>
+                                <div class="card-body">
+                                    <form id="application-settings-form">
+                                        <div class="form-group">
+                                            <label>Auto-approval threshold (%)</label>
+                                            <input type="number" class="form-control" id="auto-approval-threshold" value="85">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Maximum file size (MB)</label>
+                                            <input type="number" class="form-control" id="max-file-size" value="10">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Certificate validity (months)</label>
+                                            <input type="number" class="form-control" id="certificate-validity" value="12">
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="mb-0">Notification Settings</h5>
+                                </div>
+                                <div class="card-body">
+                                    <form id="notification-settings-form">
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" id="email-notifications" checked>
+                                            <label class="form-check-label">Email notifications</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" id="sms-notifications">
+                                            <label class="form-check-label">SMS notifications</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" id="push-notifications" checked>
+                                            <label class="form-check-label">Push notifications</label>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Backup & Restore Section -->
+                <div id="backup-restore-section" class="section-content hidden">
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                        <h1 class="h2">💾 Backup & Restore</h1>
+                        <div class="btn-toolbar mb-2 mb-md-0">
+                            <button class="btn btn-primary" onclick="adminDashboard.createBackup()">
+                                <i class="fas fa-download"></i> Create Backup
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="mb-0">Create Backup</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label>Backup Type</label>
+                                        <select class="form-control" id="backup-type">
+                                            <option value="full">Full Database Backup</option>
+                                            <option value="applications">Applications Only</option>
+                                            <option value="users">Users Only</option>
+                                            <option value="certificates">Certificates Only</option>
+                                        </select>
+                                    </div>
+                                    <button class="btn btn-success" onclick="adminDashboard.downloadBackup()">
+                                        <i class="fas fa-download"></i> Download Backup
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="mb-0">Restore from Backup</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label>Select Backup File</label>
+                                        <input type="file" class="form-control" id="restore-file" accept=".json,.sql">
+                                    </div>
+                                    <button class="btn btn-warning" onclick="adminDashboard.restoreBackup()">
+                                        <i class="fas fa-upload"></i> Restore Backup
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card mt-4">
+                        <div class="card-header">
+                            <h5 class="mb-0">Backup History</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Type</th>
+                                            <th>Size</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="backup-history">
+                                        <!-- Will be populated by JavaScript -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Audit Logs Section -->
+                <div id="audit-logs-section" class="section-content hidden">
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                        <h1 class="h2">🛡️ Audit Logs</h1>
+                        <div class="btn-toolbar mb-2 mb-md-0">
+                            <button class="btn btn-primary" onclick="adminDashboard.exportAuditLogs()">
+                                <i class="fas fa-download"></i> Export Logs
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">System Activity Logs</h5>
+                                <div>
+                                    <select class="form-control" id="log-filter">
+                                        <option value="all">All Activities</option>
+                                        <option value="login">Login/Logout</option>
+                                        <option value="application">Application Changes</option>
+                                        <option value="certificate">Certificate Actions</option>
+                                        <option value="user">User Management</option>
+                                        <option value="system">System Changes</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Timestamp</th>
+                                            <th>User</th>
+                                            <th>Action</th>
+                                            <th>Resource</th>
+                                            <th>IP Address</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="audit-logs-table">
+                                        <!-- Will be populated by JavaScript -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- User Tracking Section -->
+                <div id="user-tracking-section" class="section-content hidden">
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                        <h1 class="h2">🔍 User Tracking & History</h1>
+                        <div class="btn-toolbar mb-2 mb-md-0">
+                            <button class="btn btn-success" onclick="adminDashboard.exportUserReport()">
+                                <i class="fas fa-file-export"></i> Export Report
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Search Section -->
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5 class="mb-0">🔎 Search User by Certificate Number</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="certificate-search-input"
+                                               placeholder="Enter Certificate Number (e.g., NOC-20241225-ABC123)">
+                                        <button class="btn btn-primary" onclick="adminDashboard.searchUserByCertificate()">
+                                            <i class="fas fa-search"></i> Search
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <button class="btn btn-info" onclick="adminDashboard.showAllUsers()">
+                                        <i class="fas fa-users"></i> Show All Users
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- User Details Section -->
+                    <div id="user-details-section" style="display: none;">
+                        <div class="row">
+                            <!-- User Profile Card -->
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <div class="card-header bg-primary text-white">
+                                        <h5 class="mb-0">👤 User Profile</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="text-center mb-3">
+                                            <img id="user-profile-image" src="/static/default-profile.png"
+                                                 class="rounded-circle" width="100" height="100" alt="User Profile">
+                                        </div>
+                                        <table class="table table-borderless">
+                                            <tr><td><strong>Name:</strong></td><td id="user-name">-</td></tr>
+                                            <tr><td><strong>Email:</strong></td><td id="user-email">-</td></tr>
+                                            <tr><td><strong>Phone:</strong></td><td id="user-phone">-</td></tr>
+                                            <tr><td><strong>Role:</strong></td><td id="user-role">-</td></tr>
+                                            <tr><td><strong>Status:</strong></td><td id="user-status">-</td></tr>
+                                            <tr><td><strong>Joined:</strong></td><td id="user-joined">-</td></tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Location & Business Info -->
+                            <div class="col-md-8">
+                                <div class="card">
+                                    <div class="card-header bg-success text-white">
+                                        <h5 class="mb-0">📍 Location & Business Information</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <h6>🏢 Business Details</h6>
+                                                <table class="table table-sm">
+                                                    <tr><td><strong>Business Name:</strong></td><td id="business-name">-</td></tr>
+                                                    <tr><td><strong>Business Type:</strong></td><td id="business-type">-</td></tr>
+                                                    <tr><td><strong>License Number:</strong></td><td id="license-number">-</td></tr>
+                                                </table>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <h6>📍 Location Details</h6>
+                                                <table class="table table-sm">
+                                                    <tr><td><strong>Address:</strong></td><td id="business-address">-</td></tr>
+                                                    <tr><td><strong>City:</strong></td><td id="business-city">-</td></tr>
+                                                    <tr><td><strong>State:</strong></td><td id="business-state">-</td></tr>
+                                                    <tr><td><strong>PIN Code:</strong></td><td id="business-pincode">-</td></tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="mt-3">
+                                            <button class="btn btn-info btn-sm" onclick="adminDashboard.showLocationOnMap()">
+                                                <i class="fas fa-map-marker-alt"></i> Show on Map
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Application History -->
+                        <div class="card mt-4">
+                            <div class="card-header bg-warning text-white">
+                                <h5 class="mb-0">📋 Application History</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Application ID</th>
+                                                <th>Business Name</th>
+                                                <th>Type</th>
+                                                <th>Status</th>
+                                                <th>Submitted</th>
+                                                <th>Certificate Number</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="user-applications-table">
+                                            <!-- Will be populated by JavaScript -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Activity Logs -->
+                        <div class="card mt-4">
+                            <div class="card-header bg-danger text-white">
+                                <h5 class="mb-0">📊 User Activity Logs</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Timestamp</th>
+                                                <th>Action</th>
+                                                <th>Details</th>
+                                                <th>IP Address</th>
+                                                <th>Device</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="user-activity-logs-table">
+                                            <!-- Will be populated by JavaScript -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- All Users Table -->
+                    <div id="all-users-section">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">👥 All Registered Users</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Email</th>
+                                                <th>Phone</th>
+                                                <th>Role</th>
+                                                <th>Applications</th>
+                                                <th>Last Login</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="all-users-table">
+                                            <!-- Will be populated by JavaScript -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Applications Management Section -->
+                <div id="applications-section" class="section-content hidden">
+                <div class="container-fluid">
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                        <h1 class="h2">🏢 Applications Management</h1>
+                        <div class="btn-toolbar mb-2 mb-md-0">
+                            <button class="btn btn-sm btn-outline-secondary" onclick="adminDashboard.loadApplications()">
+                                <i class="fas fa-sync"></i> Refresh
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">All Applications</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped" id="applications-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Business Name</th>
+                                                    <th>Applicant</th>
+                                                    <th>Date</th>
+                                                    <th>Status</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td colspan="5" class="text-center">
+                                                        <i class="fas fa-spinner fa-spin"></i> Loading applications...
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+
+                <!-- Inspections Section -->
+                <div id="inspections-section" class="section-content hidden">
+                <div class="container-fluid">
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                        <h1 class="h2">🔍 Inspections Management</h1>
+                        <div class="btn-toolbar mb-2 mb-md-0">
+                            <button class="btn btn-sm btn-outline-secondary" onclick="adminDashboard.loadInspections()">
+                                <i class="fas fa-sync"></i> Refresh
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">All Inspections</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped" id="inspections-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Business Name</th>
+                                                    <th>Inspector</th>
+                                                    <th>Date</th>
+                                                    <th>Status</th>
+                                                    <th>Score</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td colspan="6" class="text-center">
+                                                        <i class="fas fa-spinner fa-spin"></i> Loading inspections...
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+
+                <!-- Certificates Section -->
+                <div id="certificates-section" class="section-content hidden">
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                        <h1 class="h2">🏆 Certificates Management</h1>
+                        <div class="btn-toolbar mb-2 mb-md-0">
+                            <button class="btn btn-sm btn-outline-secondary" onclick="adminDashboard.refreshCertificates()">
+                                <i class="fas fa-sync"></i> Refresh
+                            </button>
+                            <button class="btn btn-sm btn-success" onclick="adminDashboard.generateBulkCertificates()">
+                                <i class="fas fa-certificate"></i> Generate Bulk
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Certificate Stats -->
+                    <div class="row mb-4">
+                        <div class="col-md-3">
+                            <div class="card text-white bg-success">
+                                <div class="card-body">
+                                    <h5>Total Certificates</h5>
+                                    <h2 id="cert-total">0</h2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card text-white bg-warning">
+                                <div class="card-body">
+                                    <h5>Pending</h5>
+                                    <h2 id="cert-pending">0</h2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card text-white bg-info">
+                                <div class="card-body">
+                                    <h5>This Month</h5>
+                                    <h2 id="cert-monthly">0</h2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card text-white bg-danger">
+                                <div class="card-body">
+                                    <h5>Expired</h5>
+                                    <h2 id="cert-expired">0</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">All Certificates</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped" id="certificates-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Certificate Number</th>
+                                                    <th>Business Name</th>
+                                                    <th>Issue Date</th>
+                                                    <th>Valid Until</th>
+                                                    <th>Status</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td colspan="6" class="text-center">
+                                                        <i class="fas fa-spinner fa-spin"></i> Loading certificates...
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Analytics Section -->
+                <div id="analytics-section" class="section-content hidden">
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                        <h1 class="h2">📊 Analytics Dashboard</h1>
+                        <div class="btn-toolbar mb-2 mb-md-0">
+                            <button class="btn btn-sm btn-outline-secondary" onclick="adminDashboard.loadAnalytics()">
+                                <i class="fas fa-sync"></i> Refresh
+                            </button>
+                            <button class="btn btn-sm btn-primary" onclick="adminDashboard.exportAnalytics()">
+                                <i class="fas fa-download"></i> Export Report
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Analytics Content -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Application Trends</h5>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="applicationTrendsChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Approval Rate</h5>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="approvalRateChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- System Settings Section -->
+                <div id="system-settings-section" class="section-content hidden">
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                        <h1 class="h2">⚙️ System Settings</h1>
+                        <div class="btn-toolbar mb-2 mb-md-0">
+                            <button class="btn btn-sm btn-success" onclick="adminDashboard.saveSystemSettings()">
+                                <i class="fas fa-save"></i> Save Settings
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Application Settings</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label>Auto-approval Threshold</label>
+                                        <input type="number" class="form-control" id="auto-approval-threshold" value="85">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Max File Size (MB)</label>
+                                        <input type="number" class="form-control" id="max-file-size" value="10">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Certificate Validity (Days)</label>
+                                        <input type="number" class="form-control" id="certificate-validity" value="365">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Notification Settings</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="email-notifications" checked>
+                                        <label class="form-check-label">Email Notifications</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="sms-notifications">
+                                        <label class="form-check-label">SMS Notifications</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="push-notifications" checked>
+                                        <label class="form-check-label">Push Notifications</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Backup & Restore Section -->
+                <div id="backup-restore-section" class="section-content hidden">
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                        <h1 class="h2">💾 Backup & Restore</h1>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Create Backup</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label>Backup Type</label>
+                                        <select class="form-control" id="backup-type">
+                                            <option value="full">Full Database</option>
+                                            <option value="applications">Applications Only</option>
+                                            <option value="users">Users Only</option>
+                                        </select>
+                                    </div>
+                                    <button class="btn btn-primary" onclick="adminDashboard.createBackup()">
+                                        <i class="fas fa-download"></i> Create Backup
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Backup History</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-sm">
+                                            <thead>
+                                                <tr>
+                                                    <th>Date</th>
+                                                    <th>Type</th>
+                                                    <th>Size</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="backup-history">
+                                                <tr>
+                                                    <td colspan="4" class="text-center">No backups found</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Audit Logs Section -->
+                <div id="audit-logs-section" class="section-content hidden">
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                        <h1 class="h2">🛡️ Audit Logs</h1>
+                        <div class="btn-toolbar mb-2 mb-md-0">
+                            <button class="btn btn-sm btn-outline-secondary" onclick="adminDashboard.loadAuditLogs()">
+                                <i class="fas fa-sync"></i> Refresh
+                            </button>
+                            <button class="btn btn-sm btn-primary" onclick="adminDashboard.exportAuditLogs()">
+                                <i class="fas fa-download"></i> Export Logs
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <select class="form-control" id="log-filter">
+                                <option value="">All Activities</option>
+                                <option value="login">Login</option>
+                                <option value="application">Application</option>
+                                <option value="approval">Approval</option>
+                                <option value="certificate">Certificate</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="date" class="form-control" id="log-date-filter">
+                        </div>
+                        <div class="col-md-4">
+                            <button class="btn btn-primary" onclick="adminDashboard.filterAuditLogs()">
+                                <i class="fas fa-filter"></i> Filter
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>System Activity Logs</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped" id="audit-logs-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Timestamp</th>
+                                                    <th>User</th>
+                                                    <th>Activity</th>
+                                                    <th>IP Address</th>
+                                                    <th>Details</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td colspan="5" class="text-center">
+                                                        <i class="fas fa-spinner fa-spin"></i> Loading audit logs...
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- User Tracking Section -->
+                <div id="user-tracking-section" class="section-content hidden">
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                        <h1 class="h2">🔍 User Tracking</h1>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-8">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>🔍 Search User by Certificate Number</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="certificate-search-input"
+                                               placeholder="Enter certificate number (e.g., NOC-2024-001)">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-primary" onclick="adminDashboard.searchUserByCertificate()">
+                                                <i class="fas fa-search"></i> Search
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>📊 Quick Stats</h5>
+                                </div>
+                                <div class="card-body">
+                                    <p><strong>Total Users:</strong> <span id="total-users-count">0</span></p>
+                                    <p><strong>Active Today:</strong> <span id="active-today">0</span></p>
+                                    <p><strong>New This Week:</strong> <span id="new-this-week">0</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- User Details will be populated here -->
+                    <div id="user-details-container" style="display: none;">
+                        <!-- User details content will be dynamically loaded -->
+                    </div>
+                </div>
             </main>
         </div>
     </div>
@@ -403,16 +1871,16 @@
     <div class="bg-white rounded-lg shadow-md p-6 mb-6">
         <div class="flex items-center space-x-4">
             <div class="relative">
-                <img id="adminProfileImage" 
-                     src="/static/profile_images/default-profile.png" 
-                     alt="Admin Profile" 
+                <img id="adminProfileImage"
+                     src="/static/profile_images/default-profile.png"
+                     alt="Admin Profile"
                      class="w-24 h-24 rounded-full object-cover">
-                <label for="profileImageInput" 
+                <label for="profileImageInput"
                        class="absolute bottom-0 right-0 bg-blue-500 text-white rounded-full p-2 cursor-pointer">
                     <i class="fas fa-camera"></i>
-                    <input type="file" 
-                           id="profileImageInput" 
-                           accept="image/*" 
+                    <input type="file"
+                           id="profileImageInput"
+                           accept="image/*"
                            class="hidden">
                 </label>
             </div>
@@ -429,27 +1897,27 @@
         <div class="grid grid-cols-1 gap-6">
             <div>
                 <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
-                <input type="text" 
-                       name="name" 
-                       id="name" 
+                <input type="text"
+                       name="name"
+                       id="name"
                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
             </div>
             <div>
                 <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-                <input type="email" 
-                       name="email" 
-                       id="email" 
+                <input type="email"
+                       name="email"
+                       id="email"
                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
             </div>
             <div>
                 <label for="phone" class="block text-sm font-medium text-gray-700">Phone</label>
-                <input type="tel" 
-                       name="phone" 
-                       id="phone" 
+                <input type="tel"
+                       name="phone"
+                       id="phone"
                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
             </div>
             <div>
-                <button type="submit" 
+                <button type="submit"
                         class="w-full bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
                     Update Profile
                 </button>
@@ -516,11 +1984,18 @@
                 try {
                     const response = await fetch('/api/dashboard-stats');
                     const stats = await response.json();
-                    
-                    document.getElementById('total-applications').textContent = stats.total;
-                    document.getElementById('pending-applications').textContent = stats.pending;
-                    document.getElementById('approved-applications').textContent = stats.approved;
-                    document.getElementById('rejected-applications').textContent = stats.rejected;
+
+                    // Update application stats
+                    document.getElementById('total-applications').textContent = stats.total || 0;
+                    document.getElementById('pending-applications').textContent = stats.pending || 0;
+                    document.getElementById('approved-applications').textContent = stats.approved || 0;
+                    document.getElementById('rejected-applications').textContent = stats.rejected || 0;
+
+                    // Update enhanced stats
+                    document.getElementById('total-users').textContent = stats.total_users || 0;
+                    document.getElementById('total-certificates').textContent = stats.total_certificates || 0;
+                    document.getElementById('total-inspections').textContent = stats.total_inspections || 0;
+                    document.getElementById('total-revenue').textContent = `₹${stats.total_revenue || 0}`;
                 } catch (error) {
                     console.error('Error fetching dashboard stats:', error);
                     this.showNotification('Error loading dashboard statistics', 'danger');
@@ -538,7 +2013,7 @@
 
                     // Get CSRF token from meta tag
                     const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
-                    
+
                     const response = await fetch(`/application/${applicationId}/update-status`, {
                         method: 'POST',
                         credentials: 'same-origin', // Include cookies in the request
@@ -547,7 +2022,7 @@
                             'X-CSRF-Token': csrfToken,
                             'Accept': 'application/json'
                         },
-                        body: JSON.stringify({ 
+                        body: JSON.stringify({
                             status: newStatus,
                             reason: reason,
                             csrf_token: csrfToken // Include token in request body as well
@@ -560,10 +2035,10 @@
                     }
 
                     const result = await response.json();
-                    
+
                     // Show success notification
                     this.showNotification(`Application ${newStatus} successfully`, 'success');
-                    
+
                     // Refresh the dashboard data
                     await this.loadDashboard();
 
@@ -582,7 +2057,7 @@
                 try {
                     const response = await fetch('/api/latest-applications');
                     const data = await response.json();
-                    
+
                     const tableBody = document.getElementById('latest-applications');
                     tableBody.innerHTML = data.applications.map(app => `
                         <tr>
@@ -615,23 +2090,31 @@
                 try {
                     const response = await fetch(`/application/${applicationId}`);
                     const application = await response.json();
-                    
+
                     this.currentView = 'details';
                     document.getElementById('dashboard').style.display = 'none';
                     const detailsDiv = document.getElementById('applicationDetails');
                     detailsDiv.style.display = 'block';
-                    
+
                     detailsDiv.innerHTML = `
                         <div class="card">
                             <div class="card-header bg-white">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <h4 class="mb-0">Application Details</h4>
                                     <div class="action-buttons">
-                                        <button class="btn btn-success" onclick="adminDashboard.updateApplicationStatus('${application.id}', 'approved')">
-                                            <i class="fas fa-check"></i> Approve
+                                        ${application.status === 'pending' ? `
+                                            <button class="btn btn-success" onclick="adminDashboard.updateApplicationStatus('${application.id}', 'approved')">
+                                                <i class="fas fa-check"></i> Approve
+                                            </button>
+                                            <button class="btn btn-danger" onclick="adminDashboard.updateApplicationStatus('${application.id}', 'rejected')">
+                                                <i class="fas fa-times"></i> Reject
+                                            </button>
+                                        ` : ''}
+                                        <button class="btn btn-info" id="verifyDocuments" onclick="adminDashboard.verifyDocumentsAI('${application.id}')">
+                                            <i class="fas fa-robot"></i> AI Verify
                                         </button>
-                                        <button class="btn btn-danger" onclick="adminDashboard.updateApplicationStatus('${application.id}', 'rejected')">
-                                            <i class="fas fa-times"></i> Reject
+                                        <button class="btn btn-warning" id="generateCertificate" onclick="adminDashboard.generateNOCCertificate('${application.id}')" ${application.inspection_status === 'completed' ? '' : 'disabled'}>
+                                            <i class="fas fa-certificate"></i> Generate NOC
                                         </button>
                                         <button class="btn btn-primary" onclick="adminDashboard.showDashboard()">
                                             <i class="fas fa-arrow-left"></i> Back
@@ -711,39 +2194,84 @@
                             </div>
                         </div>
                     </div>
-                    ${this.generateAttachmentsHTML(application.attachments)}
+                    ${this.generateAttachmentsHTML(application)}
                 `;
             }
 
-            generateAttachmentsHTML(attachments) {
-                if (!attachments || attachments.length === 0) {
-                    return '<div class="row mt-4"><div class="col-12"><h5>Attachments</h5><p>No attachments provided.</p></div></div>';
+            generateAttachmentsHTML(application) {
+                // Check for files in different possible locations
+                let files = [];
+
+                if (application.files && application.files.length > 0) {
+                    files = application.files;
+                } else if (application.documents && application.documents.length > 0) {
+                    files = application.documents;
+                } else {
+                    // Check for individual file fields
+                    const fileFields = ['buildingPlan', 'safetyCertificate', 'insuranceDoc', 'businessLicense', 'electricalCertificate'];
+                    fileFields.forEach(field => {
+                        if (application[field]) {
+                            files.push({
+                                type: field.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase()),
+                                filename: application[field],
+                                original_name: application[field],
+                                url: `/download/${application[field]}`
+                            });
+                        }
+                    });
+                }
+
+                if (!files || files.length === 0) {
+                    return `
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <h5>📎 Uploaded Documents</h5>
+                                <div class="alert alert-info">
+                                    <i class="fas fa-info-circle"></i> No documents uploaded yet.
+                                </div>
+                            </div>
+                        </div>
+                    `;
                 }
 
                 return `
                     <div class="row mt-4">
                         <div class="col-12">
-                            <h5>Attachments</h5>
+                            <h5>📎 Uploaded Documents</h5>
                             <div class="table-responsive">
-                                <table class="table table-bordered">
-                                    <thead>
+                                <table class="table table-bordered table-hover">
+                                    <thead class="table-dark">
                                         <tr>
-                                            <th>Filename</th>
-                                            <th>Type</th>
-                                            <th>Size</th>
-                                            <th>Actions</th>
+                                            <th><i class="fas fa-file"></i> Document Type</th>
+                                            <th><i class="fas fa-tag"></i> Filename</th>
+                                            <th><i class="fas fa-hdd"></i> Size</th>
+                                            <th><i class="fas fa-calendar"></i> Upload Date</th>
+                                            <th><i class="fas fa-cogs"></i> Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        ${attachments.map(attachment => `
+                                        ${files.map(doc => `
                                             <tr>
-                                                <td>${attachment.filename}</td>
-                                                <td>${attachment.type}</td>
-                                                <td>${this.formatFileSize(attachment.size)}</td>
                                                 <td>
-                                                    <a href="/download/${attachment.id}" class="btn btn-sm btn-primary">
+                                                    <span class="badge bg-primary">
+                                                        ${doc.type || doc.type_label || 'Document'}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <i class="fas fa-file-pdf text-danger"></i>
+                                                    ${doc.original_name || doc.filename || 'Unknown'}
+                                                </td>
+                                                <td>${this.formatFileSize(doc.size || 0)}</td>
+                                                <td>${doc.uploaded_at ? new Date(doc.uploaded_at).toLocaleString() : 'N/A'}</td>
+                                                <td>
+                                                    <a href="${doc.url || doc.download_url || '/download/' + doc.filename}"
+                                                       class="btn btn-sm btn-primary"
+                                                       target="_blank">
                                                         <i class="fas fa-download"></i> Download
                                                     </a>
+                                                    <button class="btn btn-sm btn-info" onclick="adminDashboard.previewDocument('${doc.filename}')">
+                                                        <i class="fas fa-eye"></i> Preview
+                                                    </button>
                                                 </td>
                                             </tr>
                                         `).join('')}
@@ -778,7 +2306,7 @@
                 try {
                     const response = await fetch('/api/approved-reports');
                     const data = await response.json();
-                    
+
                     const tableBody = document.getElementById('approved-reports');
                     tableBody.innerHTML = data.reports.map(report => `
                         <tr>
@@ -806,12 +2334,12 @@
                 try {
                     const response = await fetch(`/approval-report/${reportId}`);
                     const report = await response.json();
-                    
+
                     this.currentView = 'report';
                     document.getElementById('dashboard').style.display = 'none';
                     const detailsDiv = document.getElementById('applicationDetails');
                     detailsDiv.style.display = 'block';
-                    
+
                     detailsDiv.innerHTML = `
                         <div class="card">
                             <div class="card-header bg-white">
@@ -934,7 +2462,7 @@
                     }
 
                     const data = await response.json();
-                    
+
                     if (!data.success) {
                         throw new Error(data.error || 'Failed to load data');
                     }
@@ -991,7 +2519,7 @@
                     }
 
                     const data = await response.json();
-                    
+
                     if (data.success) {
                         this.updateInspectionCounts(data.inspections);
                         this.updateInspectionsTable(data.inspections);
@@ -1058,6 +2586,84 @@
                 return colors[status.toLowerCase()] || 'secondary';
             }
 
+            async verifyDocumentsAI(applicationId) {
+                try {
+                    this.showNotification('AI document verification in progress...', 'info');
+
+                    const response = await fetch(`/api/verify-documents/${applicationId}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
+                        }
+                    });
+
+                    const result = await response.json();
+
+                    if (result.success) {
+                        this.showNotification('Documents verified successfully!', 'success');
+                        // Refresh the application details
+                        this.viewApplication(applicationId);
+                    } else {
+                        this.showNotification(`Verification failed: ${result.error}`, 'danger');
+                    }
+                } catch (error) {
+                    console.error('Error verifying documents:', error);
+                    this.showNotification('Error during document verification', 'danger');
+                }
+            },
+
+            previewDocument(filename) {
+                // Open document in new window for preview
+                window.open(`/download/${filename}`, '_blank');
+            },
+
+            async generateNOCCertificate(applicationId) {
+                try {
+                    this.showNotification('Generating NOC certificate...', 'info');
+
+                    const response = await fetch(`/generate-noc-certificate/${applicationId}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
+                        }
+                    });
+
+                    const result = await response.json();
+
+                    if (result.success) {
+                        this.showNotification('NOC certificate generated successfully!', 'success');
+
+                        // Create download button
+                        const downloadBtn = document.createElement('a');
+                        downloadBtn.href = result.download_url;
+                        downloadBtn.className = 'btn btn-primary mt-3';
+                        downloadBtn.innerHTML = '<i class="fas fa-download"></i> Download NOC Certificate';
+                        downloadBtn.target = '_blank';
+
+                        // Find a place to add the download button
+                        const actionButtons = document.querySelector('.action-buttons');
+                        if (actionButtons) {
+                            actionButtons.appendChild(downloadBtn);
+                        }
+
+                        // Disable the generate button
+                        const generateBtn = document.getElementById('generateCertificate');
+                        if (generateBtn) {
+                            generateBtn.disabled = true;
+                            generateBtn.innerHTML = '<i class="fas fa-check"></i> Certificate Generated';
+                        }
+
+                    } else {
+                        this.showNotification(`Certificate generation failed: ${result.error}`, 'danger');
+                    }
+                } catch (error) {
+                    console.error('Error generating NOC certificate:', error);
+                    this.showNotification('Error during certificate generation', 'danger');
+                }
+            },
+
             async saveInspection() {
                 try {
                     const form = document.getElementById('scheduleInspectionForm');
@@ -1107,7 +2713,7 @@
                     console.error('Error scheduling inspection:', error);
                     this.showNotification('Error scheduling inspection: ' + error.message, 'danger');
                 }
-            }
+            },
 
             async viewInspection(id) {
                 try {
@@ -1122,13 +2728,13 @@
                     }
 
                     const data = await response.json();
-                    
+
                     if (!data.success) {
                         throw new Error(data.error || 'Failed to load inspection details');
                     }
 
                     const inspection = data.inspection;
-                    
+
                     // Create modal HTML
                     const modalHtml = `
                         <div class="modal fade" id="viewInspectionModal" tabindex="-1">
@@ -1149,7 +2755,7 @@
                                                 <h6>Schedule Information</h6>
                                                 <p><strong>Date:</strong> ${inspection.date}</p>
                                                 <p><strong>Time:</strong> ${inspection.time}</p>
-                                                <p><strong>Status:</strong> 
+                                                <p><strong>Status:</strong>
                                                     <span class="badge bg-${this.getStatusColor(inspection.status)}">
                                                         ${inspection.status}
                                                     </span>
@@ -1194,7 +2800,7 @@
                     console.error('Error viewing inspection:', error);
                     this.showNotification('Error loading inspection details: ' + error.message, 'danger');
                 }
-            }
+            },
 
             async editInspection(id) {
                 try {
@@ -1209,13 +2815,13 @@
                     }
 
                     const data = await response.json();
-                    
+
                     if (!data.success) {
                         throw new Error(data.error || 'Failed to load inspection details');
                     }
 
                     const inspection = data.inspection;
-                    
+
                     // Create modal HTML
                     const modalHtml = `
                         <div class="modal fade" id="editInspectionModal" tabindex="-1">
@@ -1230,12 +2836,12 @@
                                             <div class="row mb-3">
                                                 <div class="col-md-6">
                                                     <label class="form-label">Date</label>
-                                                    <input type="date" class="form-control" id="edit-date" 
+                                                    <input type="date" class="form-control" id="edit-date"
                                                         value="${inspection.date}" required>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <label class="form-label">Time</label>
-                                                    <input type="time" class="form-control" id="edit-time" 
+                                                    <input type="time" class="form-control" id="edit-time"
                                                         value="${inspection.time}" required>
                                                 </div>
                                             </div>
@@ -1283,7 +2889,7 @@
                     console.error('Error editing inspection:', error);
                     this.showNotification('Error loading inspection details: ' + error.message, 'danger');
                 }
-            }
+            },
 
             async saveInspectionChanges(id) {
                 try {
@@ -1308,7 +2914,7 @@
                     }
 
                     const data = await response.json();
-                    
+
                     if (data.success) {
                         this.showNotification('Inspection updated successfully', 'success');
                         const modal = bootstrap.Modal.getInstance(document.getElementById('editInspectionModal'));
@@ -1322,7 +2928,7 @@
                     console.error('Error saving inspection changes:', error);
                     this.showNotification('Error updating inspection: ' + error.message, 'danger');
                 }
-            }
+            },
 
             async submitInspectionReport() {
                 try {
@@ -1357,13 +2963,13 @@
                     }
 
                     const data = await response.json();
-                    
+
                     if (data.success) {
                         this.showNotification('Inspection completed and report generated', 'success');
-                        
+
                         // Download the report
                         window.location.href = data.report_url;
-                        
+
                         // Close modal and refresh
                         const modal = bootstrap.Modal.getInstance(document.getElementById('completeInspectionModal'));
                         modal.hide();
@@ -1376,6 +2982,1038 @@
                     console.error('Error completing inspection:', error);
                     this.showNotification('Error completing inspection: ' + error.message, 'danger');
                 }
+            },
+
+            // New Admin Methods for Enhanced Features
+            showDashboard() {
+                this.hideAllSections();
+                document.getElementById('dashboard').style.display = 'block';
+                document.getElementById('dashboard').classList.remove('hidden');
+                this.loadDashboard();
+            },
+
+            showInspections() {
+                this.hideAllSections();
+                document.getElementById('inspections-section').classList.remove('hidden');
+                document.getElementById('inspections-section').style.display = 'block';
+                this.loadInspections();
+            },
+
+            showCertificates() {
+                this.hideAllSections();
+                document.getElementById('certificates-section').classList.remove('hidden');
+                document.getElementById('certificates-section').style.display = 'block';
+                this.loadCertificates();
+            },
+
+            showAnalytics() {
+                this.hideAllSections();
+                document.getElementById('analytics-section').classList.remove('hidden');
+                document.getElementById('analytics-section').style.display = 'block';
+                this.loadAnalytics();
+            },
+
+            showSystemSettings() {
+                this.hideAllSections();
+                document.getElementById('system-settings-section').classList.remove('hidden');
+                document.getElementById('system-settings-section').style.display = 'block';
+                this.loadSystemSettings();
+            },
+
+            showBackupRestore() {
+                this.hideAllSections();
+                document.getElementById('backup-restore-section').classList.remove('hidden');
+                document.getElementById('backup-restore-section').style.display = 'block';
+                this.loadBackupHistory();
+            },
+
+            showAuditLogs() {
+                this.hideAllSections();
+                document.getElementById('audit-logs-section').classList.remove('hidden');
+                document.getElementById('audit-logs-section').style.display = 'block';
+                this.loadAuditLogs();
+            },
+
+            showUserTracking() {
+                this.hideAllSections();
+                document.getElementById('user-tracking-section').classList.remove('hidden');
+                document.getElementById('user-tracking-section').style.display = 'block';
+                this.loadAllUsers();
+            },
+
+            hideAllSections() {
+                const sections = ['dashboard', 'inspections-section', 'certificates-section',
+                                'analytics-section', 'system-settings-section', 'backup-restore-section',
+                                'audit-logs-section', 'user-tracking-section', 'applicationDetails'];
+                sections.forEach(id => {
+                    const element = document.getElementById(id);
+                    if (element) {
+                        element.style.display = 'none';
+                        element.classList.add('hidden');
+                    }
+                });
+            },
+
+            // User Tracking Methods
+            async searchUserByCertificate() {
+                try {
+                    const certificateNumber = document.getElementById('certificate-search-input').value.trim();
+                    if (!certificateNumber) {
+                        this.showNotification('Please enter a certificate number', 'warning');
+                        return;
+                    }
+
+                    this.showNotification('Searching user...', 'info');
+
+                    const response = await fetch(`/api/admin/search-user-by-certificate`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
+                        },
+                        body: JSON.stringify({ certificate_number: certificateNumber })
+                    });
+
+                    const data = await response.json();
+
+                    if (data.success && data.user) {
+                        this.displayUserDetails(data.user, data.applications, data.activities);
+                        document.getElementById('all-users-section').style.display = 'none';
+                        document.getElementById('user-details-section').style.display = 'block';
+                        this.showNotification('User found successfully!', 'success');
+                    } else {
+                        this.showNotification(data.error || 'User not found', 'danger');
+                        document.getElementById('user-details-section').style.display = 'none';
+                        document.getElementById('all-users-section').style.display = 'block';
+                    }
+                } catch (error) {
+                    console.error('Error searching user:', error);
+                    this.showNotification('Error searching user', 'danger');
+                }
+            },
+
+            displayUserDetails(user, applications, activities) {
+                // Update user profile
+                document.getElementById('user-name').textContent = user.name || '-';
+                document.getElementById('user-email').textContent = user.email || '-';
+                document.getElementById('user-phone').textContent = user.phone || '-';
+                document.getElementById('user-role').textContent = user.role || '-';
+                document.getElementById('user-status').textContent = user.status || 'Active';
+                document.getElementById('user-joined').textContent = user.created_at ?
+                    new Date(user.created_at).toLocaleDateString() : '-';
+
+                // Update business information from latest application
+                if (applications && applications.length > 0) {
+                    const latestApp = applications[0];
+                    document.getElementById('business-name').textContent = latestApp.business_name || '-';
+                    document.getElementById('business-type').textContent = latestApp.business_type || '-';
+                    document.getElementById('license-number').textContent = latestApp.license_number || '-';
+                    document.getElementById('business-address').textContent = latestApp.business_address || '-';
+                    document.getElementById('business-city').textContent = latestApp.business_city || '-';
+                    document.getElementById('business-state').textContent = latestApp.business_state || '-';
+                    document.getElementById('business-pincode').textContent = latestApp.business_pincode || '-';
+                }
+
+                // Update applications table
+                this.updateApplicationsTable(applications);
+
+                // Update activity logs table
+                this.updateActivityLogsTable(activities);
+            },
+
+            updateApplicationsTable(applications) {
+                const tableBody = document.getElementById('user-applications-table');
+                if (!applications || applications.length === 0) {
+                    tableBody.innerHTML = '<tr><td colspan="7" class="text-center">No applications found</td></tr>';
+                    return;
+                }
+
+                tableBody.innerHTML = applications.map(app => `
+                    <tr>
+                        <td>${app._id || '-'}</td>
+                        <td>${app.business_name || '-'}</td>
+                        <td>${app.business_type || '-'}</td>
+                        <td><span class="badge badge-${app.status}">${app.status || '-'}</span></td>
+                        <td>${app.timestamp ? new Date(app.timestamp).toLocaleDateString() : '-'}</td>
+                        <td>${app.certificate_number || 'Not Generated'}</td>
+                        <td>
+                            <button class="btn btn-sm btn-primary" onclick="adminDashboard.viewApplication('${app._id}')">
+                                <i class="fas fa-eye"></i> View
+                            </button>
+                            ${app.certificate_number ? `
+                                <button class="btn btn-sm btn-success" onclick="adminDashboard.downloadCertificate('${app._id}')">
+                                    <i class="fas fa-download"></i> Certificate
+                                </button>
+                            ` : ''}
+                        </td>
+                    </tr>
+                `).join('');
+            },
+
+            updateActivityLogsTable(activities) {
+                const tableBody = document.getElementById('user-activity-logs-table');
+                if (!activities || activities.length === 0) {
+                    tableBody.innerHTML = '<tr><td colspan="5" class="text-center">No activity logs found</td></tr>';
+                    return;
+                }
+
+                tableBody.innerHTML = activities.map(activity => `
+                    <tr>
+                        <td>${activity.timestamp ? new Date(activity.timestamp).toLocaleString() : '-'}</td>
+                        <td>${activity.action || '-'}</td>
+                        <td>${activity.details || '-'}</td>
+                        <td>${activity.ip_address || '-'}</td>
+                        <td>${activity.device || 'Web Browser'}</td>
+                    </tr>
+                `).join('');
+            },
+
+            async loadAllUsers() {
+                try {
+                    const response = await fetch('/api/admin/user-tracking');
+                    const data = await response.json();
+
+                    if (data.success) {
+                        this.updateAllUsersTable(data.data.users);
+                    } else {
+                        this.showNotification('Error loading users: ' + data.error, 'danger');
+                    }
+                } catch (error) {
+                    console.error('Error loading users:', error);
+                    this.showNotification('Error loading users', 'danger');
+                }
+            },
+
+            updateAllUsersTable(users) {
+                const tableBody = document.getElementById('all-users-table');
+                if (!users || users.length === 0) {
+                    tableBody.innerHTML = '<tr><td colspan="7" class="text-center">No users found</td></tr>';
+                    return;
+                }
+
+                tableBody.innerHTML = users.map(user => `
+                    <tr>
+                        <td>${user.name || '-'}</td>
+                        <td>${user.email || '-'}</td>
+                        <td>${user.phone || '-'}</td>
+                        <td><span class="badge badge-${user.role}">${user.role || '-'}</span></td>
+                        <td>${user.application_count || 0}</td>
+                        <td>${user.last_login ? new Date(user.last_login).toLocaleDateString() : 'Never'}</td>
+                        <td>
+                            <button class="btn btn-sm btn-info" onclick="adminDashboard.viewUserDetails('${user._id}')">
+                                <i class="fas fa-eye"></i> View
+                            </button>
+                            <button class="btn btn-sm btn-warning" onclick="adminDashboard.trackUser('${user._id}')">
+                                <i class="fas fa-search"></i> Track
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+            },
+
+            showAllUsers() {
+                document.getElementById('user-details-section').style.display = 'none';
+                document.getElementById('all-users-section').style.display = 'block';
+                this.loadAllUsers();
+            },
+
+            async viewUserDetails(userId) {
+                try {
+                    const response = await fetch(`/api/admin/user-details/${userId}`);
+                    const data = await response.json();
+
+                    if (data.success) {
+                        this.displayUserDetails(data.user, data.applications, data.activities);
+                        document.getElementById('all-users-section').style.display = 'none';
+                        document.getElementById('user-details-section').style.display = 'block';
+                    } else {
+                        this.showNotification('Error loading user details', 'danger');
+                    }
+                } catch (error) {
+                    console.error('Error loading user details:', error);
+                    this.showNotification('Error loading user details', 'danger');
+                }
+            },
+
+            showLocationOnMap() {
+                const address = document.getElementById('business-address').textContent;
+                const city = document.getElementById('business-city').textContent;
+                const state = document.getElementById('business-state').textContent;
+
+                if (address && address !== '-') {
+                    const fullAddress = `${address}, ${city}, ${state}`;
+                    const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(fullAddress)}`;
+                    window.open(mapUrl, '_blank');
+                } else {
+                    this.showNotification('Address not available', 'warning');
+                }
+            },
+
+            async exportUserReport() {
+                try {
+                    const response = await fetch('/api/admin/export-user-report', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
+                        }
+                    });
+
+                    if (response.ok) {
+                        const blob = await response.blob();
+                        const url = window.URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = `user_report_${new Date().toISOString().split('T')[0]}.pdf`;
+                        document.body.appendChild(a);
+                        a.click();
+                        window.URL.revokeObjectURL(url);
+                        document.body.removeChild(a);
+                        this.showNotification('Report exported successfully', 'success');
+                    } else {
+                        this.showNotification('Error exporting report', 'danger');
+                    }
+                } catch (error) {
+                    console.error('Error exporting report:', error);
+                    this.showNotification('Error exporting report', 'danger');
+                }
+            },
+
+            async loadCertificates() {
+                try {
+                    const response = await fetch('/api/admin/certificates');
+                    const data = await response.json();
+
+                    if (data.success) {
+                        // Update certificate stats
+                        document.getElementById('total-certificates-count').textContent = data.data.statistics.total || 0;
+                        document.getElementById('pending-certificates-count').textContent = 0; // No pending in current data
+                        document.getElementById('monthly-certificates-count').textContent = data.data.statistics.active || 0;
+                        document.getElementById('expired-certificates-count').textContent = data.data.statistics.expired || 0;
+
+                        // Update certificates table
+                        const tableBody = document.querySelector('#certificates-table tbody');
+                        tableBody.innerHTML = data.data.certificates.map(cert => `
+                            <tr>
+                                <td>${cert.certificate_number}</td>
+                                <td>${cert.business_name}</td>
+                                <td>${new Date(cert.issue_date).toLocaleDateString()}</td>
+                                <td>${new Date(cert.valid_until).toLocaleDateString()}</td>
+                                <td><span class="badge badge-${cert.status}">${cert.status}</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-primary" onclick="adminDashboard.viewCertificate('${cert._id}')">
+                                        <i class="fas fa-eye"></i> View
+                                    </button>
+                                    <button class="btn btn-sm btn-success" onclick="adminDashboard.downloadCertificate('${cert._id}')">
+                                        <i class="fas fa-download"></i> Download
+                                    </button>
+                                    <button class="btn btn-sm btn-warning" onclick="adminDashboard.revokeCertificate('${cert._id}')">
+                                        <i class="fas fa-ban"></i> Revoke
+                                    </button>
+                                </td>
+                            </tr>
+                        `).join('');
+                    } else {
+                        this.showNotification('Error loading certificates: ' + data.error, 'danger');
+                    }
+                } catch (error) {
+                    console.error('Error loading certificates:', error);
+                    this.showNotification('Error loading certificates', 'danger');
+                }
+            },
+
+            async loadAnalytics() {
+                try {
+                    const response = await fetch('/api/admin/analytics');
+                    const data = await response.json();
+
+                    if (data.success) {
+                        // Update performance metrics
+                        document.getElementById('avg-processing-time').textContent = `${data.data.metrics.avg_processing_time || 0} days`;
+                        document.getElementById('approval-rate').textContent = `${data.data.metrics.approval_rate || 0}%`;
+                        document.getElementById('user-satisfaction').textContent = `${data.data.metrics.user_satisfaction || 0}%`;
+
+                        // Update application statistics
+                        const appStats = data.data.applications;
+                        if (document.getElementById('total-applications-analytics')) {
+                            document.getElementById('total-applications-analytics').textContent = appStats.total || 0;
+                        }
+                        if (document.getElementById('pending-applications-analytics')) {
+                            document.getElementById('pending-applications-analytics').textContent = appStats.pending || 0;
+                        }
+                        if (document.getElementById('approved-applications-analytics')) {
+                            document.getElementById('approved-applications-analytics').textContent = appStats.approved || 0;
+                        }
+
+                        // Load charts (you can add Chart.js implementation here)
+                        this.loadCharts(data.data);
+                    } else {
+                        this.showNotification('Error loading analytics: ' + data.error, 'danger');
+                    }
+                } catch (error) {
+                    console.error('Error loading analytics:', error);
+                    this.showNotification('Error loading analytics', 'danger');
+                }
+            },
+
+            loadCharts(data) {
+                // Placeholder for chart implementation
+                // You can implement Chart.js charts here
+                console.log('Loading charts with data:', data);
+            },
+
+            async loadSystemSettings() {
+                try {
+                    const response = await fetch('/api/admin/system-settings');
+                    const data = await response.json();
+
+                    if (data.success) {
+                        const settings = data.data;
+
+                        // Populate general settings if elements exist
+                        if (document.getElementById('site-name')) {
+                            document.getElementById('site-name').value = settings.general.site_name || '';
+                        }
+                        if (document.getElementById('admin-email')) {
+                            document.getElementById('admin-email').value = settings.general.admin_email || '';
+                        }
+                        if (document.getElementById('maintenance-mode')) {
+                            document.getElementById('maintenance-mode').checked = settings.general.maintenance_mode || false;
+                        }
+
+                        // Populate notification settings if elements exist
+                        if (document.getElementById('email-notifications')) {
+                            document.getElementById('email-notifications').checked = settings.notifications.email_notifications !== false;
+                        }
+                        if (document.getElementById('sms-notifications')) {
+                            document.getElementById('sms-notifications').checked = settings.notifications.sms_notifications === true;
+                        }
+                        if (document.getElementById('push-notifications')) {
+                            document.getElementById('push-notifications').checked = settings.notifications.push_notifications !== false;
+                        }
+                    } else {
+                        this.showNotification('Error loading system settings: ' + data.error, 'danger');
+                    }
+                } catch (error) {
+                    console.error('Error loading system settings:', error);
+                    this.showNotification('Error loading system settings', 'danger');
+                }
+            },
+
+            async saveSystemSettings() {
+                try {
+                    const settings = {
+                        auto_approval_threshold: document.getElementById('auto-approval-threshold').value,
+                        max_file_size: document.getElementById('max-file-size').value,
+                        certificate_validity: document.getElementById('certificate-validity').value,
+                        email_notifications: document.getElementById('email-notifications').checked,
+                        sms_notifications: document.getElementById('sms-notifications').checked,
+                        push_notifications: document.getElementById('push-notifications').checked
+                    };
+
+                    const response = await fetch('/api/admin/settings', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
+                        },
+                        body: JSON.stringify(settings)
+                    });
+
+                    const data = await response.json();
+                    if (data.success) {
+                        this.showNotification('Settings saved successfully', 'success');
+                    } else {
+                        throw new Error(data.error || 'Failed to save settings');
+                    }
+                } catch (error) {
+                    console.error('Error saving system settings:', error);
+                    this.showNotification('Error saving system settings', 'danger');
+                }
+            },
+
+            async loadBackupHistory() {
+                try {
+                    const response = await fetch('/api/admin/backup-restore');
+                    const data = await response.json();
+
+                    if (data.success) {
+                        const tableBody = document.getElementById('backup-history');
+                        tableBody.innerHTML = data.data.backup_history.map(backup => `
+                            <tr>
+                                <td>${new Date(backup.created_at).toLocaleString()}</td>
+                                <td>${backup.type}</td>
+                                <td>${backup.size}</td>
+                                <td><span class="badge badge-${backup.status}">${backup.status}</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-primary" onclick="adminDashboard.downloadBackupFile('${backup.id}')">
+                                        <i class="fas fa-download"></i> Download
+                                    </button>
+                                    <button class="btn btn-sm btn-danger" onclick="adminDashboard.deleteBackup('${backup.id}')">
+                                        <i class="fas fa-trash"></i> Delete
+                                    </button>
+                                </td>
+                            </tr>
+                        `).join('');
+
+                        // Update system stats if elements exist
+                        const stats = data.data.system_stats;
+                        if (document.getElementById('database-size')) {
+                            document.getElementById('database-size').textContent = stats.database_size;
+                        }
+                        if (document.getElementById('total-backups')) {
+                            document.getElementById('total-backups').textContent = stats.total_backups;
+                        }
+                    } else {
+                        this.showNotification('Error loading backup history: ' + data.error, 'danger');
+                    }
+                } catch (error) {
+                    console.error('Error loading backup history:', error);
+                    this.showNotification('Error loading backup history', 'danger');
+                }
+            },
+
+            async createBackup() {
+                try {
+                    const backupType = document.getElementById('backup-type').value;
+                    const response = await fetch('/api/admin/create-backup', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
+                        },
+                        body: JSON.stringify({ type: backupType })
+                    });
+
+                    const data = await response.json();
+                    if (data.success) {
+                        this.showNotification('Backup created successfully', 'success');
+                        this.loadBackupHistory();
+                    } else {
+                        throw new Error(data.error || 'Failed to create backup');
+                    }
+                } catch (error) {
+                    console.error('Error creating backup:', error);
+                    this.showNotification('Error creating backup', 'danger');
+                }
+            },
+
+            async loadAuditLogs() {
+                try {
+                    const response = await fetch('/api/admin/audit-logs');
+                    const data = await response.json();
+
+                    if (data.success) {
+                        const tableBody = document.getElementById('audit-logs-table');
+                        tableBody.innerHTML = data.data.logs.map(log => `
+                            <tr>
+                                <td>${new Date(log.timestamp).toLocaleString()}</td>
+                                <td>${log.username}</td>
+                                <td>${log.action}</td>
+                                <td>${log.description}</td>
+                                <td>${log.ip_address}</td>
+                                <td><span class="badge badge-${log.severity}">${log.severity}</span></td>
+                            </tr>
+                        `).join('');
+                    } else {
+                        this.showNotification('Error loading audit logs: ' + data.error, 'danger');
+                    }
+                } catch (error) {
+                    console.error('Error loading audit logs:', error);
+                    this.showNotification('Error loading audit logs', 'danger');
+                }
+            },
+
+            async generateBulkCertificates() {
+                try {
+                    const response = await fetch('/api/admin/generate-bulk-certificates', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
+                        }
+                    });
+
+                    const data = await response.json();
+                    if (data.success) {
+                        this.showNotification(`Generated ${data.count} certificates successfully`, 'success');
+                        this.loadCertificates();
+                    } else {
+                        throw new Error(data.error || 'Failed to generate certificates');
+                    }
+                } catch (error) {
+                    console.error('Error generating bulk certificates:', error);
+                    this.showNotification('Error generating bulk certificates', 'danger');
+                }
+            },
+
+            async viewCertificate(certificateId) {
+                window.open(`/view-certificate/${certificateId}`, '_blank');
+            },
+
+            async downloadCertificate(certificateId) {
+                window.open(`/download-certificate/${certificateId}`, '_blank');
+            },
+
+            async exportAnalytics() {
+                window.open('/api/admin/export-analytics', '_blank');
+            },
+
+            async exportAuditLogs() {
+                window.open('/api/admin/export-audit-logs', '_blank');
+            },
+
+            refreshCertificates() {
+                this.loadCertificates();
+                this.showNotification('Certificates refreshed', 'info');
+            },
+
+            // Missing functions for navigation
+            async loadSystemSettings() {
+                try {
+                    const response = await fetch('/api/admin/system-settings');
+                    const data = await response.json();
+
+                    if (data.success) {
+                        // Populate settings form
+                        document.getElementById('auto-approval-threshold').value = data.settings.auto_approval_threshold || 85;
+                        document.getElementById('max-file-size').value = data.settings.max_file_size || 10;
+                        document.getElementById('certificate-validity').value = data.settings.certificate_validity || 365;
+                        document.getElementById('email-notifications').checked = data.settings.email_notifications || false;
+                        document.getElementById('sms-notifications').checked = data.settings.sms_notifications || false;
+                        document.getElementById('push-notifications').checked = data.settings.push_notifications || false;
+                    }
+                } catch (error) {
+                    console.error('Error loading system settings:', error);
+                    this.showNotification('Error loading system settings', 'danger');
+                }
+            },
+
+            async saveSystemSettings() {
+                try {
+                    const settings = {
+                        auto_approval_threshold: document.getElementById('auto-approval-threshold').value,
+                        max_file_size: document.getElementById('max-file-size').value,
+                        certificate_validity: document.getElementById('certificate-validity').value,
+                        email_notifications: document.getElementById('email-notifications').checked,
+                        sms_notifications: document.getElementById('sms-notifications').checked,
+                        push_notifications: document.getElementById('push-notifications').checked
+                    };
+
+                    const response = await fetch('/api/admin/system-settings', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(settings)
+                    });
+
+                    const data = await response.json();
+
+                    if (data.success) {
+                        this.showNotification('System settings saved successfully', 'success');
+                    } else {
+                        throw new Error(data.error || 'Failed to save settings');
+                    }
+                } catch (error) {
+                    console.error('Error saving system settings:', error);
+                    this.showNotification('Error saving system settings', 'danger');
+                }
+            },
+
+            async loadBackupHistory() {
+                try {
+                    const response = await fetch('/api/admin/backup-history');
+                    const data = await response.json();
+
+                    if (data.success) {
+                        const tbody = document.querySelector('#backup-history');
+                        tbody.innerHTML = '';
+
+                        if (data.backups.length === 0) {
+                            tbody.innerHTML = '<tr><td colspan="4" class="text-center">No backups found</td></tr>';
+                        } else {
+                            data.backups.forEach(backup => {
+                                const row = document.createElement('tr');
+                                row.innerHTML = `
+                                    <td>${new Date(backup.created_at).toLocaleDateString()}</td>
+                                    <td>${backup.type}</td>
+                                    <td>${backup.size}</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary" onclick="adminDashboard.downloadBackup('${backup.id}')">
+                                            <i class="fas fa-download"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-danger" onclick="adminDashboard.deleteBackup('${backup.id}')">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </td>
+                                `;
+                                tbody.appendChild(row);
+                            });
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error loading backup history:', error);
+                    this.showNotification('Error loading backup history', 'danger');
+                }
+            },
+
+            async createBackup() {
+                try {
+                    const backupType = document.getElementById('backup-type').value;
+
+                    const response = await fetch('/api/admin/create-backup', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ type: backupType })
+                    });
+
+                    const data = await response.json();
+
+                    if (data.success) {
+                        this.showNotification('Backup created successfully', 'success');
+                        this.loadBackupHistory();
+                    } else {
+                        throw new Error(data.error || 'Failed to create backup');
+                    }
+                } catch (error) {
+                    console.error('Error creating backup:', error);
+                    this.showNotification('Error creating backup', 'danger');
+                }
+            },
+
+            async loadAllUsers() {
+                try {
+                    const response = await fetch('/api/admin/all-users');
+                    const data = await response.json();
+
+                    if (data.success) {
+                        document.getElementById('total-users-count').textContent = data.stats.total_users || 0;
+                        document.getElementById('active-today').textContent = data.stats.active_today || 0;
+                        document.getElementById('new-this-week').textContent = data.stats.new_this_week || 0;
+                    }
+                } catch (error) {
+                    console.error('Error loading users:', error);
+                    this.showNotification('Error loading user data', 'danger');
+                }
+            },
+
+            async searchUserByCertificate() {
+                try {
+                    const certificateNumber = document.getElementById('certificate-search-input').value.trim();
+
+                    if (!certificateNumber) {
+                        this.showNotification('Please enter a certificate number', 'warning');
+                        return;
+                    }
+
+                    const response = await fetch(`/api/admin/search-user-by-certificate?certificate=${encodeURIComponent(certificateNumber)}`);
+                    const data = await response.json();
+
+                    if (data.success && data.user) {
+                        this.displayUserDetails(data.user);
+                    } else {
+                        this.showNotification('User not found with this certificate number', 'warning');
+                        document.getElementById('user-details-container').style.display = 'none';
+                    }
+                } catch (error) {
+                    console.error('Error searching user:', error);
+                    this.showNotification('Error searching user', 'danger');
+                }
+            },
+
+            displayUserDetails(user) {
+                const container = document.getElementById('user-details-container');
+                container.innerHTML = `
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>👤 User Details</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h6>Personal Information</h6>
+                                    <p><strong>Name:</strong> ${user.name || 'N/A'}</p>
+                                    <p><strong>Email:</strong> ${user.email || 'N/A'}</p>
+                                    <p><strong>Phone:</strong> ${user.phone || 'N/A'}</p>
+                                    <p><strong>Role:</strong> ${user.role || 'N/A'}</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <h6>Business Information</h6>
+                                    <p><strong>Business Name:</strong> ${user.business_name || 'N/A'}</p>
+                                    <p><strong>Business Type:</strong> ${user.business_type || 'N/A'}</p>
+                                    <p><strong>Location:</strong> ${user.location || 'N/A'}</p>
+                                    <p><strong>Registration Date:</strong> ${user.created_at ? new Date(user.created_at).toLocaleDateString() : 'N/A'}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.style.display = 'block';
+            },
+
+            // Applications Management
+            async loadApplications() {
+                try {
+                    const response = await fetch('/api/admin/applications');
+                    const data = await response.json();
+
+                    if (data.success) {
+                        this.updateApplicationsTable(data.applications);
+                    } else {
+                        throw new Error(data.error || 'Failed to load applications');
+                    }
+                } catch (error) {
+                    console.error('Error loading applications:', error);
+                    this.showNotification('Error loading applications', 'danger');
+                }
+            },
+
+            updateApplicationsTable(applications) {
+                const tableBody = document.querySelector('#applications-table tbody');
+                if (!tableBody) return;
+
+                tableBody.innerHTML = applications.map(app => `
+                    <tr>
+                        <td>${app.business_name || 'N/A'}</td>
+                        <td>${app.username || 'N/A'}</td>
+                        <td>${app.formatted_date || 'N/A'}</td>
+                        <td><span class="badge badge-${this.getStatusColor(app.status)}">${app.status}</span></td>
+                        <td>
+                            <button class="btn btn-sm btn-success" onclick="adminDashboard.approveApplication('${app._id}')"
+                                    ${app.status === 'approved' ? 'disabled' : ''}>
+                                <i class="fas fa-check"></i> Approve
+                            </button>
+                            <button class="btn btn-sm btn-danger" onclick="adminDashboard.rejectApplication('${app._id}')"
+                                    ${app.status === 'rejected' ? 'disabled' : ''}>
+                                <i class="fas fa-times"></i> Reject
+                            </button>
+                            <button class="btn btn-sm btn-primary" onclick="adminDashboard.viewApplication('${app._id}')">
+                                <i class="fas fa-eye"></i> View
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+            },
+
+            getStatusColor(status) {
+                const colors = {
+                    'pending': 'warning',
+                    'approved': 'success',
+                    'rejected': 'danger',
+                    'under_review': 'info'
+                };
+                return colors[status] || 'secondary';
+            },
+
+            async approveApplication(applicationId) {
+                if (!confirm('Are you sure you want to approve this application?')) return;
+
+                try {
+                    const response = await fetch(`/api/admin/application/${applicationId}/approve`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
+                        }
+                    });
+
+                    const data = await response.json();
+                    if (data.success) {
+                        this.showNotification('Application approved successfully! Certificate generated.', 'success');
+                        this.loadApplications();
+                        this.loadCertificates();
+                    } else {
+                        throw new Error(data.error || 'Failed to approve application');
+                    }
+                } catch (error) {
+                    console.error('Error approving application:', error);
+                    this.showNotification('Error approving application', 'danger');
+                }
+            },
+
+            async rejectApplication(applicationId) {
+                const reason = prompt('Please provide a reason for rejection:');
+                if (!reason) return;
+
+                try {
+                    const response = await fetch(`/api/admin/application/${applicationId}/reject`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
+                        },
+                        body: JSON.stringify({ reason })
+                    });
+
+                    const data = await response.json();
+                    if (data.success) {
+                        this.showNotification('Application rejected successfully', 'success');
+                        this.loadApplications();
+                    } else {
+                        throw new Error(data.error || 'Failed to reject application');
+                    }
+                } catch (error) {
+                    console.error('Error rejecting application:', error);
+                    this.showNotification('Error rejecting application', 'danger');
+                }
+            },
+
+            viewApplication(applicationId) {
+                window.open(`/application/${applicationId}`, '_blank');
+            },
+
+            // Inspections Management
+            async loadInspections() {
+                try {
+                    const response = await fetch('/api/admin/inspections');
+                    const data = await response.json();
+
+                    if (data.success) {
+                        this.updateInspectionsTable(data.inspections);
+                    } else {
+                        throw new Error(data.error || 'Failed to load inspections');
+                    }
+                } catch (error) {
+                    console.error('Error loading inspections:', error);
+                    this.showNotification('Error loading inspections', 'danger');
+                }
+            },
+
+            updateInspectionsTable(inspections) {
+                const tableBody = document.querySelector('#inspections-table tbody');
+                if (!tableBody) return;
+
+                tableBody.innerHTML = inspections.map(inspection => `
+                    <tr>
+                        <td>${inspection.business_name}</td>
+                        <td>${inspection.inspector}</td>
+                        <td>${inspection.inspection_date}</td>
+                        <td><span class="badge badge-${this.getStatusColor(inspection.status)}">${inspection.status}</span></td>
+                        <td>${inspection.compliance_score}</td>
+                        <td>
+                            <button class="btn btn-sm btn-primary" onclick="adminDashboard.viewInspectionReport('${inspection._id}')">
+                                <i class="fas fa-eye"></i> View Report
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+            },
+
+            viewInspectionReport(inspectionId) {
+                window.open(`/view-inspection-report/${inspectionId}`, '_blank');
+            },
+
+            // Navigation Functions
+            showDashboard() {
+                this.hideAllSections();
+                document.getElementById('dashboard').style.display = 'block';
+                this.loadDashboard();
+            },
+
+            showApplications() {
+                this.hideAllSections();
+                const section = document.getElementById('applications-section');
+                if (section) {
+                    section.style.display = 'block';
+                    section.classList.remove('hidden');
+                }
+                this.loadApplications();
+            },
+
+            showInspections() {
+                this.hideAllSections();
+                const section = document.getElementById('inspections-section');
+                if (section) {
+                    section.style.display = 'block';
+                    section.classList.remove('hidden');
+                }
+                this.loadInspections();
+            },
+
+            showCertificates() {
+                this.hideAllSections();
+                const section = document.getElementById('certificates-section');
+                if (section) {
+                    section.style.display = 'block';
+                    section.classList.remove('hidden');
+                }
+                this.loadCertificates();
+            },
+
+            showAnalytics() {
+                this.hideAllSections();
+                const section = document.getElementById('analytics-section');
+                if (section) {
+                    section.style.display = 'block';
+                    section.classList.remove('hidden');
+                }
+                this.loadAnalytics();
+            },
+
+            showSystemSettings() {
+                this.hideAllSections();
+                const section = document.getElementById('system-settings-section');
+                if (section) {
+                    section.style.display = 'block';
+                    section.classList.remove('hidden');
+                }
+                this.loadSystemSettings();
+            },
+
+            showBackupRestore() {
+                this.hideAllSections();
+                const section = document.getElementById('backup-restore-section');
+                if (section) {
+                    section.style.display = 'block';
+                    section.classList.remove('hidden');
+                }
+                this.loadBackupHistory();
+            },
+
+            showAuditLogs() {
+                this.hideAllSections();
+                const section = document.getElementById('audit-logs-section');
+                if (section) {
+                    section.style.display = 'block';
+                    section.classList.remove('hidden');
+                }
+                this.loadAuditLogs();
+            },
+
+            showUserTracking() {
+                this.hideAllSections();
+                const section = document.getElementById('user-tracking-section');
+                if (section) {
+                    section.style.display = 'block';
+                    section.classList.remove('hidden');
+                }
+                this.loadAllUsers();
+            },
+
+            hideAllSections() {
+                const sections = [
+                    'dashboard',
+                    'applications-section',
+                    'inspections-section',
+                    'certificates-section',
+                    'analytics-section',
+                    'system-settings-section',
+                    'backup-restore-section',
+                    'audit-logs-section',
+                    'user-tracking-section',
+                    'applicationDetails'
+                ];
+
+                sections.forEach(sectionId => {
+                    const section = document.getElementById(sectionId);
+                    if (section) {
+                        section.style.display = 'none';
+                        section.classList.add('hidden');
+                    }
+                });
             }
         }
 
@@ -1418,7 +4056,7 @@
             document.body.appendChild(modal);
             const modalInstance = new bootstrap.Modal(modal);
             modalInstance.show();
-            
+
             // Pre-fill form with current values
             document.getElementById('editAdminName').value = document.getElementById('adminName').textContent;
             document.getElementById('editAdminEmail').value = document.getElementById('adminEmail').textContent;
@@ -1445,12 +4083,12 @@
                 if (!response.ok) throw new Error('Failed to update profile');
 
                 const data = await response.json();
-                
+
                 // Update UI
                 document.getElementById('adminName').textContent = data.name;
                 document.getElementById('adminEmail').textContent = data.email;
                 document.getElementById('adminPhone').textContent = data.phone;
-                
+
                 // Close modal and show success message
                 bootstrap.Modal.getInstance(document.querySelector('.modal')).hide();
                 showNotification('Profile updated successfully', 'success');
@@ -1493,7 +4131,7 @@
             try {
                 const response = await fetch('/api/admin-profile');
                 const data = await response.json();
-                
+
                 // Update profile information
                 document.getElementById('adminName').textContent = data.name;
                 document.getElementById('adminEmail').textContent = data.email;
@@ -1502,7 +4140,7 @@
                 document.getElementById('totalUsers').textContent = `Total Users: ${data.total_users}`;
                 document.getElementById('totalApplications').textContent = `Total Applications: ${data.total_applications}`;
                 document.getElementById('totalApprovals').textContent = `Total Approvals: ${data.total_approvals}`;
-                
+
                 if (data.profile_image) {
                     document.getElementById('adminProfileImage').src = `/static/profile_images/${data.profile_image}`;
                 }
@@ -1522,7 +4160,7 @@
             notification.className = `alert alert-${type} fixed top-4 right-4 z-50`;
             notification.textContent = message;
             document.body.appendChild(notification);
-            
+
             // Remove notification after 3 seconds
             setTimeout(() => {
                 notification.remove();
@@ -1537,13 +4175,13 @@
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 const data = await response.json();
-                
+
                 if (data.success) {
                     // Update profile information
                     document.getElementById('adminName').textContent = data.name || 'Admin';
                     document.getElementById('adminEmail').textContent = data.email || '';
                     document.getElementById('adminPhone').textContent = data.phone || '';
-                    
+
                     // Update profile image if exists
                     if (data.profile_image) {
                         document.getElementById('adminProfileImage').src = `/static/profile_images/${data.profile_image}`;
@@ -1560,7 +4198,7 @@
         // Function to update admin profile
         async function updateAdminProfile(event) {
             event.preventDefault();
-            
+
             try {
                 const formData = new FormData(event.target);
                 const response = await fetch('/api/admin/profile/update', {
@@ -1576,7 +4214,7 @@
                 });
 
                 const data = await response.json();
-                
+
                 if (data.success) {
                     showNotification('Profile updated successfully');
                     loadAdminProfile(); // Reload profile data
@@ -1604,7 +4242,7 @@
                 });
 
                 const data = await response.json();
-                
+
                 if (data.success) {
                     document.getElementById('adminProfileImage').src = `/static/profile_images/${data.image_path}`;
                     showNotification('Profile image updated successfully');
@@ -1620,13 +4258,13 @@
         // Add event listeners when document loads
         document.addEventListener('DOMContentLoaded', () => {
             loadAdminProfile();
-            
+
             // Add event listener for profile form submission
             const profileForm = document.getElementById('adminProfileForm');
             if (profileForm) {
                 profileForm.addEventListener('submit', updateAdminProfile);
             }
-            
+
             // Add event listener for profile image upload
             const imageInput = document.getElementById('profileImageInput');
             if (imageInput) {
@@ -1652,24 +4290,24 @@
                                 <option value="">Select Business</option>
                             </select>
                         </div>
-                        
+
                         <div class="form-group mb-3">
                             <label>Inspector</label>
                             <select class="form-control" id="inspector-select" required>
                                 <option value="">Select Inspector</option>
                             </select>
                         </div>
-                        
+
                         <div class="form-group mb-3">
                             <label>Date</label>
                             <input type="date" class="form-control" id="inspection-date" required>
                         </div>
-                        
+
                         <div class="form-group mb-3">
                             <label>Time</label>
                             <input type="time" class="form-control" id="inspection-time" required>
                         </div>
-                        
+
                         <div class="form-group mb-3">
                             <label>Notes</label>
                             <textarea class="form-control" id="inspection-notes" rows="3"></textarea>
@@ -1718,7 +4356,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="mb-3">
                             <h6>Emergency Systems</h6>
                             <div class="row">
@@ -1742,7 +4380,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="mb-3">
                             <label class="form-label">Inspector Notes</label>
                             <textarea class="form-control" name="notes" rows="4"></textarea>
@@ -1758,6 +4396,6 @@
             </div>
         </div>
     </div>
- 
+
 </body>
 </html>

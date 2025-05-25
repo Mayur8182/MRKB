@@ -1,0 +1,13 @@
+[
+    {
+        "index": 0,
+        "timestamp": "2025-05-23 03:12:53.827011",
+        "data": {
+            "message": "Genesis Block",
+            "system": "AEK NOC System Blockchain"
+        },
+        "previous_hash": "0",
+        "nonce": 42,
+        "hash": "00c6ca6bd6612db3bd925876cb2ef0b038ddc1831a44ca5eb20b2ad9bb68284c"
+    }
+]

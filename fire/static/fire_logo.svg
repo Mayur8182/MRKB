@@ -1,0 +1,6 @@
+<svg width="96" height="96" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+<circle cx="48" cy="48" r="48" fill="#DC2626"/>
+<path d="M48 20C40 20 35 25 35 35C35 40 38 44 42 46C40 48 38 52 38 56C38 64 44 70 52 70C60 70 66 64 66 56C66 52 64 48 62 46C66 44 69 40 69 35C69 25 64 20 56 20C54 20 52 20 50 21C49 20 48 20 48 20Z" fill="white"/>
+<path d="M48 25C52 25 55 28 55 32C55 36 52 39 48 39C44 39 41 36 41 32C41 28 44 25 48 25Z" fill="#DC2626"/>
+<text x="48" y="85" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="10" font-weight="bold">FIRE NOC</text>
+</svg>

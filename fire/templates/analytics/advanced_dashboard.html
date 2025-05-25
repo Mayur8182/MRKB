@@ -1,0 +1,200 @@
+{% extends "base.html" %}
+
+{% block title %}Advanced Analytics Dashboard{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-6">
+    <h1 class="text-3xl font-bold mb-6 text-red-600">Advanced Analytics Dashboard</h1>
+    
+    <!-- Role selector -->
+    <div class="mb-6 bg-white p-4 rounded-lg shadow">
+        <h2 class="text-xl font-semibold mb-2">Dashboard View</h2>
+        <div class="flex space-x-4">
+            <button id="overview-btn" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 active-tab">Overview</button>
+            <button id="predictive-btn" class="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300">Predictive Analytics</button>
+            <button id="risk-map-btn" class="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300">Risk Assessment</button>
+            <button id="compliance-btn" class="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300">Compliance Tracking</button>
+        </div>
+    </div>
+    
+    <!-- Overview Section -->
+    <div id="overview-section" class="dashboard-section">
+        <!-- KPI Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-lg font-semibold mb-2">Total Applications</h2>
+                <p class="text-4xl font-bold text-blue-600" id="total-applications">{{ stats.total }}</p>
+                <div class="text-sm text-gray-500 mt-2">
+                    <span id="total-trend" class="font-medium"></span> from last month
+                </div>
+            </div>
+            
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-lg font-semibold mb-2">Approval Rate</h2>
+                <p class="text-4xl font-bold text-green-600" id="approval-rate">{{ stats.approval_rate }}%</p>
+                <div class="text-sm text-gray-500 mt-2">
+                    <span id="approval-trend" class="font-medium"></span> from last month
+                </div>
+            </div>
+            
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-lg font-semibold mb-2">Avg. Processing Time</h2>
+                <p class="text-4xl font-bold text-yellow-600" id="avg-processing-time">{{ stats.avg_processing_time }} days</p>
+                <div class="text-sm text-gray-500 mt-2">
+                    <span id="processing-trend" class="font-medium"></span> from last month
+                </div>
+            </div>
+            
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-lg font-semibold mb-2">Compliance Rate</h2>
+                <p class="text-4xl font-bold text-purple-600" id="compliance-rate">{{ stats.compliance_rate }}%</p>
+                <div class="text-sm text-gray-500 mt-2">
+                    <span id="compliance-trend" class="font-medium"></span> from last month
+                </div>
+            </div>
+        </div>
+        
+        <!-- Charts Row -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-lg font-semibold mb-4">Application Trends</h2>
+                <canvas id="application-trends-chart" height="300"></canvas>
+            </div>
+            
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-lg font-semibold mb-4">Status Distribution</h2>
+                <canvas id="status-distribution-chart" height="300"></canvas>
+            </div>
+        </div>
+        
+        <!-- More Charts Row -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-lg font-semibold mb-4">Business Type Distribution</h2>
+                <canvas id="business-type-chart" height="300"></canvas>
+            </div>
+            
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-lg font-semibold mb-4">Inspector Performance</h2>
+                <canvas id="inspector-performance-chart" height="300"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Predictive Analytics Section -->
+    <div id="predictive-section" class="dashboard-section hidden">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-lg font-semibold mb-2">Predicted Applications</h2>
+                <p class="text-4xl font-bold text-blue-600" id="predicted-applications">{{ predictions.applications }}</p>
+                <div class="text-sm text-gray-500 mt-2">Next 30 days</div>
+            </div>
+            
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-lg font-semibold mb-2">Upcoming Renewals</h2>
+                <p class="text-4xl font-bold text-orange-600" id="upcoming-renewals">{{ predictions.renewals }}</p>
+                <div class="text-sm text-gray-500 mt-2">Next 30 days</div>
+            </div>
+            
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-lg font-semibold mb-2">Predicted Inspections</h2>
+                <p class="text-4xl font-bold text-green-600" id="predicted-inspections">{{ predictions.inspections }}</p>
+                <div class="text-sm text-gray-500 mt-2">Next 30 days</div>
+            </div>
+        </div>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-lg font-semibold mb-4">Application Forecast</h2>
+                <canvas id="application-forecast-chart" height="300"></canvas>
+            </div>
+            
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-lg font-semibold mb-4">Renewal Forecast</h2>
+                <canvas id="renewal-forecast-chart" height="300"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Risk Assessment Section -->
+    <div id="risk-map-section" class="dashboard-section hidden">
+        <div class="bg-white p-6 rounded-lg shadow-md mb-8">
+            <h2 class="text-lg font-semibold mb-4">Fire Risk Heat Map</h2>
+            <div id="risk-map" class="h-96"></div>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-lg font-semibold mb-4">High Risk Areas</h2>
+                <div id="high-risk-areas" class="overflow-auto max-h-80">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Area</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Risk Score</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Contributing Factors</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200" id="high-risk-table-body">
+                            <!-- Will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-lg font-semibold mb-4">Resource Allocation Recommendations</h2>
+                <div id="resource-recommendations" class="overflow-auto max-h-80">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Compliance Tracking Section -->
+    <div id="compliance-section" class="dashboard-section hidden">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-lg font-semibold mb-2">Overall Compliance</h2>
+                <p class="text-4xl font-bold text-blue-600" id="overall-compliance">{{ compliance.overall }}%</p>
+                <div class="text-sm text-gray-500 mt-2">
+                    <span id="compliance-overall-trend" class="font-medium"></span> from last quarter
+                </div>
+            </div>
+            
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-lg font-semibold mb-2">Certificates Expiring</h2>
+                <p class="text-4xl font-bold text-red-600" id="expiring-certificates">{{ compliance.expiring }}</p>
+                <div class="text-sm text-gray-500 mt-2">Next 30 days</div>
+            </div>
+            
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-lg font-semibold mb-2">Inspection Compliance</h2>
+                <p class="text-4xl font-bold text-green-600" id="inspection-compliance">{{ compliance.inspection }}%</p>
+                <div class="text-sm text-gray-500 mt-2">
+                    <span id="inspection-compliance-trend" class="font-medium"></span> from last quarter
+                </div>
+            </div>
+        </div>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-lg font-semibold mb-4">Compliance by Business Type</h2>
+                <canvas id="compliance-by-type-chart" height="300"></canvas>
+            </div>
+            
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-lg font-semibold mb-4">Compliance Trend</h2>
+                <canvas id="compliance-trend-chart" height="300"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="{{ url_for('static', filename='js/advanced_analytics.js') }}"></script>
+{% endblock %}

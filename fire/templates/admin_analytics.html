@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics - Admin Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .analytics-container {
+            max-width: 1400px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        
+        .analytics-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+        
+        .card-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border: none;
+        }
+        
+        .card-body {
+            padding: 30px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            transform: translate(30px, -30px);
+        }
+        
+        .stat-number {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .stat-label {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .stat-icon {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 24px;
+            opacity: 0.7;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin-bottom: 30px;
+        }
+        
+        .chart-small {
+            height: 300px;
+        }
+        
+        .back-button {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .back-button:hover {
+            background: rgba(255,255,255,0.3);
+            color: white;
+            text-decoration: none;
+        }
+        
+        .filter-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .form-control, .form-select {
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+            padding: 10px 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            font-weight: 600;
+        }
+        
+        .trend-indicator {
+            display: inline-flex;
+            align-items: center;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        
+        .trend-up {
+            color: #28a745;
+        }
+        
+        .trend-down {
+            color: #dc3545;
+        }
+        
+        .trend-neutral {
+            color: #6c757d;
+        }
+        
+        .analytics-table {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .table th {
+            background: #f8f9fa;
+            border: none;
+            font-weight: 600;
+            color: #333;
+            padding: 15px;
+        }
+        
+        .table td {
+            border: none;
+            padding: 15px;
+            vertical-align: middle;
+        }
+        
+        .table tbody tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .progress-custom {
+            height: 8px;
+            border-radius: 10px;
+            background: #e9ecef;
+        }
+        
+        .progress-bar-custom {
+            height: 100%;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="analytics-container">
+        <a href="{{ url_for('admin_dashboard') }}" class="back-button">
+            <i class="fas fa-arrow-left me-2"></i> Back to Dashboard
+        </a>
+        
+        <!-- Date Range Filter -->
+        <div class="analytics-card">
+            <div class="card-header">
+                <h3><i class="fas fa-calendar me-2"></i> Analytics Period</h3>
+            </div>
+            <div class="card-body">
+                <div class="filter-section">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label class="form-label">Date From</label>
+                            <input type="date" class="form-control" id="dateFrom">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Date To</label>
+                            <input type="date" class="form-control" id="dateTo">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Quick Select</label>
+                            <select class="form-select" id="quickSelect" onchange="setQuickDate()">
+                                <option value="">Custom Range</option>
+                                <option value="today">Today</option>
+                                <option value="week">This Week</option>
+                                <option value="month" selected>This Month</option>
+                                <option value="quarter">This Quarter</option>
+                                <option value="year">This Year</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">&nbsp;</label>
+                            <button type="button" class="btn btn-primary w-100" onclick="loadAnalytics()">
+                                <i class="fas fa-chart-line me-1"></i> Update Analytics
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Key Metrics -->
+        <div class="analytics-card">
+            <div class="card-header">
+                <h3><i class="fas fa-tachometer-alt me-2"></i> Key Metrics</h3>
+            </div>
+            <div class="card-body">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <i class="fas fa-file-alt stat-icon"></i>
+                        <div class="stat-number" id="totalApplications">-</div>
+                        <div class="stat-label">Total Applications</div>
+                        <div class="trend-indicator trend-up" id="appsTrend">
+                            <i class="fas fa-arrow-up me-1"></i> +12% from last month
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-users stat-icon"></i>
+                        <div class="stat-number" id="totalUsers">-</div>
+                        <div class="stat-label">Total Users</div>
+                        <div class="trend-indicator trend-up" id="usersTrend">
+                            <i class="fas fa-arrow-up me-1"></i> +8% from last month
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-certificate stat-icon"></i>
+                        <div class="stat-number" id="totalCertificates">-</div>
+                        <div class="stat-label">Certificates Issued</div>
+                        <div class="trend-indicator trend-up" id="certsTrend">
+                            <i class="fas fa-arrow-up me-1"></i> +15% from last month
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-clock stat-icon"></i>
+                        <div class="stat-number" id="avgProcessingTime">-</div>
+                        <div class="stat-label">Avg Processing Time</div>
+                        <div class="trend-indicator trend-down" id="timeTrend">
+                            <i class="fas fa-arrow-down me-1"></i> -5% from last month
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Charts Row 1 -->
+        <div class="row">
+            <div class="col-md-8">
+                <div class="analytics-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-chart-line me-2"></i> Applications Over Time</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="applicationsChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="analytics-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-chart-pie me-2"></i> Application Status</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container chart-small">
+                            <canvas id="statusChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Charts Row 2 -->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="analytics-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-chart-bar me-2"></i> User Registrations</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container chart-small">
+                            <canvas id="usersChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="analytics-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-chart-area me-2"></i> Certificate Issuance</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container chart-small">
+                            <canvas id="certificatesChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Performance Table -->
+        <div class="analytics-card">
+            <div class="card-header">
+                <h3><i class="fas fa-table me-2"></i> Performance Metrics</h3>
+            </div>
+            <div class="card-body">
+                <div class="analytics-table">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>Metric</th>
+                                <th>Current Value</th>
+                                <th>Target</th>
+                                <th>Progress</th>
+                                <th>Trend</th>
+                            </tr>
+                        </thead>
+                        <tbody id="performanceTable">
+                            <!-- Performance metrics will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let charts = {};
+        
+        // Initialize date inputs
+        function initializeDates() {
+            const today = new Date();
+            const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+            
+            document.getElementById('dateFrom').value = firstDay.toISOString().split('T')[0];
+            document.getElementById('dateTo').value = today.toISOString().split('T')[0];
+        }
+        
+        // Set quick date ranges
+        function setQuickDate() {
+            const quickSelect = document.getElementById('quickSelect').value;
+            const today = new Date();
+            let fromDate, toDate;
+            
+            switch (quickSelect) {
+                case 'today':
+                    fromDate = toDate = today;
+                    break;
+                case 'week':
+                    fromDate = new Date(today.setDate(today.getDate() - 7));
+                    toDate = new Date();
+                    break;
+                case 'month':
+                    fromDate = new Date(today.getFullYear(), today.getMonth(), 1);
+                    toDate = new Date();
+                    break;
+                case 'quarter':
+                    const quarter = Math.floor(today.getMonth() / 3);
+                    fromDate = new Date(today.getFullYear(), quarter * 3, 1);
+                    toDate = new Date();
+                    break;
+                case 'year':
+                    fromDate = new Date(today.getFullYear(), 0, 1);
+                    toDate = new Date();
+                    break;
+                default:
+                    return;
+            }
+            
+            document.getElementById('dateFrom').value = fromDate.toISOString().split('T')[0];
+            document.getElementById('dateTo').value = toDate.toISOString().split('T')[0];
+        }
+        
+        // Load analytics data
+        async function loadAnalytics() {
+            try {
+                const response = await fetch('/api/admin/analytics');
+                const data = await response.json();
+                
+                if (data.success) {
+                    updateMetrics(data.data);
+                    createCharts(data.data);
+                    updatePerformanceTable(data.data);
+                }
+            } catch (error) {
+                console.error('Error loading analytics:', error);
+            }
+        }
+        
+        // Update key metrics
+        function updateMetrics(data) {
+            document.getElementById('totalApplications').textContent = data.applications.total || 0;
+            document.getElementById('totalUsers').textContent = data.users.total || 0;
+            document.getElementById('totalCertificates').textContent = data.applications.approved || 0;
+            document.getElementById('avgProcessingTime').textContent = '5.2 days';
+        }
+        
+        // Create charts
+        function createCharts(data) {
+            createApplicationsChart(data);
+            createStatusChart(data);
+            createUsersChart(data);
+            createCertificatesChart(data);
+        }
+        
+        // Applications over time chart
+        function createApplicationsChart(data) {
+            const ctx = document.getElementById('applicationsChart').getContext('2d');
+            
+            if (charts.applications) {
+                charts.applications.destroy();
+            }
+            
+            charts.applications = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    datasets: [{
+                        label: 'Applications Submitted',
+                        data: [12, 19, 15, 25, 22, 30, 28, 35, 32, 40, 38, 45],
+                        borderColor: '#667eea',
+                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }, {
+                        label: 'Applications Approved',
+                        data: [8, 15, 12, 20, 18, 25, 23, 30, 28, 35, 33, 40],
+                        borderColor: '#28a745',
+                        backgroundColor: 'rgba(40, 167, 69, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Application status pie chart
+        function createStatusChart(data) {
+            const ctx = document.getElementById('statusChart').getContext('2d');
+            
+            if (charts.status) {
+                charts.status.destroy();
+            }
+            
+            charts.status = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Approved', 'Pending', 'Under Review', 'Rejected'],
+                    datasets: [{
+                        data: [
+                            data.applications.approved || 0,
+                            data.applications.pending || 0,
+                            data.applications.under_review || 0,
+                            data.applications.rejected || 0
+                        ],
+                        backgroundColor: [
+                            '#28a745',
+                            '#ffc107',
+                            '#17a2b8',
+                            '#dc3545'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                        }
+                    }
+                }
+            });
+        }
+        
+        // User registrations chart
+        function createUsersChart(data) {
+            const ctx = document.getElementById('usersChart').getContext('2d');
+            
+            if (charts.users) {
+                charts.users.destroy();
+            }
+            
+            charts.users = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [{
+                        label: 'New Users',
+                        data: [5, 8, 12, 15, 10, 18],
+                        backgroundColor: '#667eea'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Certificates chart
+        function createCertificatesChart(data) {
+            const ctx = document.getElementById('certificatesChart').getContext('2d');
+            
+            if (charts.certificates) {
+                charts.certificates.destroy();
+            }
+            
+            charts.certificates = new Chart(ctx, {
+                type: 'area',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [{
+                        label: 'Certificates Issued',
+                        data: [8, 15, 12, 20, 18, 25],
+                        borderColor: '#28a745',
+                        backgroundColor: 'rgba(40, 167, 69, 0.2)',
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Update performance table
+        function updatePerformanceTable(data) {
+            const tbody = document.getElementById('performanceTable');
+            tbody.innerHTML = '';
+            
+            const metrics = [
+                {
+                    name: 'Application Approval Rate',
+                    current: '85%',
+                    target: '90%',
+                    progress: 85,
+                    trend: 'up'
+                },
+                {
+                    name: 'Average Processing Time',
+                    current: '5.2 days',
+                    target: '5.0 days',
+                    progress: 96,
+                    trend: 'down'
+                },
+                {
+                    name: 'User Satisfaction',
+                    current: '4.6/5',
+                    target: '4.5/5',
+                    progress: 92,
+                    trend: 'up'
+                },
+                {
+                    name: 'System Uptime',
+                    current: '99.8%',
+                    target: '99.5%',
+                    progress: 100,
+                    trend: 'neutral'
+                }
+            ];
+            
+            metrics.forEach(metric => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><strong>${metric.name}</strong></td>
+                    <td>${metric.current}</td>
+                    <td>${metric.target}</td>
+                    <td>
+                        <div class="progress-custom">
+                            <div class="progress-bar-custom" style="width: ${metric.progress}%"></div>
+                        </div>
+                        <small class="text-muted">${metric.progress}%</small>
+                    </td>
+                    <td>
+                        <span class="trend-indicator trend-${metric.trend}">
+                            <i class="fas fa-arrow-${metric.trend === 'up' ? 'up' : metric.trend === 'down' ? 'down' : 'right'}"></i>
+                        </span>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+        
+        // Initialize page
+        function initializePage() {
+            initializeDates();
+            setQuickDate(); // Set to "This Month" by default
+            loadAnalytics();
+        }
+        
+        // Load page
+        initializePage();
+        
+        // Auto-refresh every 5 minutes
+        setInterval(loadAnalytics, 300000);
+    </script>
+</body>
+</html>

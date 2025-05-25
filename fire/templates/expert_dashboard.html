@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expert Dashboard - AEK NOC System</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.3/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --accent-color: #059669;
+        }
+
+        body {
+            background: #f8fafc;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .sidebar {
+            background: var(--primary-color);
+            color: white;
+            padding: 1.5rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.8);
+            padding: 0.75rem 1rem;
+            margin: 0.5rem 0;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.875rem;
+        }
+
+        .status-pending {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .status-completed {
+            background: #dcfce7;
+            color: #059669;
+        }
+
+        .animated {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .expertise-card {
+            border-left: 4px solid var(--primary-color);
+            transition: all 0.3s ease;
+        }
+
+        .expertise-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="d-flex">
+            <div class="sidebar w-64">
+                <div class="text-center mb-4">
+                    <img src="/logo.png" alt="AEK Logo" class="w-24 h-24 mx-auto mb-4">
+                    <h2 class="text-xl font-bold text-white">AEK NOC System</h2>
+                </div>
+
+                <div class="user-profile border-t border-b border-blue-700 py-4 mb-4">
+                    <div class="text-center">
+                        <div class="relative inline-block">
+                            <img id="userProfileImage"
+                                 src="/static/default-profile.png"
+                                 alt="Profile"
+                                 class="w-20 h-20 rounded-full object-cover border-2 border-white mx-auto">
+                        </div>
+                        <h3 id="userName" class="text-white font-medium mt-2">{{ session.get('username', 'Expert') }}</h3>
+                        <span id="userRole" class="inline-block bg-blue-200 text-blue-800 text-xs px-2 py-1 rounded-full mt-1">Fire Safety Expert</span>
+                    </div>
+                </div>
+
+                <nav class="space-y-2">
+                    <a href="{{ url_for('expert_dashboard') }}" class="nav-link w-full text-left block">
+                        <i class="fas fa-home mr-2"></i> Dashboard
+                    </a>
+                    <a href="#" class="nav-link w-full text-left block">
+                        <i class="fas fa-question-circle mr-2"></i> Consultations
+                    </a>
+                    <a href="#" class="nav-link w-full text-left block">
+                        <i class="fas fa-file-alt mr-2"></i> Reports
+                    </a>
+                    <a href="#" class="nav-link w-full text-left block">
+                        <i class="fas fa-book mr-2"></i> Knowledge Base
+                    </a>
+                    <a href="{{ url_for('logout') }}" class="nav-link w-full text-left block">
+                        <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                    </a>
+                </nav>
+            </div>
+
+            <div class="main-content flex-1 p-6">
+                <div class="bg-white p-6 rounded-lg shadow-sm mb-8">
+                    <div class="flex items-center space-x-4">
+                        <div class="profile-image">
+                            <img src="/static/default-profile.png"
+                                 alt="Profile"
+                                 class="w-20 h-20 rounded-full object-cover border-4 border-primary">
+                        </div>
+                        <div class="profile-info flex-1">
+                            <h1 class="text-3xl font-bold mb-2">Welcome, Expert</h1>
+                            <div class="flex items-center space-x-4 text-gray-600">
+                                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">Fire Safety Expert</span>
+                                <span class="flex items-center">
+                                    <i class="fas fa-envelope mr-2"></i> {{ session.get('email', 'expert@example.com') }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-3 gap-6 mb-8">
+                    <div class="bg-white p-6 rounded-lg shadow-sm">
+                        <div class="flex items-center justify-between mb-4">
+                            <h4 class="text-lg font-semibold">Pending Consultations</h4>
+                            <span class="text-yellow-500">
+                                <i class="fas fa-question-circle text-xl"></i>
+                            </span>
+                        </div>
+                        <div class="text-3xl font-bold text-center mb-2">0</div>
+                        <div class="text-center text-gray-500">Awaiting your expertise</div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-lg shadow-sm">
+                        <div class="flex items-center justify-between mb-4">
+                            <h4 class="text-lg font-semibold">Reports Submitted</h4>
+                            <span class="text-blue-500">
+                                <i class="fas fa-file-alt text-xl"></i>
+                            </span>
+                        </div>
+                        <div class="text-3xl font-bold text-center mb-2">0</div>
+                        <div class="text-center text-gray-500">This month</div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-lg shadow-sm">
+                        <div class="flex items-center justify-between mb-4">
+                            <h4 class="text-lg font-semibold">Knowledge Articles</h4>
+                            <span class="text-green-500">
+                                <i class="fas fa-book text-xl"></i>
+                            </span>
+                        </div>
+                        <div class="text-3xl font-bold text-center mb-2">0</div>
+                        <div class="text-center text-gray-500">Published by you</div>
+                    </div>
+                </div>
+
+                <!-- Expert Dashboard Navigation -->
+                <div class="bg-white p-6 rounded-lg shadow-sm mb-8">
+                    <h3 class="text-xl font-semibold mb-4">Expert Dashboard Navigation</h3>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <button onclick="showExpertSection('expertise')" class="nav-btn active bg-blue-500 text-white p-4 rounded-lg hover:bg-blue-600 transition">
+                            <i class="fas fa-user-graduate text-2xl mb-2"></i>
+                            <div class="font-semibold">Expertise Areas</div>
+                        </button>
+                        <button onclick="showExpertSection('inventory')" class="nav-btn bg-gray-100 text-gray-700 p-4 rounded-lg hover:bg-gray-200 transition">
+                            <i class="fas fa-boxes text-2xl mb-2"></i>
+                            <div class="font-semibold">Inventory Management</div>
+                        </button>
+                        <button onclick="showExpertSection('personnel')" class="nav-btn bg-gray-100 text-gray-700 p-4 rounded-lg hover:bg-gray-200 transition">
+                            <i class="fas fa-users text-2xl mb-2"></i>
+                            <div class="font-semibold">Fire Department Personnel</div>
+                        </button>
+                        <button onclick="showExpertSection('features')" class="nav-btn bg-gray-100 text-gray-700 p-4 rounded-lg hover:bg-gray-200 transition">
+                            <i class="fas fa-fire text-2xl mb-2"></i>
+                            <div class="font-semibold">Fire Department Features</div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Expertise Areas Section -->
+                <div id="expertise-section" class="expert-section">
+                    <div class="bg-white p-6 rounded-lg shadow-sm mb-8">
+                        <h3 class="text-xl font-semibold mb-4">Your Expertise Areas</h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="expertise-card p-4 bg-gray-50 rounded">
+                                <h4 class="font-semibold text-lg mb-2">Fire Safety Regulations</h4>
+                                <p class="text-gray-600">Expert in national and local fire safety codes and regulations.</p>
+                            </div>
+                            <div class="expertise-card p-4 bg-gray-50 rounded">
+                                <h4 class="font-semibold text-lg mb-2">Building Evacuation</h4>
+                                <p class="text-gray-600">Specialized in designing effective building evacuation plans.</p>
+                            </div>
+                            <div class="expertise-card p-4 bg-gray-50 rounded">
+                                <h4 class="font-semibold text-lg mb-2">Fire Suppression Systems</h4>
+                                <p class="text-gray-600">Knowledge of modern fire suppression technologies and implementations.</p>
+                            </div>
+                            <div class="expertise-card p-4 bg-gray-50 rounded">
+                                <h4 class="font-semibold text-lg mb-2">Risk Assessment</h4>
+                                <p class="text-gray-600">Experienced in conducting comprehensive fire risk assessments.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Inventory Management Section -->
+                <div id="inventory-section" class="expert-section" style="display: none;">
+                    <div class="bg-white p-6 rounded-lg shadow-sm mb-8">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-2xl font-bold text-gray-800">🔥 Fire Safety Equipment Inventory</h3>
+                            <button onclick="refreshExpertInventory()" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition">
+                                <i class="fas fa-sync-alt mr-2"></i>Refresh
+                            </button>
+                        </div>
+
+                        <!-- Inventory Stats -->
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                            <div class="bg-gradient-to-r from-green-500 to-green-600 rounded-xl p-6 text-white">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-green-100 text-sm">Fire Extinguishers</p>
+                                        <p class="text-3xl font-bold">125</p>
+                                    </div>
+                                    <i class="fas fa-fire-extinguisher text-3xl text-green-200"></i>
+                                </div>
+                            </div>
+                            <div class="bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl p-6 text-white">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-blue-100 text-sm">Smoke Detectors</p>
+                                        <p class="text-3xl font-bold">89</p>
+                                    </div>
+                                    <i class="fas fa-smoke text-3xl text-blue-200"></i>
+                                </div>
+                            </div>
+                            <div class="bg-gradient-to-r from-purple-500 to-purple-600 rounded-xl p-6 text-white">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-purple-100 text-sm">Fire Hoses</p>
+                                        <p class="text-3xl font-bold">67</p>
+                                    </div>
+                                    <i class="fas fa-water text-3xl text-purple-200"></i>
+                                </div>
+                            </div>
+                            <div class="bg-gradient-to-r from-red-500 to-red-600 rounded-xl p-6 text-white">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-red-100 text-sm">Emergency Lights</p>
+                                        <p class="text-3xl font-bold">156</p>
+                                    </div>
+                                    <i class="fas fa-lightbulb text-3xl text-red-200"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Equipment Categories -->
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                            <div class="bg-gray-50 rounded-xl p-6">
+                                <h4 class="text-lg font-bold text-gray-800 mb-4 flex items-center">
+                                    <i class="fas fa-shield-alt mr-2 text-red-600"></i>Safety Equipment Status
+                                </h4>
+                                <div class="space-y-4">
+                                    <div class="flex justify-between items-center p-3 bg-white rounded-lg">
+                                        <span class="font-medium">Fire Extinguishers</span>
+                                        <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">Operational</span>
+                                    </div>
+                                    <div class="flex justify-between items-center p-3 bg-white rounded-lg">
+                                        <span class="font-medium">Sprinkler Systems</span>
+                                        <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">Operational</span>
+                                    </div>
+                                    <div class="flex justify-between items-center p-3 bg-white rounded-lg">
+                                        <span class="font-medium">Alarm Systems</span>
+                                        <span class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm">Maintenance Due</span>
+                                    </div>
+                                    <div class="flex justify-between items-center p-3 bg-white rounded-lg">
+                                        <span class="font-medium">Emergency Exits</span>
+                                        <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">Clear</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-gray-50 rounded-xl p-6">
+                                <h4 class="text-lg font-bold text-gray-800 mb-4 flex items-center">
+                                    <i class="fas fa-exclamation-triangle mr-2 text-yellow-600"></i>Maintenance Alerts
+                                </h4>
+                                <div class="space-y-3">
+                                    <div class="flex items-start space-x-3 p-3 bg-white rounded-lg">
+                                        <i class="fas fa-circle text-red-500 text-xs mt-2"></i>
+                                        <div>
+                                            <p class="font-semibold text-red-800">Fire Pump Service</p>
+                                            <p class="text-sm text-red-600">Overdue by 5 days</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start space-x-3 p-3 bg-white rounded-lg">
+                                        <i class="fas fa-circle text-yellow-500 text-xs mt-2"></i>
+                                        <div>
+                                            <p class="font-semibold text-yellow-800">Extinguisher Inspection</p>
+                                            <p class="text-sm text-yellow-600">Due in 3 days</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start space-x-3 p-3 bg-white rounded-lg">
+                                        <i class="fas fa-circle text-blue-500 text-xs mt-2"></i>
+                                        <div>
+                                            <p class="font-semibold text-blue-800">Smoke Detector Battery</p>
+                                            <p class="text-sm text-blue-600">Replacement scheduled</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fire Department Personnel Section -->
+                <div id="personnel-section" class="expert-section" style="display: none;">
+                    <div class="bg-white p-6 rounded-lg shadow-sm mb-8">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-2xl font-bold text-gray-800">👨‍🚒 Fire Department Personnel</h3>
+                            <button onclick="refreshPersonnel()" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition">
+                                <i class="fas fa-sync-alt mr-2"></i>Refresh
+                            </button>
+                        </div>
+
+                        <!-- Personnel Stats -->
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                            <div class="bg-gradient-to-r from-red-500 to-red-600 rounded-xl p-6 text-white">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-red-100 text-sm">Fire Fighters</p>
+                                        <p class="text-3xl font-bold">45</p>
+                                    </div>
+                                    <i class="fas fa-fire text-3xl text-red-200"></i>
+                                </div>
+                            </div>
+                            <div class="bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl p-6 text-white">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-blue-100 text-sm">Inspectors</p>
+                                        <p class="text-3xl font-bold">12</p>
+                                    </div>
+                                    <i class="fas fa-search text-3xl text-blue-200"></i>
+                                </div>
+                            </div>
+                            <div class="bg-gradient-to-r from-green-500 to-green-600 rounded-xl p-6 text-white">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-green-100 text-sm">Paramedics</p>
+                                        <p class="text-3xl font-bold">18</p>
+                                    </div>
+                                    <i class="fas fa-ambulance text-3xl text-green-200"></i>
+                                </div>
+                            </div>
+                            <div class="bg-gradient-to-r from-purple-500 to-purple-600 rounded-xl p-6 text-white">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-purple-100 text-sm">Officers</p>
+                                        <p class="text-3xl font-bold">8</p>
+                                    </div>
+                                    <i class="fas fa-star text-3xl text-purple-200"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Personnel Details -->
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                            <div class="bg-gray-50 rounded-xl p-6">
+                                <h4 class="text-lg font-bold text-gray-800 mb-4 flex items-center">
+                                    <i class="fas fa-users mr-2 text-blue-600"></i>Department Hierarchy
+                                </h4>
+                                <div class="space-y-4">
+                                    <div class="flex items-center justify-between p-3 bg-white rounded-lg">
+                                        <div class="flex items-center space-x-3">
+                                            <i class="fas fa-crown text-yellow-500"></i>
+                                            <span class="font-medium">Fire Chief</span>
+                                        </div>
+                                        <span class="text-sm text-gray-600">Mayur Bharvad</span>
+                                    </div>
+                                    <div class="flex items-center justify-between p-3 bg-white rounded-lg">
+                                        <div class="flex items-center space-x-3">
+                                            <i class="fas fa-star text-blue-500"></i>
+                                            <span class="font-medium">Deputy Chief</span>
+                                        </div>
+                                        <span class="text-sm text-gray-600">Assistant Chief</span>
+                                    </div>
+                                    <div class="flex items-center justify-between p-3 bg-white rounded-lg">
+                                        <div class="flex items-center space-x-3">
+                                            <i class="fas fa-shield-alt text-green-500"></i>
+                                            <span class="font-medium">Battalion Chief</span>
+                                        </div>
+                                        <span class="text-sm text-gray-600">Operations Head</span>
+                                    </div>
+                                    <div class="flex items-center justify-between p-3 bg-white rounded-lg">
+                                        <div class="flex items-center space-x-3">
+                                            <i class="fas fa-fire text-red-500"></i>
+                                            <span class="font-medium">Fire Captains</span>
+                                        </div>
+                                        <span class="text-sm text-gray-600">4 Active</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-gray-50 rounded-xl p-6">
+                                <h4 class="text-lg font-bold text-gray-800 mb-4 flex items-center">
+                                    <i class="fas fa-calendar-check mr-2 text-green-600"></i>Duty Schedule
+                                </h4>
+                                <div class="space-y-3">
+                                    <div class="flex items-start space-x-3 p-3 bg-white rounded-lg">
+                                        <i class="fas fa-circle text-green-500 text-xs mt-2"></i>
+                                        <div>
+                                            <p class="font-semibold text-green-800">Day Shift (6 AM - 6 PM)</p>
+                                            <p class="text-sm text-green-600">15 Personnel on duty</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start space-x-3 p-3 bg-white rounded-lg">
+                                        <i class="fas fa-circle text-blue-500 text-xs mt-2"></i>
+                                        <div>
+                                            <p class="font-semibold text-blue-800">Night Shift (6 PM - 6 AM)</p>
+                                            <p class="text-sm text-blue-600">12 Personnel on duty</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start space-x-3 p-3 bg-white rounded-lg">
+                                        <i class="fas fa-circle text-yellow-500 text-xs mt-2"></i>
+                                        <div>
+                                            <p class="font-semibold text-yellow-800">Emergency Response Team</p>
+                                            <p class="text-sm text-yellow-600">24/7 Standby - 8 Personnel</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fire Department Features Section -->
+                <div id="features-section" class="expert-section" style="display: none;">
+                    <div class="bg-white p-6 rounded-lg shadow-sm mb-8">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-2xl font-bold text-gray-800">🚒 Fire Department Features</h3>
+                            <button onclick="refreshFeatures()" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition">
+                                <i class="fas fa-sync-alt mr-2"></i>Refresh
+                            </button>
+                        </div>
+
+                        <!-- Emergency Services -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                            <div class="bg-red-50 rounded-xl p-6 border border-red-200">
+                                <h4 class="text-lg font-bold text-red-800 mb-4 flex items-center">
+                                    <i class="fas fa-fire-extinguisher mr-2"></i>Fire Suppression
+                                </h4>
+                                <ul class="space-y-2 text-sm text-red-700">
+                                    <li class="flex items-center"><i class="fas fa-check mr-2"></i>Structural Fire Fighting</li>
+                                    <li class="flex items-center"><i class="fas fa-check mr-2"></i>Wildland Fire Control</li>
+                                    <li class="flex items-center"><i class="fas fa-check mr-2"></i>Hazmat Response</li>
+                                    <li class="flex items-center"><i class="fas fa-check mr-2"></i>Vehicle Fire Response</li>
+                                </ul>
+                            </div>
+
+                            <div class="bg-blue-50 rounded-xl p-6 border border-blue-200">
+                                <h4 class="text-lg font-bold text-blue-800 mb-4 flex items-center">
+                                    <i class="fas fa-life-ring mr-2"></i>Rescue Operations
+                                </h4>
+                                <ul class="space-y-2 text-sm text-blue-700">
+                                    <li class="flex items-center"><i class="fas fa-check mr-2"></i>Technical Rescue</li>
+                                    <li class="flex items-center"><i class="fas fa-check mr-2"></i>Water Rescue</li>
+                                    <li class="flex items-center"><i class="fas fa-check mr-2"></i>High Angle Rescue</li>
+                                    <li class="flex items-center"><i class="fas fa-check mr-2"></i>Confined Space Rescue</li>
+                                </ul>
+                            </div>
+
+                            <div class="bg-green-50 rounded-xl p-6 border border-green-200">
+                                <h4 class="text-lg font-bold text-green-800 mb-4 flex items-center">
+                                    <i class="fas fa-heartbeat mr-2"></i>Emergency Medical
+                                </h4>
+                                <ul class="space-y-2 text-sm text-green-700">
+                                    <li class="flex items-center"><i class="fas fa-check mr-2"></i>Advanced Life Support</li>
+                                    <li class="flex items-center"><i class="fas fa-check mr-2"></i>Basic Life Support</li>
+                                    <li class="flex items-center"><i class="fas fa-check mr-2"></i>Mass Casualty Response</li>
+                                    <li class="flex items-center"><i class="fas fa-check mr-2"></i>Medical Transport</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Equipment & Vehicles -->
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                            <div class="bg-gray-50 rounded-xl p-6">
+                                <h4 class="text-lg font-bold text-gray-800 mb-4 flex items-center">
+                                    <i class="fas fa-truck mr-2 text-red-600"></i>Fire Department Vehicles
+                                </h4>
+                                <div class="space-y-4">
+                                    <div class="flex justify-between items-center p-3 bg-white rounded-lg">
+                                        <div class="flex items-center space-x-3">
+                                            <i class="fas fa-fire-extinguisher text-red-500"></i>
+                                            <span class="font-medium">Fire Engines</span>
+                                        </div>
+                                        <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">6 Active</span>
+                                    </div>
+                                    <div class="flex justify-between items-center p-3 bg-white rounded-lg">
+                                        <div class="flex items-center space-x-3">
+                                            <i class="fas fa-ladder text-blue-500"></i>
+                                            <span class="font-medium">Ladder Trucks</span>
+                                        </div>
+                                        <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">3 Active</span>
+                                    </div>
+                                    <div class="flex justify-between items-center p-3 bg-white rounded-lg">
+                                        <div class="flex items-center space-x-3">
+                                            <i class="fas fa-ambulance text-green-500"></i>
+                                            <span class="font-medium">Ambulances</span>
+                                        </div>
+                                        <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">4 Active</span>
+                                    </div>
+                                    <div class="flex justify-between items-center p-3 bg-white rounded-lg">
+                                        <div class="flex items-center space-x-3">
+                                            <i class="fas fa-tools text-purple-500"></i>
+                                            <span class="font-medium">Rescue Units</span>
+                                        </div>
+                                        <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">2 Active</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-gray-50 rounded-xl p-6">
+                                <h4 class="text-lg font-bold text-gray-800 mb-4 flex items-center">
+                                    <i class="fas fa-chart-line mr-2 text-blue-600"></i>Response Statistics
+                                </h4>
+                                <div class="space-y-3">
+                                    <div class="flex justify-between items-center p-3 bg-white rounded-lg">
+                                        <span class="font-medium">Average Response Time</span>
+                                        <span class="text-green-600 font-bold">4.2 minutes</span>
+                                    </div>
+                                    <div class="flex justify-between items-center p-3 bg-white rounded-lg">
+                                        <span class="font-medium">Calls This Month</span>
+                                        <span class="text-blue-600 font-bold">156</span>
+                                    </div>
+                                    <div class="flex justify-between items-center p-3 bg-white rounded-lg">
+                                        <span class="font-medium">Fire Incidents</span>
+                                        <span class="text-red-600 font-bold">23</span>
+                                    </div>
+                                    <div class="flex justify-between items-center p-3 bg-white rounded-lg">
+                                        <span class="font-medium">Medical Calls</span>
+                                        <span class="text-purple-600 font-bold">89</span>
+                                    </div>
+                                    <div class="flex justify-between items-center p-3 bg-white rounded-lg">
+                                        <span class="font-medium">Rescue Operations</span>
+                                        <span class="text-orange-600 font-bold">44</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <h3 class="text-xl font-semibold mb-4">Recent Activities</h3>
+                    <div class="space-y-4">
+                        <div class="p-4 border-l-4 border-blue-500 bg-blue-50 rounded">
+                            <div class="flex justify-between">
+                                <span class="font-medium">System</span>
+                                <span class="text-sm text-gray-500">Just now</span>
+                            </div>
+                            <p class="text-gray-700">Welcome to your expert dashboard! You can manage consultations and share your expertise here.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Expert Dashboard JavaScript Functions
+        function showExpertSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('.expert-section').forEach(section => {
+                section.style.display = 'none';
+            });
+
+            // Remove active class from all nav buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active', 'bg-blue-500', 'text-white');
+                btn.classList.add('bg-gray-100', 'text-gray-700');
+            });
+
+            // Show selected section
+            const targetSection = document.getElementById(sectionName + '-section');
+            if (targetSection) {
+                targetSection.style.display = 'block';
+            }
+
+            // Add active class to clicked button
+            const activeBtn = document.querySelector(`[onclick="showExpertSection('${sectionName}')"]`);
+            if (activeBtn) {
+                activeBtn.classList.add('active', 'bg-blue-500', 'text-white');
+                activeBtn.classList.remove('bg-gray-100', 'text-gray-700');
+            }
+        }
+
+        function refreshExpertInventory() {
+            showNotification('🔄 Refreshing inventory data...', 'info');
+            setTimeout(() => {
+                showNotification('✅ Inventory data refreshed successfully!', 'success');
+            }, 1500);
+        }
+
+        function refreshPersonnel() {
+            showNotification('🔄 Refreshing personnel data...', 'info');
+            setTimeout(() => {
+                showNotification('✅ Personnel data refreshed successfully!', 'success');
+            }, 1500);
+        }
+
+        function refreshFeatures() {
+            showNotification('🔄 Refreshing features data...', 'info');
+            setTimeout(() => {
+                showNotification('✅ Features data refreshed successfully!', 'success');
+            }, 1500);
+        }
+
+        function showNotification(message, type = 'info') {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg max-w-sm transition-all duration-300 transform translate-x-full`;
+
+            // Set notification style based on type
+            switch(type) {
+                case 'success':
+                    notification.classList.add('bg-green-500', 'text-white');
+                    break;
+                case 'error':
+                    notification.classList.add('bg-red-500', 'text-white');
+                    break;
+                case 'warning':
+                    notification.classList.add('bg-yellow-500', 'text-white');
+                    break;
+                default:
+                    notification.classList.add('bg-blue-500', 'text-white');
+            }
+
+            notification.innerHTML = `
+                <div class="flex items-center justify-between">
+                    <span>${message}</span>
+                    <button onclick="this.parentElement.parentElement.remove()" class="ml-4 text-white hover:text-gray-200">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+
+            document.body.appendChild(notification);
+
+            // Show notification
+            setTimeout(() => {
+                notification.classList.remove('translate-x-full');
+            }, 100);
+
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                notification.classList.add('translate-x-full');
+                setTimeout(() => notification.remove(), 300);
+            }, 5000);
+        }
+
+        // Initialize expert dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            // Show expertise section by default
+            showExpertSection('expertise');
+
+            // Add some welcome notifications
+            setTimeout(() => {
+                showNotification('🔥 Welcome to Expert Dashboard!', 'success');
+            }, 1000);
+
+            setTimeout(() => {
+                showNotification('📊 All systems operational', 'info');
+            }, 2000);
+        });
+    </script>
+</body>
+</html>

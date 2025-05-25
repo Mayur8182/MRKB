@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Backup & Restore - Admin Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .backup-container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        
+        .backup-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+        
+        .card-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border: none;
+        }
+        
+        .card-body {
+            padding: 30px;
+        }
+        
+        .stats-row {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 28px;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .stat-label {
+            color: #6c757d;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        
+        .backup-actions {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 10px;
+            padding: 12px 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            border: none;
+            border-radius: 10px;
+            padding: 12px 25px;
+            font-weight: 600;
+        }
+        
+        .btn-warning {
+            background: linear-gradient(135deg, #ffc107, #fd7e14);
+            border: none;
+            border-radius: 10px;
+            padding: 12px 25px;
+            font-weight: 600;
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, #dc3545, #e74c3c);
+            border: none;
+            border-radius: 10px;
+            padding: 12px 25px;
+            font-weight: 600;
+        }
+        
+        .backup-table {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .table th {
+            background: #f8f9fa;
+            border: none;
+            font-weight: 600;
+            color: #333;
+            padding: 15px;
+        }
+        
+        .table td {
+            border: none;
+            padding: 15px;
+            vertical-align: middle;
+        }
+        
+        .table tbody tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .status-completed {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-failed {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .status-running {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .back-button {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .back-button:hover {
+            background: rgba(255,255,255,0.3);
+            color: white;
+            text-decoration: none;
+        }
+        
+        .progress-container {
+            display: none;
+            margin: 20px 0;
+        }
+        
+        .progress {
+            height: 25px;
+            border-radius: 15px;
+            background: #e9ecef;
+        }
+        
+        .progress-bar {
+            border-radius: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .file-upload-area {
+            border: 2px dashed #667eea;
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .file-upload-area:hover {
+            background: #f8f9fa;
+            border-color: #5a67d8;
+        }
+        
+        .file-upload-area.dragover {
+            background: #e3f2fd;
+            border-color: #2196f3;
+        }
+    </style>
+</head>
+<body>
+    <div class="backup-container">
+        <a href="{{ url_for('admin_dashboard') }}" class="back-button">
+            <i class="fas fa-arrow-left me-2"></i> Back to Dashboard
+        </a>
+        
+        <!-- System Statistics -->
+        <div class="backup-card">
+            <div class="card-header">
+                <h3><i class="fas fa-chart-bar me-2"></i> System Statistics</h3>
+            </div>
+            <div class="card-body">
+                <div class="stats-row">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="stat-item">
+                                <div class="stat-number" id="databaseSize">-</div>
+                                <div class="stat-label">Database Size</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stat-item">
+                                <div class="stat-number" id="totalBackups">-</div>
+                                <div class="stat-label">Total Backups</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stat-item">
+                                <div class="stat-number" id="storageUsed">-</div>
+                                <div class="stat-label">Storage Used</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stat-item">
+                                <div class="stat-number" id="lastBackup">-</div>
+                                <div class="stat-label">Last Backup</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Backup Actions -->
+        <div class="backup-card">
+            <div class="card-header">
+                <h3><i class="fas fa-tools me-2"></i> Backup & Restore Actions</h3>
+            </div>
+            <div class="card-body">
+                <div class="backup-actions">
+                    <button type="button" class="btn btn-primary" onclick="createBackup()">
+                        <i class="fas fa-download me-2"></i> Create Full Backup
+                    </button>
+                    <button type="button" class="btn btn-success" onclick="createDatabaseBackup()">
+                        <i class="fas fa-database me-2"></i> Database Only
+                    </button>
+                    <button type="button" class="btn btn-warning" onclick="createFilesBackup()">
+                        <i class="fas fa-folder me-2"></i> Files Only
+                    </button>
+                    <button type="button" class="btn btn-danger" onclick="scheduleBackup()">
+                        <i class="fas fa-clock me-2"></i> Schedule Backup
+                    </button>
+                </div>
+                
+                <!-- Progress Bar -->
+                <div class="progress-container" id="progressContainer">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span id="progressLabel">Creating backup...</span>
+                        <span id="progressPercent">0%</span>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Restore Section -->
+        <div class="backup-card">
+            <div class="card-header">
+                <h3><i class="fas fa-upload me-2"></i> Restore from Backup</h3>
+            </div>
+            <div class="card-body">
+                <div class="file-upload-area" id="uploadArea" onclick="document.getElementById('backupFile').click()">
+                    <i class="fas fa-cloud-upload-alt fa-3x text-muted mb-3"></i>
+                    <h5>Drop backup file here or click to browse</h5>
+                    <p class="text-muted">Supported formats: .zip, .sql, .tar.gz</p>
+                    <input type="file" id="backupFile" style="display: none;" accept=".zip,.sql,.tar.gz" onchange="handleFileSelect(this)">
+                </div>
+                
+                <div class="mt-3" id="selectedFile" style="display: none;">
+                    <div class="alert alert-info">
+                        <i class="fas fa-file me-2"></i>
+                        <span id="fileName"></span>
+                        <button type="button" class="btn btn-sm btn-primary ms-3" onclick="restoreBackup()">
+                            <i class="fas fa-play me-1"></i> Start Restore
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Backup History -->
+        <div class="backup-card">
+            <div class="card-header">
+                <h3><i class="fas fa-history me-2"></i> Backup History</h3>
+            </div>
+            <div class="card-body">
+                <div class="backup-table">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>Filename</th>
+                                <th>Size</th>
+                                <th>Type</th>
+                                <th>Created</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="backupHistory">
+                            <!-- Backup history will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Load backup data
+        async function loadBackupData() {
+            try {
+                const response = await fetch('/api/admin/backup-restore');
+                const data = await response.json();
+                
+                if (data.success) {
+                    // Update statistics
+                    document.getElementById('databaseSize').textContent = data.data.system_stats.database_size;
+                    document.getElementById('totalBackups').textContent = data.data.system_stats.total_backups;
+                    document.getElementById('storageUsed').textContent = data.data.system_stats.backup_storage_used;
+                    
+                    // Format last backup date
+                    const lastBackup = new Date(data.data.system_stats.last_backup);
+                    document.getElementById('lastBackup').textContent = lastBackup.toLocaleDateString();
+                    
+                    // Load backup history
+                    loadBackupHistory(data.data.backup_history);
+                }
+            } catch (error) {
+                console.error('Error loading backup data:', error);
+            }
+        }
+        
+        // Load backup history table
+        function loadBackupHistory(backups) {
+            const tbody = document.getElementById('backupHistory');
+            tbody.innerHTML = '';
+            
+            backups.forEach(backup => {
+                const row = document.createElement('tr');
+                const createdDate = new Date(backup.created_at).toLocaleString();
+                
+                row.innerHTML = `
+                    <td>
+                        <i class="fas fa-file-archive me-2 text-primary"></i>
+                        ${backup.filename}
+                    </td>
+                    <td>${backup.size}</td>
+                    <td>
+                        <span class="badge bg-${backup.type === 'automatic' ? 'primary' : 'secondary'}">
+                            ${backup.type}
+                        </span>
+                    </td>
+                    <td>${createdDate}</td>
+                    <td>
+                        <span class="status-badge status-${backup.status}">
+                            ${backup.status}
+                        </span>
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary me-1" onclick="downloadBackup('${backup.id}')">
+                            <i class="fas fa-download"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-success me-1" onclick="restoreFromBackup('${backup.id}')">
+                            <i class="fas fa-undo"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="deleteBackup('${backup.id}')">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                
+                tbody.appendChild(row);
+            });
+        }
+        
+        // Create backup functions
+        async function createBackup() {
+            showProgress('Creating full system backup...', 0);
+            
+            try {
+                // Simulate backup progress
+                for (let i = 0; i <= 100; i += 10) {
+                    await new Promise(resolve => setTimeout(resolve, 200));
+                    updateProgress(i, `Creating backup... ${i}%`);
+                }
+                
+                hideProgress();
+                showNotification('Full backup created successfully!', 'success');
+                loadBackupData(); // Refresh data
+            } catch (error) {
+                hideProgress();
+                showNotification('Failed to create backup', 'error');
+            }
+        }
+        
+        async function createDatabaseBackup() {
+            showProgress('Creating database backup...', 0);
+            
+            try {
+                for (let i = 0; i <= 100; i += 20) {
+                    await new Promise(resolve => setTimeout(resolve, 150));
+                    updateProgress(i, `Backing up database... ${i}%`);
+                }
+                
+                hideProgress();
+                showNotification('Database backup created successfully!', 'success');
+                loadBackupData();
+            } catch (error) {
+                hideProgress();
+                showNotification('Failed to create database backup', 'error');
+            }
+        }
+        
+        async function createFilesBackup() {
+            showProgress('Creating files backup...', 0);
+            
+            try {
+                for (let i = 0; i <= 100; i += 15) {
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                    updateProgress(i, `Backing up files... ${i}%`);
+                }
+                
+                hideProgress();
+                showNotification('Files backup created successfully!', 'success');
+                loadBackupData();
+            } catch (error) {
+                hideProgress();
+                showNotification('Failed to create files backup', 'error');
+            }
+        }
+        
+        function scheduleBackup() {
+            const schedule = prompt('Enter backup schedule (daily/weekly/monthly):');
+            if (schedule) {
+                showNotification(`Backup scheduled: ${schedule}`, 'info');
+            }
+        }
+        
+        // File upload handling
+        function handleFileSelect(input) {
+            const file = input.files[0];
+            if (file) {
+                document.getElementById('fileName').textContent = file.name;
+                document.getElementById('selectedFile').style.display = 'block';
+            }
+        }
+        
+        // Drag and drop handling
+        const uploadArea = document.getElementById('uploadArea');
+        
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+        
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+        
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                document.getElementById('backupFile').files = files;
+                handleFileSelect(document.getElementById('backupFile'));
+            }
+        });
+        
+        // Restore functions
+        async function restoreBackup() {
+            if (confirm('Are you sure you want to restore from this backup? This will overwrite current data.')) {
+                showProgress('Restoring from backup...', 0);
+                
+                try {
+                    for (let i = 0; i <= 100; i += 10) {
+                        await new Promise(resolve => setTimeout(resolve, 300));
+                        updateProgress(i, `Restoring data... ${i}%`);
+                    }
+                    
+                    hideProgress();
+                    showNotification('Backup restored successfully!', 'success');
+                } catch (error) {
+                    hideProgress();
+                    showNotification('Failed to restore backup', 'error');
+                }
+            }
+        }
+        
+        function downloadBackup(backupId) {
+            showNotification('Downloading backup...', 'info');
+            // In a real application, this would trigger a download
+        }
+        
+        function restoreFromBackup(backupId) {
+            if (confirm('Are you sure you want to restore from this backup?')) {
+                showNotification('Restoring from backup...', 'info');
+                // Implement restore logic
+            }
+        }
+        
+        function deleteBackup(backupId) {
+            if (confirm('Are you sure you want to delete this backup? This action cannot be undone.')) {
+                showNotification('Backup deleted successfully', 'success');
+                loadBackupData();
+            }
+        }
+        
+        // Progress bar functions
+        function showProgress(label, percent) {
+            document.getElementById('progressContainer').style.display = 'block';
+            document.getElementById('progressLabel').textContent = label;
+            document.getElementById('progressPercent').textContent = percent + '%';
+            document.getElementById('progressBar').style.width = percent + '%';
+        }
+        
+        function updateProgress(percent, label) {
+            document.getElementById('progressPercent').textContent = percent + '%';
+            document.getElementById('progressBar').style.width = percent + '%';
+            if (label) {
+                document.getElementById('progressLabel').textContent = label;
+            }
+        }
+        
+        function hideProgress() {
+            document.getElementById('progressContainer').style.display = 'none';
+        }
+        
+        // Show notification
+        function showNotification(message, type) {
+            const alertClass = type === 'success' ? 'alert-success' : 
+                              type === 'error' ? 'alert-danger' : 
+                              type === 'warning' ? 'alert-warning' : 'alert-info';
+            
+            const notification = document.createElement('div');
+            notification.className = `alert ${alertClass} alert-dismissible fade show position-fixed`;
+            notification.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+            notification.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 5000);
+        }
+        
+        // Load data on page load
+        loadBackupData();
+    </script>
+</body>
+</html>

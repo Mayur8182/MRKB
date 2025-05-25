@@ -1,0 +1,59 @@
+services:
+  - type: web
+    name: fire-safety-noc-system
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn --worker-class eventlet -w 1 --bind 0.0.0.0:$PORT app:app
+    envVars:
+      - key: FLASK_APP
+        value: app.py
+      - key: FLASK_ENV
+        value: production
+      - key: FLASK_DEBUG
+        value: False
+      - key: DATABASE_URL
+        value: mongodb+srv://mkbharvad8080:Mkb%408080@cluster0.a82h2.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+      - key: MONGODB_URI
+        value: mongodb+srv://mkbharvad8080:Mkb%408080@cluster0.a82h2.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+      - key: DB_NAME
+        value: aek_noc
+      - key: SECRET_KEY
+        value: your_super_secure_secret_key_change_this_in_production_2024_render
+      - key: SESSION_PERMANENT
+        value: True
+      - key: SESSION_LIFETIME_DAYS
+        value: 7
+      - key: MAIL_SERVER
+        value: smtp.gmail.com
+      - key: MAIL_PORT
+        value: 587
+      - key: MAIL_USERNAME
+        value: mkbharvad534@gmail.com
+      - key: MAIL_PASSWORD
+        value: dwtp fmiq miyl ccvq
+      - key: MAIL_USE_TLS
+        value: True
+      - key: MAIL_USE_SSL
+        value: False
+      - key: TWILIO_ACCOUNT_SID
+        value: YOUR_TWILIO_ACCOUNT_SID
+      - key: TWILIO_AUTH_TOKEN
+        value: YOUR_TWILIO_AUTH_TOKEN
+      - key: TWILIO_PHONE_NUMBER
+        value: +1234567890
+      - key: MSG91_AUTH_KEY
+        value: YOUR_MSG91_API_KEY
+      - key: MSG91_SENDER_ID
+        value: FIRNOC
+      - key: MSG91_ROUTE
+        value: 4
+      - key: UPLOAD_FOLDER
+        value: static/profile_images
+      - key: MAX_CONTENT_LENGTH
+        value: 16777216
+      - key: ALLOWED_EXTENSIONS
+        value: png,jpg,jpeg,gif,pdf
+      - key: PORT
+        value: 5000
+      - key: HOST
+        value: 0.0.0.0

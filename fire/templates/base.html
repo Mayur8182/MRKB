@@ -10,7 +10,9 @@
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
     <meta name="csrf-token" content="{{ csrf_token() if csrf_token else '' }}">
+    <meta name="username" content="{{ session.get('username', '') }}">
     <style>
         .back-button {
             display: inline-flex;
@@ -32,12 +34,54 @@
         .back-button i {
             margin-right: 0.5rem;
         }
+
+        /* Mobile responsive styles */
+        @media (max-width: 768px) {
+            .sidebar-open {
+                transform: translateX(0);
+            }
+
+            .sidebar-closed {
+                transform: translateX(-100%);
+            }
+
+            .mobile-menu-button {
+                display: block;
+            }
+
+            .desktop-menu {
+                display: none;
+            }
+
+            .mobile-menu {
+                display: block;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .mobile-menu-button {
+                display: none;
+            }
+
+            .desktop-menu {
+                display: flex;
+            }
+
+            .mobile-menu {
+                display: none;
+            }
+        }
     </style>
     {% block extra_css %}{% endblock %}
 </head>
-<body class="bg-gray-100 flex">
-    <!-- Sidebar -->
-    <div class="w-64 bg-white shadow-lg h-screen fixed left-0 top-0 z-50 pt-20">
+<body class="bg-gray-100 flex flex-col md:flex-row" data-username="{{ session.get('username', '') }}">
+    <!-- Mobile Menu Button -->
+    <button id="mobile-menu-button" class="mobile-menu-button fixed top-4 left-4 z-50 bg-red-600 text-white p-2 rounded-md">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Sidebar - Hidden on mobile by default -->
+    <div id="sidebar" class="w-64 bg-white shadow-lg h-screen fixed left-0 top-0 z-40 pt-20 transform transition-transform duration-300 sidebar-closed md:sidebar-open md:static md:pt-0">
         <div class="px-4 py-6">
             <h2 class="text-xl font-bold text-red-600 mb-6">Analytics</h2>
             <nav>
@@ -53,12 +97,20 @@
                     <i class="fas fa-tachometer-alt mr-3"></i>
                     Performance Metrics
                 </a>
+                <a href="/advanced_analytics" class="flex items-center px-4 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600 rounded-lg transition duration-200">
+                    <i class="fas fa-chart-line mr-3"></i>
+                    Advanced Analytics
+                </a>
+                <a href="/verify-certificate" class="flex items-center px-4 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600 rounded-lg transition duration-200">
+                    <i class="fas fa-certificate mr-3"></i>
+                    Verify Certificate
+                </a>
             </nav>
         </div>
     </div>
 
-    <!-- Main Content Area (with left padding to accommodate sidebar) -->
-    <div class="flex-1 ml-64">
+    <!-- Main Content Area -->
+    <div class="flex-1 md:ml-64 w-full transition-all duration-300">
         <nav class="bg-white shadow-lg">
             <div class="container mx-auto px-6 py-4">
                 <div class="flex justify-between items-center">
@@ -66,6 +118,10 @@
                         <img src="https://tse3.mm.bing.net/th?id=OIP.8LC-0Es7mqVzfE_ElrEdDQAAAA&pid=Api&P=0&h=180" alt="Logo" class="h-12">
                         <span class="text-xl font-bold text-red-600">Fire NOC Portal</span>
                         {% if session.get('username') %}
+                            <!-- Notification Component -->
+                            <div class="mr-4">
+                                {% include 'components/notifications.html' %}
+                            </div>
                             <a href="/settings" class="flex items-center text-gray-700 hover:text-red-600">
                                 <i class="fas fa-cog mr-1"></i> Settings
                             </a>
@@ -77,8 +133,10 @@
                     <div class="flex items-center space-x-6">
                         <a href="/" class="text-gray-700 hover:text-red-600">Home</a>
                         <a href="/services" class="text-gray-700 hover:text-red-600">Services</a>
+                        <a href="/verify-certificate" class="text-gray-700 hover:text-red-600">Verify Certificate</a>
                         {% if session.get('role') == 'admin' %}
                             <a href="/admin_dashboard" class="text-gray-700 hover:text-red-600">Admin Dashboard</a>
+                            <a href="/advanced_analytics" class="text-gray-700 hover:text-red-600">Advanced Analytics</a>
                         {% endif %}
                         {% if session.get('username') %}
                             <a href="/user_dashboard" class="text-gray-700 hover:text-red-600">Dashboard</a>
@@ -101,7 +159,7 @@
                     {% endfor %}
                 {% endif %}
             {% endwith %}
-            
+
             {% block content %}{% endblock %}
         </div>
 
@@ -112,6 +170,37 @@
         </footer>
 
         {% block extra_js %}{% endblock %}
+
+        <!-- Mobile menu toggle script -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const mobileMenuButton = document.getElementById('mobile-menu-button');
+                const sidebar = document.getElementById('sidebar');
+
+                if (mobileMenuButton && sidebar) {
+                    mobileMenuButton.addEventListener('click', function() {
+                        if (sidebar.classList.contains('sidebar-closed')) {
+                            sidebar.classList.remove('sidebar-closed');
+                            sidebar.classList.add('sidebar-open');
+                        } else {
+                            sidebar.classList.remove('sidebar-open');
+                            sidebar.classList.add('sidebar-closed');
+                        }
+                    });
+
+                    // Close sidebar when clicking on a link (mobile only)
+                    const sidebarLinks = sidebar.querySelectorAll('a');
+                    sidebarLinks.forEach(link => {
+                        link.addEventListener('click', function() {
+                            if (window.innerWidth <= 768) {
+                                sidebar.classList.remove('sidebar-open');
+                                sidebar.classList.add('sidebar-closed');
+                            }
+                        });
+                    });
+                }
+            });
+        </script>
     </div>
 </body>
 </html>

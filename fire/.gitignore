@@ -1,0 +1,100 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environment
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Environment Variables
+.env
+.env.local
+.env.production
+.env.development
+
+# Sensitive Files
+ACTUAL_CREDENTIALS.md
+*_CREDENTIALS.md
+config/secrets.py
+secrets.json
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Uploads and Generated Files
+uploads/*.pdf
+uploads/*.jpg
+uploads/*.png
+uploads/*.jpeg
+uploads/*.gif
+static/certificates/*.pdf
+static/reports/*.pdf
+static/profile_images/*.jpg
+static/profile_images/*.png
+static/profile_images/*.jpeg
+static/profile_images/*.gif
+static/inspection_photos/*.jpg
+static/inspection_photos/*.png
+static/inspection_photos/*.jpeg
+
+# Logs
+*.log
+logs/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Temporary files
+*.tmp
+*.temp
+temp/
+tmp/
+
+# Node modules (if any)
+node_modules/
+
+# Coverage reports
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
