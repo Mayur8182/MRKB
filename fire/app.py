@@ -183,10 +183,9 @@ pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tessera
 
 
 # Add these configurations after app initialization
-UPLOAD_FOLDER = 'static/profile_images'
+# Use the UPLOAD_FOLDER from environment or default to 'uploads'
+UPLOAD_FOLDER = app.config['UPLOAD_FOLDER']
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
-
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # Create upload folder if it doesn't exist
 if not os.path.exists(UPLOAD_FOLDER):
