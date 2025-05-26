@@ -1481,98 +1481,103 @@ def resend_otp():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    form = RegistrationForm()
-    if form.validate_on_submit():
-        if users.find_one({'username': form.username.data}):
-            flash('Username already exists!', 'danger')
-        else:
-            # Handle Aadhaar photo upload
-            aadhaar_photo = form.aadhaar_photo.data
-            if aadhaar_photo:
-                filename = secure_filename(f"aadhaar_{form.username.data}_{int(time.time())}.jpg")
-                filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-                aadhaar_photo.save(filepath)
-
-                # Extract Aadhaar number and verify (temporarily disabled)
-                # extracted_aadhaar = extract_aadhaar(filepath)
-                # if extracted_aadhaar:
-                #     # Check if Aadhaar exists in dataset
-                #     name, aadhaar_phone = find_user_by_aadhaar(extracted_aadhaar)
-                #     if name:
-
-                # For now, create user directly without Aadhaar verification
-                # Create user without name verification
-                hashed_password = bcrypt.hashpw(
-                    form.password.data.encode('utf-8'),
-                    bcrypt.gensalt()
-                )
-
-                # Use the phone number provided in the form
-                phone_number = form.phone.data
-
-                # Create base user data
-                user_data = {
-                    'username': form.username.data,
-                    'name': form.name.data,  # Use provided name
-                    'email': form.email.data,
-                    'password': hashed_password,
-                    'role': form.role.data,
-                    'aadhaar_number': 'temp_aadhaar',  # Temporary value
-                    'aadhaar_photo': filename,
-                    'phone': phone_number,
-                    'created_at': datetime.now(),
-                    'profile_complete': True
-                }
-
-                # Add role-specific profile data
-                role = form.role.data
-                if role == 'user':
-                    user_data.update({
-                        'department': 'Business',
-                        'designation': 'Business Owner',
-                        'business_type': 'To be specified',
-                        'applications_submitted': 0,
-                        'certificates_received': 0
-                    })
-                elif role == 'admin':
-                    user_data.update({
-                        'department': 'Administration',
-                        'designation': 'System Administrator',
-                        'access_level': 'Full'
-                    })
-                elif role == 'inspector':
-                    user_data.update({
-                        'department': 'Inspection',
-                        'designation': 'Fire Safety Inspector',
-                        'inspections_completed': 0,
-                        'assigned_area': 'To be assigned'
-                    })
-                elif role == 'manager':
-                    user_data.update({
-                        'department': 'Management',
-                        'designation': 'Fire Safety Manager',
-                        'team_size': 0,
-                        'managed_area': 'To be assigned'
-                    })
-                elif role == 'expert':
-                    user_data.update({
-                        'department': 'Technical',
-                        'designation': 'Fire Safety Expert',
-                        'specialization': 'General',
-                        'certifications': []
-                    })
-
-                # Insert user into database
-                users.insert_one(user_data)
-
-                # Send registration email
-                send_registration_email(user_data)
-
-                log_activity('Registration', f"New user registered: {form.username.data} as {role}")
-                flash('Registration successful! Please check your email.', 'success')
-                return redirect(url_for('login'))
+    try:
+        form = RegistrationForm()
+        if form.validate_on_submit():
+            if users.find_one({'username': form.username.data}):
+                flash('Username already exists!', 'danger')
             else:
-                flash('Please upload your Aadhaar card photo!', 'danger')
+                # Handle Aadhaar photo upload
+                aadhaar_photo = form.aadhaar_photo.data
+                if aadhaar_photo:
+                    filename = secure_filename(f"aadhaar_{form.username.data}_{int(time.time())}.jpg")
+                    filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                    aadhaar_photo.save(filepath)
+
+                    # Extract Aadhaar number and verify (temporarily disabled)
+                    # extracted_aadhaar = extract_aadhaar(filepath)
+                    # if extracted_aadhaar:
+                    #     # Check if Aadhaar exists in dataset
+                    #     name, aadhaar_phone = find_user_by_aadhaar(extracted_aadhaar)
+                    #     if name:
+
+                    # For now, create user directly without Aadhaar verification
+                    # Create user without name verification
+                    hashed_password = bcrypt.hashpw(
+                        form.password.data.encode('utf-8'),
+                        bcrypt.gensalt()
+                    )
+
+                    # Use the phone number provided in the form
+                    phone_number = form.phone.data
+
+                    # Create base user data
+                    user_data = {
+                        'username': form.username.data,
+                        'name': form.name.data,  # Use provided name
+                        'email': form.email.data,
+                        'password': hashed_password,
+                        'role': form.role.data,
+                        'aadhaar_number': 'temp_aadhaar',  # Temporary value
+                        'aadhaar_photo': filename,
+                        'phone': phone_number,
+                        'created_at': datetime.now(),
+                        'profile_complete': True
+                    }
+
+                    # Add role-specific profile data
+                    role = form.role.data
+                    if role == 'user':
+                        user_data.update({
+                            'department': 'Business',
+                            'designation': 'Business Owner',
+                            'business_type': 'To be specified',
+                            'applications_submitted': 0,
+                            'certificates_received': 0
+                        })
+                    elif role == 'admin':
+                        user_data.update({
+                            'department': 'Administration',
+                            'designation': 'System Administrator',
+                            'access_level': 'Full'
+                        })
+                    elif role == 'inspector':
+                        user_data.update({
+                            'department': 'Inspection',
+                            'designation': 'Fire Safety Inspector',
+                            'inspections_completed': 0,
+                            'assigned_area': 'To be assigned'
+                        })
+                    elif role == 'manager':
+                        user_data.update({
+                            'department': 'Management',
+                            'designation': 'Fire Safety Manager',
+                            'team_size': 0,
+                            'managed_area': 'To be assigned'
+                        })
+                    elif role == 'expert':
+                        user_data.update({
+                            'department': 'Technical',
+                            'designation': 'Fire Safety Expert',
+                            'specialization': 'General',
+                            'certifications': []
+                        })
+
+                    # Insert user into database
+                    users.insert_one(user_data)
+
+                    # Send registration email
+                    send_registration_email(user_data)
+
+                    log_activity('Registration', f"New user registered: {form.username.data} as {role}")
+                    flash('Registration successful! Please check your email.', 'success')
+                    return redirect(url_for('login'))
+                else:
+                    flash('Please upload your Aadhaar card photo!', 'danger')
+
+    except Exception as e:
+        print(f"Error in register function: {str(e)}")
+        flash('Registration failed. Please try again.', 'danger')
 
     return render_template('register.html', form=form)
 
