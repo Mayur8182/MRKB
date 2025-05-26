@@ -11812,7 +11812,7 @@ def get_admin_analytics():
         return jsonify({'error': str(e)}), 500
 
 @app.route('/api/admin/settings', methods=['GET', 'POST'])
-def admin_system_settings():
+def admin_settings_api():
     """Get or update system settings"""
     if session.get('role') != 'admin':
         return jsonify({'error': 'Unauthorized'}), 401
@@ -12039,7 +12039,7 @@ def get_all_users():
         return jsonify({'error': str(e)}), 500
 
 @app.route('/api/admin/user-details/<user_id>')
-def get_user_details(user_id):
+def get_admin_user_details(user_id):
     """Get detailed user information"""
     if session.get('role') != 'admin':
         return jsonify({'error': 'Unauthorized'}), 401
@@ -12244,9 +12244,9 @@ def get_admin_inspections():
         return jsonify({'error': str(e)}), 500
 
 # Inspection Report Routes
-@app.route('/view-inspection-report/<report_id>')
-def view_inspection_report(report_id):
-    """View inspection report in browser"""
+@app.route('/view-inspection-report-by-id/<report_id>')
+def view_inspection_report_by_id(report_id):
+    """View inspection report in browser by report ID"""
     try:
         from bson import ObjectId
 
@@ -12270,9 +12270,9 @@ def view_inspection_report(report_id):
     except Exception as e:
         return f"Error generating report: {str(e)}", 500
 
-@app.route('/download-inspection-report/<report_id>')
-def download_inspection_report(report_id):
-    """Download inspection report as PDF"""
+@app.route('/download-inspection-report-by-id/<report_id>')
+def download_inspection_report_by_id(report_id):
+    """Download inspection report as PDF by report ID"""
     try:
         from bson import ObjectId
 
@@ -12296,9 +12296,9 @@ def download_inspection_report(report_id):
     except Exception as e:
         return f"Error generating report: {str(e)}", 500
 
-@app.route('/generate-inspection-report/<report_id>')
-def generate_inspection_report(report_id):
-    """Generate inspection report"""
+@app.route('/generate-inspection-report-by-id/<report_id>')
+def generate_inspection_report_by_id(report_id):
+    """Generate inspection report by report ID"""
     try:
         from bson import ObjectId
 
