@@ -1,4 +1,7 @@
 # Core Flask Dependencies
+pip==22.3.1
+setuptools==65.5.1
+wheel==0.37.1
 Flask==2.3.3
 Flask-Mail==0.9.1
 Flask-WTF==1.2.1
@@ -13,8 +16,9 @@ werkzeug==2.3.7
 pymongo==4.5.0
 dnspython==2.4.2
 
+build
 # Image Processing & OCR
-Pillow==11.0.0
+Pillow==9.5.0
 opencv-python-headless==4.8.1.78
 pytesseract==0.3.10
 
