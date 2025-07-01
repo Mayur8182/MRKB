@@ -3,8 +3,8 @@ const urlsToCache = [
   '/',
   '/static/css/style.css', // Assuming you have a main CSS file
   '/static/js/main.js',   // Assuming you have a main JS file
-  '/static/icons/icon-192x192.png',
-  '/static/icons/icon-512x512.png'
+  '/static/icons/icon-192x192.svg',
+  '/static/icons/icon-512x512.svg'
 ];
 
 self.addEventListener('install', event => {

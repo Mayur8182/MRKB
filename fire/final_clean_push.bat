@@ -58,9 +58,7 @@ echo    - Build Command: pip install -r requirements.txt
 echo    - Start Command: gunicorn --worker-class eventlet -w 1 --bind 0.0.0.0:$PORT app:app
 echo 5. 🔑 Add Environment Variables in Render:
 echo    - DATABASE_URL=mongodb+srv://mkbharvad8080:Mkb%%408080@cluster0.a82h2.mongodb.net/?retryWrites=true^&w=majority^&appName=Cluster0
-echo    - TWILIO_ACCOUNT_SID=AC21b09c1cb25e642ddd201475bc12080a
-echo    - TWILIO_AUTH_TOKEN=78a14e4041fd920576e0b679d3a39e83
-echo    - MSG91_AUTH_KEY=453564T2JkiVcp4hee683300c2P1
+
 echo    - MAIL_USERNAME=mkbharvad534@gmail.com
 echo    - MAIL_PASSWORD=dwtp fmiq miyl ccvq
 echo    - SECRET_KEY=your_super_secure_secret_key_change_this_in_production_2024
