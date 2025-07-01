@@ -145,6 +145,8 @@ python start.py  # Verify configuration
 python test_deployment.py
 ```
 
+ONLINE SITE : https://eagel-grid.onrender.com/
+
 ## 📁 Project Structure
 
 ```
