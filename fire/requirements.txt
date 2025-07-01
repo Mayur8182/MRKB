@@ -18,7 +18,7 @@ dnspython==2.4.2
 
 build==1.0.3
 # Image Processing & OCR
-Pillow==10.0.0
+Pillow==9.5.0
 
 opencv-python-headless==4.8.1.78
 pytesseract==0.3.10
