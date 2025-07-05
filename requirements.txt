@@ -1,7 +1,4 @@
 # Core Flask Dependencies
-pip==21.3.1
-setuptools==59.6.0
-wheel==0.37.1
 Flask==2.3.3
 Flask-Mail==0.9.1
 Flask-WTF==1.2.1
@@ -16,10 +13,8 @@ werkzeug==2.3.7
 pymongo==4.5.0
 dnspython==2.4.2
 
-build==1.0.3
-
 # Image Processing & OCR
-Pillow==9.0.1
+Pillow>=10.0.0
 opencv-python-headless==4.8.1.78
 pytesseract==0.3.10
 
@@ -46,7 +41,7 @@ gunicorn==21.2.0
 eventlet==0.33.3
 
 # Data Processing
-pandas==2.0.3 # Using an older version for better compatibility with Python 3.13.4
+pandas>=2.0.0
 
 # File Handling
 openpyxl==3.1.2
