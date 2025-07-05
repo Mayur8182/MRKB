@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#FF4444"/>
+    <meta name="theme-color" content="#000000"/>
     <link rel="manifest" href="/manifest.json">
     <title>{% block title %}Fire NOC Portal{% endblock %}</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
@@ -80,10 +80,10 @@
         window.addEventListener('load', () => {
           navigator.serviceWorker.register('/service-worker.js')
             .then(registration => {
-              console.log('Service Worker registered: ', registration);
+              console.log('🔥 Fire Shakti Service Worker registered: ', registration);
             })
             .catch(error => {
-              console.error('Service Worker registration failed: ', error);
+              console.error('❌ Service Worker registration failed: ', error);
             });
         });
       }

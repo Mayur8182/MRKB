@@ -12670,26 +12670,61 @@ def serve_manifest():
 @app.route('/service-worker.js')
 def serve_service_worker():
     """Serve service worker for PWA"""
-    sw_content = '''
+    try:
+        # Try to serve from static folder first
+        response = send_from_directory(app.static_folder, 'service-worker.js')
+        response.headers['Content-Type'] = 'application/javascript'
+        response.headers['Cache-Control'] = 'no-cache'
+        return response
+    except:
+        # Fallback to inline service worker
+        sw_content = '''
+// Fire Shakti PWA Service Worker
+const CACHE_NAME = 'fire-shakti-v1';
+const urlsToCache = [
+  '/',
+  '/static/icons/icon-192x192.png',
+  '/static/icons/icon-512x512.png',
+  '/manifest.json'
+];
+
 self.addEventListener('install', function(event) {
-    console.log('Service Worker installing');
-    self.skipWaiting();
+  console.log('🔥 Fire Shakti Service Worker installing...');
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then(function(cache) {
+        console.log('📦 Caching app shell');
+        return cache.addAll(urlsToCache).catch(function(error) {
+          console.log('Cache failed for some resources:', error);
+        });
+      })
+  );
+  self.skipWaiting();
 });
 
 self.addEventListener('activate', function(event) {
-    console.log('Service Worker activating');
-    event.waitUntil(self.clients.claim());
+  console.log('✅ Fire Shakti Service Worker activating...');
+  event.waitUntil(self.clients.claim());
 });
 
 self.addEventListener('fetch', function(event) {
-    // Basic fetch handler for PWA
-    event.respondWith(fetch(event.request));
+  event.respondWith(
+    caches.match(event.request)
+      .then(function(response) {
+        if (response) {
+          return response;
+        }
+        return fetch(event.request);
+      })
+  );
 });
+
+console.log('🔥 Fire Shakti Service Worker loaded successfully!');
 '''
-    response = make_response(sw_content)
-    response.headers['Content-Type'] = 'application/javascript'
-    response.headers['Cache-Control'] = 'no-cache'
-    return response
+        response = make_response(sw_content)
+        response.headers['Content-Type'] = 'application/javascript'
+        response.headers['Cache-Control'] = 'no-cache'
+        return response
 
 if __name__ == '__main__':
     # Development mode
