@@ -4,12 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#FF4444"/>
-    <link rel="manifest" href="/static/manifest.json">
-    <link rel="icon" type="image/svg+xml" href="/static/icons/favicon.ico">
-    <link rel="apple-touch-icon" href="/static/icons/apple-touch-icon.svg">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="Fire Shakti">
+    <link rel="manifest" href="/manifest.json">
     <title>{% block title %}Fire NOC Portal{% endblock %}</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -83,7 +78,7 @@
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/static/service-worker.js')
+          navigator.serviceWorker.register('/service-worker.js')
             .then(registration => {
               console.log('Service Worker registered: ', registration);
             })
@@ -220,133 +215,6 @@
                     });
                 }
             });
-        </script>
-
-        <!-- PWA Installation Prompt -->
-        <div id="pwa-install-banner" class="fixed bottom-4 left-4 right-4 bg-red-500 text-white p-4 rounded-lg shadow-lg z-50 hidden">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center">
-                    <i class="fas fa-mobile-alt mr-3 text-xl"></i>
-                    <div>
-                        <h4 class="font-bold">Install Fire Shakti App</h4>
-                        <p class="text-sm opacity-90">Get quick access from your home screen</p>
-                    </div>
-                </div>
-                <div class="flex space-x-2">
-                    <button id="pwa-install-btn" class="bg-white text-red-500 px-4 py-2 rounded font-bold hover:bg-gray-100">
-                        Install
-                    </button>
-                    <button id="pwa-dismiss-btn" class="text-white opacity-75 hover:opacity-100">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- PWA and Service Worker Registration -->
-        <script>
-            // Service Worker Registration
-            if ('serviceWorker' in navigator) {
-                window.addEventListener('load', function() {
-                    navigator.serviceWorker.register('/static/service-worker.js')
-                        .then(function(registration) {
-                            console.log('ServiceWorker registration successful with scope: ', registration.scope);
-                        })
-                        .catch(function(err) {
-                            console.log('ServiceWorker registration failed: ', err);
-                        });
-                });
-            }
-
-            // PWA Installation
-            let deferredPrompt;
-            const installBanner = document.getElementById('pwa-install-banner');
-            const installBtn = document.getElementById('pwa-install-btn');
-            const dismissBtn = document.getElementById('pwa-dismiss-btn');
-
-            // Listen for beforeinstallprompt event
-            window.addEventListener('beforeinstallprompt', (e) => {
-                console.log('PWA: beforeinstallprompt event fired');
-                e.preventDefault();
-                deferredPrompt = e;
-
-                // Check if user has dismissed the banner before
-                if (!localStorage.getItem('pwa-dismissed')) {
-                    installBanner.classList.remove('hidden');
-                }
-            });
-
-            // Install button click handler
-            installBtn.addEventListener('click', async () => {
-                if (deferredPrompt) {
-                    deferredPrompt.prompt();
-                    const { outcome } = await deferredPrompt.userChoice;
-                    console.log(`PWA: User response to the install prompt: ${outcome}`);
-
-                    if (outcome === 'accepted') {
-                        console.log('PWA: User accepted the install prompt');
-                    } else {
-                        console.log('PWA: User dismissed the install prompt');
-                    }
-
-                    deferredPrompt = null;
-                    installBanner.classList.add('hidden');
-                }
-            });
-
-            // Dismiss button click handler
-            dismissBtn.addEventListener('click', () => {
-                installBanner.classList.add('hidden');
-                localStorage.setItem('pwa-dismissed', 'true');
-            });
-
-            // Listen for app installed event
-            window.addEventListener('appinstalled', (evt) => {
-                console.log('PWA: App was installed');
-                installBanner.classList.add('hidden');
-
-                // Show success message
-                if (typeof flash !== 'undefined') {
-                    flash('Fire Shakti app installed successfully!', 'success');
-                }
-            });
-
-            // Check if app is running in standalone mode
-            if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
-                console.log('PWA: App is running in standalone mode');
-                document.body.classList.add('pwa-standalone');
-            }
-
-            // Add PWA-specific styles
-            const style = document.createElement('style');
-            style.textContent = `
-                .pwa-standalone {
-                    padding-top: env(safe-area-inset-top);
-                    padding-bottom: env(safe-area-inset-bottom);
-                }
-
-                @media (display-mode: standalone) {
-                    .hide-in-pwa {
-                        display: none !important;
-                    }
-                }
-
-                #pwa-install-banner {
-                    animation: slideUp 0.3s ease-out;
-                }
-
-                @keyframes slideUp {
-                    from {
-                        transform: translateY(100%);
-                        opacity: 0;
-                    }
-                    to {
-                        transform: translateY(0);
-                        opacity: 1;
-                    }
-                }
-            `;
-            document.head.appendChild(style);
         </script>
     </div>
 </body>

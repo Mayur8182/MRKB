@@ -1,11 +1,11 @@
-const CACHE_NAME = 'fire-shakti-cache-v2';
-const STATIC_CACHE = 'fire-shakti-static-v2';
-const DYNAMIC_CACHE = 'fire-shakti-dynamic-v2';
+const CACHE_NAME = 'fire-shakti-cache-v3';
+const STATIC_CACHE = 'fire-shakti-static-v3';
+const DYNAMIC_CACHE = 'fire-shakti-dynamic-v3';
 
 // Static assets to cache immediately
 const STATIC_ASSETS = [
   '/',
-  '/static/manifest.json',
+  '/manifest.json',
   '/static/icons/icon-72x72.svg',
   '/static/icons/icon-96x96.svg',
   '/static/icons/icon-144x144.svg',
@@ -96,11 +96,9 @@ self.addEventListener('fetch', event => {
         if (request.url.includes('/api/') || request.url.includes('/upload')) {
           return fetch(request)
             .then(response => {
-              // Don't cache API responses
               return response;
             })
             .catch(() => {
-              // Return offline page for API failures
               return new Response(
                 JSON.stringify({ error: 'Offline - Please check your connection' }),
                 {
@@ -115,15 +113,12 @@ self.addEventListener('fetch', event => {
         // Cache first for static assets and pages
         return fetch(request)
           .then(response => {
-            // Check if response is valid
             if (!response || response.status !== 200 || response.type !== 'basic') {
               return response;
             }
 
-            // Clone response for caching
             const responseToCache = response.clone();
 
-            // Cache dynamic content
             if (DYNAMIC_ROUTES.some(route => request.url.includes(route))) {
               caches.open(DYNAMIC_CACHE)
                 .then(cache => {
@@ -134,9 +129,8 @@ self.addEventListener('fetch', event => {
             return response;
           })
           .catch(() => {
-            // Return offline page for navigation requests
             if (request.destination === 'document') {
-              return caches.match('/') || new Response(
+              return new Response(
                 `<!DOCTYPE html>
                 <html>
                 <head>
@@ -168,61 +162,4 @@ self.addEventListener('fetch', event => {
           });
       })
   );
-});
-
-// Background sync for form submissions
-self.addEventListener('sync', event => {
-  console.log('Service Worker: Background sync', event.tag);
-
-  if (event.tag === 'background-sync') {
-    event.waitUntil(
-      // Handle background sync logic here
-      console.log('Service Worker: Performing background sync')
-    );
-  }
-});
-
-// Push notification handling
-self.addEventListener('push', event => {
-  console.log('Service Worker: Push received', event);
-
-  const options = {
-    body: event.data ? event.data.text() : 'New notification from Fire Shakti',
-    icon: '/static/icons/icon-192x192.svg',
-    badge: '/static/icons/icon-72x72.svg',
-    vibrate: [100, 50, 100],
-    data: {
-      dateOfArrival: Date.now(),
-      primaryKey: 1
-    },
-    actions: [
-      {
-        action: 'explore',
-        title: 'View Details',
-        icon: '/static/icons/icon-192x192.svg'
-      },
-      {
-        action: 'close',
-        title: 'Close',
-        icon: '/static/icons/icon-192x192.svg'
-      }
-    ]
-  };
-
-  event.waitUntil(
-    self.registration.showNotification('Fire Shakti', options)
-  );
-});
-
-// Notification click handling
-self.addEventListener('notificationclick', event => {
-  console.log('Service Worker: Notification clicked', event);
-
-  event.notification.close();
-
-  if (event.action === 'explore') {
-    event.waitUntil(
-      clients.openWindow('/dashboard')
-    );
-  }
 });

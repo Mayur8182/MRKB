@@ -50,7 +50,7 @@ from io import BytesIO
 import csv
 from io import TextIOWrapper
 from flask_cors import CORS
-# import pdfkit  # Disabled for deployment - requires wkhtmltopdf
+import pdfkit
 # from aadhaar_utils import extract_aadhaar, find_user_by_aadhaar
 
 # Initialize Flask App
@@ -10774,12 +10774,7 @@ def view_certificate_by_number(certificate_number):
 def generate_certificate_pdf(app_data, certificate):
     """Generate PDF certificate from HTML template"""
     try:
-        # Try to import pdfkit (may not be available in deployment)
-        try:
-            import pdfkit
-            PDFKIT_AVAILABLE = True
-        except ImportError:
-            PDFKIT_AVAILABLE = False
+        import pdfkit
         from io import BytesIO
 
         # Get inspection report for compliance score and inspector details
@@ -10825,16 +10820,12 @@ def generate_certificate_pdf(app_data, certificate):
             'enable-local-file-access': None
         }
 
-        if PDFKIT_AVAILABLE:
-            try:
-                # Try to generate PDF using pdfkit
-                pdf_data = pdfkit.from_string(certificate_html, False, options=options)
-                return BytesIO(pdf_data)
-            except:
-                # Fallback to reportlab if pdfkit fails
-                return generate_certificate_pdf_reportlab(app_data, certificate)
-        else:
-            # Use reportlab directly if pdfkit not available
+        try:
+            # Try to generate PDF using pdfkit
+            pdf_data = pdfkit.from_string(certificate_html, False, options=options)
+            return BytesIO(pdf_data)
+        except:
+            # Fallback to reportlab if pdfkit fails
             return generate_certificate_pdf_reportlab(app_data, certificate)
 
     except Exception as e:
@@ -12651,6 +12642,18 @@ if __name__ == '__main__':
 
     # Run the application with SocketIO
     socketio.run(app, host=host, port=port, debug=debug)
+# Handle 404 errors
+@app.errorhandler(404)
+def not_found_error(error):
+    """Handle 404 errors"""
+    return render_template('404.html'), 404
+
+# Handle 500 errors
+@app.errorhandler(500)
+def internal_error(error):
+    """Handle 500 errors"""
+    return render_template('404.html'), 500
+
 else:
     # Production mode - Gunicorn compatibility
     print(f"🚀 Fire Safety NOC System ready for production deployment")
