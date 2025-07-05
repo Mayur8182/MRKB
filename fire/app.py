@@ -8,7 +8,7 @@ import bcrypt
 from werkzeug.security import generate_password_hash, check_password_hash
 from pymongo import MongoClient
 from PIL import Image, ImageDraw, ImageFont
-import pytesseract
+# import pytesseract  # Disabled for deployment
 import re
 import os
 import time
@@ -50,7 +50,7 @@ from io import BytesIO
 import csv
 from io import TextIOWrapper
 from flask_cors import CORS
-# import pdfkit  # Disabled for deployment
+import pdfkit
 # from aadhaar_utils import extract_aadhaar, find_user_by_aadhaar
 
 # Initialize Flask App
@@ -178,8 +178,8 @@ db.inspections.create_index([('date', 1)])
 db.inspections.create_index([('status', 1)])
 db.inspections.create_index([('business_id', 1)])
 db.inspections.create_index([('inspector_id', 1)])
-# Tesseract configuration
-pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+# Tesseract configuration (disabled for deployment)
+# pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
 
 # Add these configurations after app initialization
@@ -209,9 +209,10 @@ def detect_document_content(image_path):
         if (image_path.lower().endswith('.pdf')):
             return "PDF document", []  # Skip content detection for PDFs
 
-        # For images, perform OCR
+        # For images, perform OCR (disabled for deployment)
         img = Image.open(image_path)
-        extracted_text = pytesseract.image_to_string(img)
+        # extracted_text = pytesseract.image_to_string(img)  # Disabled
+        extracted_text = "OCR disabled for deployment"
 
         # Define patterns to check
         patterns = {

@@ -2,7 +2,10 @@ services:
   - type: web
     name: fire-shakti-pwa
     runtime: python
-    buildCommand: pip install --upgrade pip && pip install -r requirements.txt
+    buildCommand: |
+      python --version
+      pip install --upgrade pip
+      pip install -r requirements.txt
     startCommand: gunicorn --worker-class eventlet -w 1 --bind 0.0.0.0:$PORT simple_wsgi:application
     plan: free
     envVars:
