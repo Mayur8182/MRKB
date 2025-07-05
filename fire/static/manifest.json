@@ -1,51 +1,66 @@
 {
-  "name": "FIRE SHAKTI - NOC Portal",
-  "short_name": "FIRE SHAKTI",
-  "description": "Fire Safety NOC (No Objection Certificate) Portal for building safety compliance and inspection management",
+  "name": "Fire Shakti NOC Portal",
+  "short_name": "Fire Shakti",
+  "description": "Fire Safety NOC (No Objection Certificate) Portal for building safety compliance and inspection management. Digital platform for fire safety certificates, inspections, and compliance management.",
   "start_url": "/",
   "scope": "/",
+  "id": "/",
   "display": "standalone",
   "orientation": "portrait-primary",
   "background_color": "#ffffff",
   "theme_color": "#FF4444",
-  "categories": ["government", "utilities", "productivity"],
+  "categories": ["government", "utilities", "productivity", "business"],
   "lang": "en",
   "dir": "ltr",
+  "iarc_rating_id": "",
+  "prefer_related_applications": false,
   "icons": [
     {
-      "src": "/static/icons/icon-72x72.svg",
+      "src": "/static/icons/icon-48x48.png",
+      "sizes": "48x48",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/static/icons/icon-72x72.png",
       "sizes": "72x72",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/static/icons/icon-96x96.svg",
+      "src": "/static/icons/icon-96x96.png",
       "sizes": "96x96",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/static/icons/icon-144x144.svg",
+      "src": "/static/icons/icon-144x144.png",
       "sizes": "144x144",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/static/icons/icon-192x192.svg",
+      "src": "/static/icons/icon-192x192.png",
       "sizes": "192x192",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/static/icons/icon-512x512.svg",
+      "src": "/static/icons/icon-512x512.png",
       "sizes": "512x512",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/static/icons/apple-touch-icon.svg",
+      "src": "/static/icons/apple-touch-icon.png",
       "sizes": "180x180",
-      "type": "image/svg+xml",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/static/icons/favicon.png",
+      "sizes": "32x32",
+      "type": "image/png",
       "purpose": "any"
     }
   ],
@@ -54,10 +69,17 @@
       "src": "/static/icons/icon-512x512.svg",
       "sizes": "512x512",
       "type": "image/svg+xml",
-      "form_factor": "wide"
+      "form_factor": "wide",
+      "label": "Fire Shakti NOC Portal Dashboard"
+    },
+    {
+      "src": "/static/icons/icon-512x512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "form_factor": "narrow",
+      "label": "Fire Shakti Mobile View"
     }
   ],
-  "prefer_related_applications": false,
   "shortcuts": [
     {
       "name": "Dashboard",
@@ -84,6 +106,26 @@
           "type": "image/svg+xml"
         }
       ]
+    },
+    {
+      "name": "View Certificates",
+      "short_name": "Certificates",
+      "description": "View issued fire safety certificates",
+      "url": "/view_inspections",
+      "icons": [
+        {
+          "src": "/static/icons/icon-192x192.svg",
+          "sizes": "192x192",
+          "type": "image/svg+xml"
+        }
+      ]
     }
-  ]
+  ],
+  "related_applications": [],
+  "edge_side_panel": {
+    "preferred_width": 400
+  },
+  "launch_handler": {
+    "client_mode": "navigate-existing"
+  }
 }
