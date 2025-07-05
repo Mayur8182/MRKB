@@ -50,7 +50,7 @@ from io import BytesIO
 import csv
 from io import TextIOWrapper
 from flask_cors import CORS
-import pdfkit
+# import pdfkit  # Disabled for deployment - requires wkhtmltopdf
 # from aadhaar_utils import extract_aadhaar, find_user_by_aadhaar
 
 # Initialize Flask App
@@ -10774,7 +10774,12 @@ def view_certificate_by_number(certificate_number):
 def generate_certificate_pdf(app_data, certificate):
     """Generate PDF certificate from HTML template"""
     try:
-        import pdfkit
+        # Try to import pdfkit (may not be available in deployment)
+        try:
+            import pdfkit
+            PDFKIT_AVAILABLE = True
+        except ImportError:
+            PDFKIT_AVAILABLE = False
         from io import BytesIO
 
         # Get inspection report for compliance score and inspector details
@@ -10820,12 +10825,16 @@ def generate_certificate_pdf(app_data, certificate):
             'enable-local-file-access': None
         }
 
-        try:
-            # Try to generate PDF using pdfkit
-            pdf_data = pdfkit.from_string(certificate_html, False, options=options)
-            return BytesIO(pdf_data)
-        except:
-            # Fallback to reportlab if pdfkit fails
+        if PDFKIT_AVAILABLE:
+            try:
+                # Try to generate PDF using pdfkit
+                pdf_data = pdfkit.from_string(certificate_html, False, options=options)
+                return BytesIO(pdf_data)
+            except:
+                # Fallback to reportlab if pdfkit fails
+                return generate_certificate_pdf_reportlab(app_data, certificate)
+        else:
+            # Use reportlab directly if pdfkit not available
             return generate_certificate_pdf_reportlab(app_data, certificate)
 
     except Exception as e:
