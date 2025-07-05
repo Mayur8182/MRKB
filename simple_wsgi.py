@@ -7,11 +7,25 @@ Optimized for Render deployment - Flask only (no SocketIO)
 import os
 import sys
 
-# Add the current directory to Python path
-sys.path.insert(0, os.path.dirname(__file__))
+# Add the fire directory to Python path
+current_dir = os.path.dirname(os.path.abspath(__file__))
+fire_dir = os.path.join(current_dir, 'fire')
+sys.path.insert(0, fire_dir)
 
-# Import the Flask app only
-from app import app
+# Import the Flask app from fire directory
+try:
+    from app import app
+    print("✅ Successfully imported Flask app from fire directory")
+except ImportError as e:
+    print(f"❌ Error importing Flask app: {e}")
+    # Try alternative import
+    sys.path.insert(0, current_dir)
+    try:
+        from fire.app import app
+        print("✅ Successfully imported Flask app using fire.app")
+    except ImportError as e2:
+        print(f"❌ Failed both import methods: {e2}")
+        raise
 
 # Create simple WSGI application
 application = app

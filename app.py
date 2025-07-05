@@ -12,7 +12,15 @@ import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'fire'))
 
 # Import the Flask app from the fire directory
-from fire.app import app
+try:
+    from fire.app import app
+    print("✅ Successfully imported Flask app from fire directory")
+except ImportError as e:
+    print(f"❌ Error importing Flask app: {e}")
+    # Fallback import
+    import sys
+    sys.path.insert(0, 'fire')
+    from app import app
 
 if __name__ == '__main__':
     # Get port from environment variable or default to 5000
