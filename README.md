@@ -1,6 +1,6 @@
-# 🔥 Fire Safety NOC System
+# 🔥 Fire Shakti - PWA NOC Portal
 
-A comprehensive Fire Safety No Objection Certificate (NOC) management system built with Flask, MongoDB Atlas, and modern web technologies. This system revolutionizes fire safety compliance management with advanced features including 2FA authentication, multi-role dashboards, AI-powered document verification, and automated certificate generation.
+A comprehensive Fire Safety No Objection Certificate (NOC) management system built as a **Progressive Web App (PWA)** with Flask, MongoDB Atlas, and modern web technologies. This system revolutionizes fire safety compliance management with advanced features including 2FA authentication, multi-role dashboards, AI-powered document verification, automated certificate generation, and **mobile app capabilities**.
 
 ## 🌟 Key Features
 
@@ -51,6 +51,14 @@ A comprehensive Fire Safety No Objection Certificate (NOC) management system bui
 - **Predictive Analytics**: Fire risk assessment algorithms
 - **Automated Processing**: Smart application routing and approval
 - **Blockchain Integration**: Certificate verification on blockchain
+
+### 📱 Progressive Web App (PWA) Features
+- **App Installation**: Install directly from browser to home screen
+- **Offline Functionality**: Continue working without internet connection
+- **Push Notifications**: Receive updates even when app is closed
+- **Fast Loading**: Cached resources for instant loading
+- **Native App Feel**: Standalone display mode without browser UI
+- **APK Generation**: Convert PWA to Android APK using Bubblewrap
 
 ## 🛠️ Technology Stack
 

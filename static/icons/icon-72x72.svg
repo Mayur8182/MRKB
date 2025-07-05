@@ -1,0 +1,7 @@
+<svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="72" height="72" rx="8" fill="#FF4444"/>
+<circle cx="36" cy="28" r="8" fill="#FFD700"/>
+<path d="M28 36 L44 36 L40 48 L32 48 Z" fill="#FF6B35"/>
+<path d="M30 48 L42 48 L40 56 L32 56 Z" fill="#FF8E53"/>
+<text x="50%" y="85%" dominant-baseline="middle" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="white">FIRE</text>
+</svg>
