@@ -12632,6 +12632,65 @@ print(f"🚀 Fire Safety NOC System initializing...")
 print(f"🗄️ Database: {DB_NAME}")
 print(f"🔧 Environment: {'Production' if not __name__ == '__main__' else 'Development'}")
 
+# PWA Routes for APK Generation
+@app.route('/manifest.json')
+def serve_manifest():
+    """Serve PWA manifest with proper headers"""
+    try:
+        response = send_from_directory(app.static_folder, 'manifest.json')
+        response.headers['Content-Type'] = 'application/manifest+json'
+        response.headers['Cache-Control'] = 'no-cache'
+        return response
+    except:
+        return jsonify({
+            "name": "Fire Shakti NOC Portal",
+            "short_name": "Fire Shakti",
+            "description": "Fire Safety NOC Portal for building safety compliance",
+            "start_url": "/",
+            "scope": "/",
+            "display": "standalone",
+            "background_color": "#ffffff",
+            "theme_color": "#FF4444",
+            "icons": [
+                {
+                    "src": "/static/icons/icon-192x192.png",
+                    "sizes": "192x192",
+                    "type": "image/png",
+                    "purpose": "any"
+                },
+                {
+                    "src": "/static/icons/icon-512x512.png",
+                    "sizes": "512x512",
+                    "type": "image/png",
+                    "purpose": "any maskable"
+                }
+            ]
+        })
+
+@app.route('/service-worker.js')
+def serve_service_worker():
+    """Serve service worker for PWA"""
+    sw_content = '''
+self.addEventListener('install', function(event) {
+    console.log('Service Worker installing');
+    self.skipWaiting();
+});
+
+self.addEventListener('activate', function(event) {
+    console.log('Service Worker activating');
+    event.waitUntil(self.clients.claim());
+});
+
+self.addEventListener('fetch', function(event) {
+    // Basic fetch handler for PWA
+    event.respondWith(fetch(event.request));
+});
+'''
+    response = make_response(sw_content)
+    response.headers['Content-Type'] = 'application/javascript'
+    response.headers['Cache-Control'] = 'no-cache'
+    return response
+
 if __name__ == '__main__':
     # Development mode
     port = int(os.getenv('PORT', 5000))

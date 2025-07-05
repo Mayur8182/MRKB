@@ -1,18 +1,17 @@
 {
   "name": "Fire Shakti NOC Portal",
   "short_name": "Fire Shakti",
-  "description": "Fire Safety NOC (No Objection Certificate) Portal for building safety compliance and inspection management. Digital platform for fire safety certificates, inspections, and compliance management.",
+  "description": "Fire Safety NOC Portal for building safety compliance and inspection management",
   "start_url": "/",
   "scope": "/",
   "id": "/",
   "display": "standalone",
-  "orientation": "portrait-primary",
+  "orientation": "portrait",
   "background_color": "#ffffff",
-  "theme_color": "#FF4444",
+  "theme_color": "#ff4444",
   "categories": ["government", "utilities", "productivity", "business"],
   "lang": "en",
   "dir": "ltr",
-  "iarc_rating_id": "",
   "prefer_related_applications": false,
   "icons": [
     {
@@ -43,41 +42,13 @@
       "src": "/static/icons/icon-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
       "src": "/static/icons/icon-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
-    },
-    {
-      "src": "/static/icons/apple-touch-icon.png",
-      "sizes": "180x180",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/static/icons/favicon.png",
-      "sizes": "32x32",
-      "type": "image/png",
-      "purpose": "any"
-    }
-  ],
-  "screenshots": [
-    {
-      "src": "/static/icons/icon-512x512.svg",
-      "sizes": "512x512",
-      "type": "image/svg+xml",
-      "form_factor": "wide",
-      "label": "Fire Shakti NOC Portal Dashboard"
-    },
-    {
-      "src": "/static/icons/icon-512x512.svg",
-      "sizes": "512x512",
-      "type": "image/svg+xml",
-      "form_factor": "narrow",
-      "label": "Fire Shakti Mobile View"
     }
   ],
   "shortcuts": [
@@ -88,9 +59,9 @@
       "url": "/dashboard",
       "icons": [
         {
-          "src": "/static/icons/icon-192x192.svg",
+          "src": "/static/icons/icon-192x192.png",
           "sizes": "192x192",
-          "type": "image/svg+xml"
+          "type": "image/png"
         }
       ]
     },
@@ -101,31 +72,11 @@
       "url": "/request_inspection",
       "icons": [
         {
-          "src": "/static/icons/icon-192x192.svg",
+          "src": "/static/icons/icon-192x192.png",
           "sizes": "192x192",
-          "type": "image/svg+xml"
-        }
-      ]
-    },
-    {
-      "name": "View Certificates",
-      "short_name": "Certificates",
-      "description": "View issued fire safety certificates",
-      "url": "/view_inspections",
-      "icons": [
-        {
-          "src": "/static/icons/icon-192x192.svg",
-          "sizes": "192x192",
-          "type": "image/svg+xml"
+          "type": "image/png"
         }
       ]
     }
-  ],
-  "related_applications": [],
-  "edge_side_panel": {
-    "preferred_width": 400
-  },
-  "launch_handler": {
-    "client_mode": "navigate-existing"
-  }
+  ]
 }
