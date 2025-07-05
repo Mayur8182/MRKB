@@ -50,7 +50,7 @@ from io import BytesIO
 import csv
 from io import TextIOWrapper
 from flask_cors import CORS
-import pdfkit
+# import pdfkit  # Disabled for deployment - no system dependencies
 # from aadhaar_utils import extract_aadhaar, find_user_by_aadhaar
 
 # Initialize Flask App
